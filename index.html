@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My First Website</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="noise"></div>
+
+  <header>
+    <div class="logo">MFW</div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <span class="eyebrow">Hello, World 👋</span>
+      <h1>My First <br/><em>Website</em></h1>
+      <p>Built with plain HTML, CSS & JS — and deployed on GitHub Pages.</p>
+      <a href="#projects" class="btn">See My Work</a>
+    </div>
+    <div class="hero-blob"></div>
+  </section>
+
+  <section id="about" class="section">
+    <div class="tag">About</div>
+    <h2>Who Am I?</h2>
+    <p>I'm learning to build for the web. This is my first project pushed to GitHub and live on the internet. Every expert was once a beginner.</p>
+    <div class="skills-grid">
+      <div class="skill-card">HTML</div>
+      <div class="skill-card">CSS</div>
+      <div class="skill-card">JavaScript</div>
+      <div class="skill-card">Git</div>
+      <div class="skill-card">GitHub</div>
+      <div class="skill-card">Learning...</div>
+    </div>
+  </section>
+
+  <section id="projects" class="section dark-section">
+    <div class="tag light">Projects</div>
+    <h2>What I've Built</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-num">01</div>
+        <h3>This Website</h3>
+        <p>My first ever website deployed live on GitHub Pages.</p>
+        <span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JS</span>
+      </div>
+      <div class="project-card">
+        <div class="project-num">02</div>
+        <h3>Coming Soon</h3>
+        <p>The next project is already taking shape in my head.</p>
+        <span class="chip">TBD</span>
+      </div>
+      <div class="project-card">
+        <div class="project-num">03</div>
+        <h3>And Another</h3>
+        <p>Growth happens one commit at a time.</p>
+        <span class="chip">TBD</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="tag">Contact</div>
+    <h2>Say Hello</h2>
+    <p>Got a question or want to collaborate? Send me a message.</p>
+    <form id="contactForm">
+      <input type="text" placeholder="Your name" id="nameInput" required />
+      <input type="email" placeholder="Your email" id="emailInput" required />
+      <textarea placeholder="Your message..." id="msgInput" required></textarea>
+      <button type="submit" class="btn">Send Message</button>
+    </form>
+    <div id="formMsg" class="form-msg"></div>
+  </section>
+
+  <footer>
+    <p>Made with ❤️ and deployed on GitHub Pages</p>
+    <p class="year"></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
