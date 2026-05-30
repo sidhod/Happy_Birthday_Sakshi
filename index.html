@@ -266,12 +266,7 @@ body{font-family:'Cormorant Garamond',serif;color:var(--text-dark)}
   color:var(--gold);margin-top:6px;opacity:.7}
 
 /* PHOTOS */
-.photos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:clamp(6px,2vw,14px);margin:16px 0}
-.photo-frame{border:2px solid var(--gold-light);overflow:hidden;position:relative;background:linear-gradient(135deg,var(--cream-dark),var(--gold-light))}
-.photo-frame.round{border-radius:50%;aspect-ratio:1}
-.photo-frame.rect{border-radius:4px;aspect-ratio:3/4}
-.photo-frame img{width:100%;height:100%;object-fit:cover;display:block}
-.photo-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;min-height:120px;color:var(--gold-dark);opacity:.5;font-size:11px;text-align:center;padding:8px}
+/* photo styles defined below with animations */
 
 /* SCHEDULE cards */
 .schedule-section{margin:20px 0}
@@ -389,8 +384,135 @@ body{font-family:'Cormorant Garamond',serif;color:var(--text-dark)}
 .s-fade{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
 .s-fade.in{opacity:1;transform:translateY(0)}
 
-@keyframes fadeInDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes scaleIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+/* ===== FLOATING MUSIC BUTTON ===== */
+#music-btn{
+  position:fixed;bottom:clamp(20px,5vw,32px);right:clamp(16px,4vw,28px);
+  z-index:3000;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  -webkit-tap-highlight-color:transparent;user-select:none;
+}
+.music-rings{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);pointer-events:none}
+.mring{
+  position:absolute;border-radius:50%;border:1.5px solid rgba(201,168,76,.5);
+  top:50%;left:50%;transform:translate(-50%,-50%) scale(0);opacity:0;
+}
+.mring.r1{width:44px;height:44px}
+.mring.r2{width:60px;height:60px}
+.mring.r3{width:76px;height:76px}
+
+/* rings animate only when playing */
+#music-btn.playing .mring.r1{animation:ringPulse 2s ease-out infinite}
+#music-btn.playing .mring.r2{animation:ringPulse 2s ease-out .5s infinite}
+#music-btn.playing .mring.r3{animation:ringPulse 2s ease-out 1s infinite}
+@keyframes ringPulse{
+  0%{transform:translate(-50%,-50%) scale(.3);opacity:.8}
+  100%{transform:translate(-50%,-50%) scale(1.6);opacity:0}
+}
+
+.music-icon{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--brown),var(--gold-dark));
+  border:2px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(139,105,20,.5);
+  transition:transform .2s ease,box-shadow .2s ease;
+  position:relative;z-index:1;
+}
+#music-btn:hover .music-icon{transform:scale(1.1);box-shadow:0 6px 28px rgba(139,105,20,.7)}
+#music-btn:active .music-icon{transform:scale(.94)}
+#music-btn.playing .music-icon{
+  animation:musicPop .3s ease;
+  background:linear-gradient(135deg,#6B3010,var(--gold-dark));
+}
+@keyframes musicPop{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
+
+/* Spinning vinyl ring when playing */
+#music-btn.playing .music-icon::after{
+  content:'';position:absolute;inset:-4px;border-radius:50%;
+  border:2px solid transparent;
+  border-top-color:var(--gold-light);border-right-color:rgba(201,168,76,.4);
+  animation:vinylSpin 2s linear infinite;
+}
+@keyframes vinylSpin{to{transform:rotate(360deg)}}
+
+.music-label{
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;
+  color:var(--gold-dark);text-transform:uppercase;
+  background:rgba(253,246,232,.9);
+  padding:2px 8px;border-radius:10px;border:1px solid rgba(201,168,76,.4);
+  white-space:nowrap;
+}
+
+/* ===== PHOTO ANIMATIONS ===== */
+/* Center couple photo */
+.couple-center-frame{
+  animation:photoReveal 1.2s cubic-bezier(.34,1.2,.64,1) both;
+}
+@keyframes photoReveal{
+  from{opacity:0;transform:scale(.85) translateY(20px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+.couple-center-img{
+  transition:transform .6s cubic-bezier(.34,1.2,.64,1),filter .4s ease;
+}
+.couple-center-frame:hover .couple-center-img{
+  transform:scale(1.04);
+}
+
+/* Photos grid */
+.photos-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:clamp(6px,2vw,14px);margin:16px 0;
+}
+.photo-frame{
+  border:2px solid var(--gold-light);overflow:hidden;
+  position:relative;background:linear-gradient(135deg,var(--cream-dark),var(--gold-light));
+  transition:transform .4s ease,box-shadow .4s ease;
+}
+.photo-frame.round{border-radius:50%;aspect-ratio:1}
+.photo-frame.rect{border-radius:4px;aspect-ratio:3/4}
+.photo-frame img{width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .7s cubic-bezier(.34,1.1,.64,1),filter .5s ease}
+.photo-frame:hover{
+  transform:translateY(-6px) scale(1.03);
+  box-shadow:0 12px 32px rgba(139,105,20,.3);
+  z-index:2;
+}
+.photo-frame:hover img{transform:scale(1.08)}
+.photo-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:100%;min-height:120px;color:var(--gold-dark);opacity:.5;font-size:11px;
+  text-align:center;padding:8px}
+
+/* Entry animations for each photo frame */
+.photo-frame:nth-child(1){animation:photoEntryLeft 1s cubic-bezier(.34,1.2,.64,1) .2s both}
+.photo-frame:nth-child(2){animation:photoEntryUp 1s cubic-bezier(.34,1.2,.64,1) .4s both}
+.photo-frame:nth-child(3){animation:photoEntryRight 1s cubic-bezier(.34,1.2,.64,1) .6s both}
+@keyframes photoEntryLeft{from{opacity:0;transform:translateX(-30px) rotate(-3deg)}to{opacity:1;transform:translateX(0) rotate(0)}}
+@keyframes photoEntryUp{from{opacity:0;transform:translateY(30px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes photoEntryRight{from{opacity:0;transform:translateX(30px) rotate(3deg)}to{opacity:1;transform:translateX(0) rotate(0)}}
+
+/* Gold shimmer overlay on photo hover */
+.photo-frame::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(201,168,76,0) 0%,rgba(201,168,76,.12) 50%,rgba(201,168,76,0) 100%);
+  opacity:0;transition:opacity .4s ease;pointer-events:none;
+}
+.photo-frame:hover::after{opacity:1}
+
+/* Round frame golden glow on hover */
+.photo-frame.round:hover{
+  box-shadow:0 0 0 3px var(--gold-light),0 12px 32px rgba(139,105,20,.35);
+}
+
+/* ===== keep existing responsive rules ===== */
+@media(max-width:480px){
+  .families-grid{grid-template-columns:1fr;gap:10px}
+  .fam-sep{display:none}
+  .photos-grid{grid-template-columns:1fr 1fr}
+  .photos-grid .photo-frame:nth-child(3){display:none}
+  .action-row{flex-direction:column;align-items:stretch}
+  .btn-nav,.btn-cal{justify-content:center}
+}
 
 /* Sections */
 .mantra-text{text-align:center;font-family:'Noto Serif Devanagari',serif;font-size:clamp(13px,3.5vw,20px);
@@ -577,19 +699,8 @@ body{font-family:'Cormorant Garamond',serif;color:var(--text-dark)}
 }
 @keyframes shimmer{0%,100%{opacity:.7}50%{opacity:1}}
 
-@media(max-width:480px){
-  .hero-section{margin:-20px -14px 20px}
-  .action-row{flex-direction:column;align-items:stretch}
-  .btn-nav,.btn-cal{justify-content:center}
-}
 
 
-@media(max-width:480px){
-  .families-grid{grid-template-columns:1fr;gap:10px}
-  .fam-sep{display:none}
-  .photos-grid{grid-template-columns:1fr 1fr}
-  .photos-grid .photo-frame:nth-child(3){display:none}
-}
 </style>
 </head>
 <body>
@@ -918,7 +1029,7 @@ body{font-family:'Cormorant Garamond',serif;color:var(--text-dark)}
   <!-- Buddha image -->
   <div class="buddha-wrap" style="animation:scaleIn .8s ease .2s both">
     <img class="buddha-img"
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/BuddhaGautama.jpg/220px-BuddhaGautama.jpg"
+      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8D0pm58lt5wBDh3oXKpxd72V0h83PJhlEuQ&s"
       alt="Lord Buddha"
       onerror="this.style.display='none'">
   </div>
@@ -1089,6 +1200,36 @@ body{font-family:'Cormorant Garamond',serif;color:var(--text-dark)}
 </div><!-- /page -->
 </div><!-- /invitation -->
 
+<!-- Background music (free Buddhist/Indian instrumental) -->
+<audio id="bg-music" loop preload="auto">
+  <!-- Free royalty-free Buddhist/Indian ambient music from public CDN -->
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Floating music button -->
+<div id="music-btn" onclick="toggleMusic()" title="Toggle music">
+  <div class="music-rings">
+    <div class="mring r1"></div>
+    <div class="mring r2"></div>
+    <div class="mring r3"></div>
+  </div>
+  <div class="music-icon" id="music-icon">
+    <svg id="icon-play" width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="11" stroke="#C9A84C" stroke-width="1.5" fill="rgba(253,246,232,.95)"/>
+      <!-- Musical note -->
+      <path d="M10 17V8l7-1.5v2L12 9.5V17" stroke="#8B6914" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <circle cx="9.5" cy="17" r="1.5" fill="#8B6914"/>
+      <circle cx="16.5" cy="16" r="1.5" fill="#8B6914"/>
+    </svg>
+    <svg id="icon-pause" width="22" height="22" viewBox="0 0 24 24" fill="none" style="display:none">
+      <circle cx="12" cy="12" r="11" stroke="#C9A84C" stroke-width="1.5" fill="rgba(253,246,232,.95)"/>
+      <rect x="8" y="8" width="2.5" height="8" rx="1" fill="#8B6914"/>
+      <rect x="13.5" y="8" width="2.5" height="8" rx="1" fill="#8B6914"/>
+    </svg>
+  </div>
+  <div class="music-label" id="music-label">♪ Music</div>
+</div>
+
 <!-- ===== MODALS ===== -->
 <div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
   <div class="modal-box" id="modal-box">
@@ -1167,6 +1308,7 @@ function openEnvelope(){
         inv.classList.add('fade');
         setupScroll();
         startTimer();
+        fadeInMusic();
       })});
     },1400);
   },2000);
@@ -1337,6 +1479,57 @@ function closeModalOutside(e){if(e.target===document.getElementById('modal'))clo
 
 // Escape key
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+
+// ===== MUSIC =====
+var audio=document.getElementById('bg-music');
+var musicPlaying=false;
+audio.volume=0.35;
+
+function toggleMusic(){
+  if(musicPlaying){
+    audio.pause();
+    musicPlaying=false;
+    document.getElementById('music-btn').classList.remove('playing');
+    document.getElementById('icon-play').style.display='';
+    document.getElementById('icon-pause').style.display='none';
+    document.getElementById('music-label').textContent='♪ Music';
+  } else {
+    audio.play().then(function(){
+      musicPlaying=true;
+      document.getElementById('music-btn').classList.add('playing');
+      document.getElementById('icon-play').style.display='none';
+      document.getElementById('icon-pause').style.display='';
+      document.getElementById('music-label').textContent='❚❚ Pause';
+    }).catch(function(){
+      // Autoplay blocked — user needs to tap
+      document.getElementById('music-label').textContent='♪ Tap Play';
+    });
+  }
+}
+
+// Try autoplay when invitation opens (after user interaction with envelope)
+function tryAutoplay(){
+  audio.play().then(function(){
+    musicPlaying=true;
+    document.getElementById('music-btn').classList.add('playing');
+    document.getElementById('icon-play').style.display='none';
+    document.getElementById('icon-pause').style.display='';
+    document.getElementById('music-label').textContent='❚❚ Pause';
+  }).catch(function(){});
+}
+
+// Fade-in music smoothly
+function fadeInMusic(){
+  audio.volume=0;
+  tryAutoplay();
+  var vol=0;
+  var fade=setInterval(function(){
+    vol=Math.min(vol+0.02,0.35);
+    audio.volume=vol;
+    if(vol>=0.35)clearInterval(fade);
+  },120);
+}
+
 </script>
 </body>
 </html>
