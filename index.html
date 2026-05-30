@@ -2,2101 +2,1341 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sakshi & Sidhodhan — Sacred Buddhist Wedding</title>
-
-<!-- Elegant Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=0,400;0,500;0,600;0,700;1,400;1,500&family=Cinzel:wght@400;500;600;700;800&family=Nunito:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Sakshi & Sidhodhan - Wedding Invitation</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;500;600&family=Noto+Serif+Devanagari:wght@300;400&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cream: #fffbf2; /* Zen Warm Ivory */
-    --cream2: #fcf1df;
-    --gold: #d4af37; /* Sacred Temple Gold */
-    --gold-light: #f3e5ab;
-    --gold-pale: #fcf7e8;
-    --gold-dark: #aa8529;
-    --maroon: #5c0612; /* Royal Buddhist Maroon */
-    --maroon-light: #800a1d;
-    --text: #2c1a12;
-    --text-light: #70554a;
-    --saffron: #e07a5f; /* Holy Saffron */
-    --white: #ffffff;
-    --shadow-soft: 0 15px 35px rgba(92, 6, 18, 0.08);
-    --shadow-gold: 0 10px 30px rgba(212, 175, 55, 0.35);
-    --border-radius-lg: 24px;
-    --border-radius-sm: 12px;
-  }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --gold:#C9A84C;--gold-light:#E8D5A3;--gold-dark:#8B6914;
+  --cream:#FDF6E8;--cream-dark:#F5E6C8;--brown:#5C3D1E;--text-dark:#2C1A0E;
+}
+html,body{width:100%;min-height:100%;overflow-x:hidden;background:var(--cream)}
+body{font-family:'Cormorant Garamond',serif;color:var(--text-dark)}
 
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+/* PETALS */
+.petal-layer{position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden}
+.petal{position:absolute;top:-40px;border-radius:50% 0 50% 0;animation:fall linear infinite}
+@keyframes fall{0%{transform:translateY(-40px) rotate(0deg);opacity:.8}80%{opacity:.5}100%{transform:translateY(110vh) rotate(720deg) translateX(50px);opacity:0}}
 
-  html {
-    scroll-behavior: smooth;
-    overflow-x: hidden;
-  }
+/* ===== INTRO / ENVELOPE SCREEN ===== */
+#env-screen{
+  position:fixed;inset:0;z-index:1000;overflow:hidden;
+  transition:opacity 1.4s ease;
+  background:#05080f;
+}
+#env-screen.out{opacity:0;pointer-events:none}
 
-  body {
-    background-color: var(--cream);
-    color: var(--text);
-    font-family: 'Nunito', sans-serif;
-    overflow-x: hidden;
-    position: relative;
-  }
+/* ---- INTRO CANVAS (full-screen SVG pond scene) ---- */
+#intro-canvas{position:absolute;inset:0;width:100%;height:100%}
 
-  /* Prevent scroll while lotus is closed */
-  body.lock-scroll {
-    overflow: hidden;
-    height: 100vh;
-  }
+/* ---- STAGE LAYERS ---- */
+/* Each stage fades in on top */
+.intro-stage{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:0;pointer-events:none;
+  opacity:0;transition:opacity 1s ease}
+.intro-stage.active{opacity:1}
+.intro-stage.done{opacity:0}
 
-  /* Custom Scrollbar */
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--cream);
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--gold);
-    border-radius: 5px;
-  }
+/* ---- RIPPLE ---- */
+.ripple-ring{position:absolute;border-radius:50%;border:1.5px solid rgba(201,168,76,.5);
+  animation:rippleOut 3s ease-out infinite}
+@keyframes rippleOut{0%{transform:scale(.2);opacity:.9}100%{transform:scale(4);opacity:0}}
 
-  /* Typography */
-  h1, h2, h3, h4 {
-    font-family: 'Cinzel', serif;
-    font-weight: 500;
-  }
-  
-  .script-font {
-    font-family: 'Great Vibes', cursive;
-  }
+/* ---- CANDLES (floating light spots) ---- */
+.candle{position:absolute;pointer-events:none}
+.candle-flame{animation:flicker 1.5s ease-in-out infinite alternate}
+@keyframes flicker{0%{transform:scaleY(1) scaleX(1)}50%{transform:scaleY(1.15) scaleX(.88)}100%{transform:scaleY(.92) scaleX(1.05)}}
 
-  .playfair {
-    font-family: 'Playfair Display', serif;
-  }
+/* ---- LANTERNS ---- */
+.lantern{position:absolute;animation:lanternRise linear infinite}
+@keyframes lanternRise{0%{transform:translateY(0) rotate(-3deg);opacity:.9}
+  50%{transform:translateY(-30px) rotate(3deg);opacity:1}
+  100%{transform:translateY(-100vh) rotate(-2deg);opacity:0}}
 
-  .text-gold { color: var(--gold); }
-  .text-maroon { color: var(--maroon); }
-  .text-center { text-align: center; }
+/* ---- LOTUS BLOOM ---- */
+.lotus-bloom{position:absolute;bottom:28%;left:50%;transform:translateX(-50%);
+  transform-origin:bottom center}
+.petal-bloom{transform-origin:bottom center;animation:none}
+.petal-bloom.open{animation:petalOpen .8s cubic-bezier(.34,1.2,.64,1) forwards}
+@keyframes petalOpen{from{transform:rotate(var(--start-r)) scaleY(.1)}
+  to{transform:rotate(var(--end-r)) scaleY(1)}}
 
-  /* Preloader */
-  #preloader {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--maroon);
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    transition: opacity 0.8s ease, visibility 0.8s;
-  }
-  .loader-rings {
-    width: 120px;
-    height: 120px;
-    border: 3px solid transparent;
-    border-top-color: var(--gold);
-    border-bottom-color: var(--gold);
-    border-radius: 50%;
-    animation: spin 2s linear infinite;
-    position: relative;
-  }
-  .loader-rings::before {
-    content: '';
-    position: absolute;
-    top: 10px; left: 10px; right: 10px; bottom: 10px;
-    border: 3px solid transparent;
-    border-left-color: var(--cream);
-    border-right-color: var(--cream);
-    border-radius: 50%;
-    animation: spin-reverse 1.5s linear infinite;
-  }
-  .loader-text {
-    margin-top: 25px;
-    color: var(--gold);
-    font-family: 'Cinzel', serif;
-    font-size: 1.1rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    animation: pulse 1.5s infinite;
-  }
+/* ---- DHARMA WHEEL (center stage) ---- */
+#dharma-stage{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  opacity:0;transition:opacity 1.2s ease;pointer-events:none}
+#dharma-stage.show{opacity:1}
+.dharma-glow{filter:drop-shadow(0 0 18px rgba(201,168,76,.7))}
+.dharma-spin{animation:dspin 12s linear infinite;transform-origin:center}
+@keyframes dspin{to{transform:rotate(360deg)}}
 
-  /* ===== 3D SACRED LOTUS BLOOMING UNVEIL SCREEN ===== */
-  .lotus-unveil-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle, rgba(41, 2, 7, 0.94) 0%, #0c0103 100%), 
-                url('ChatGPT Image May 30, 2026, 02_06_24 AM.png') center/cover no-repeat;
-    background-blend-mode: multiply;
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: transform 1.5s cubic-bezier(0.85, 0, 0.15, 1), opacity 1.2s ease;
-  }
-  .lotus-unveil-overlay.hide {
-    transform: scale(1.1) translateY(-100vh);
-    opacity: 0;
-    pointer-events: none;
-  }
-  .lotus-shrine-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-  }
-  .shrine-halo {
-    position: absolute;
-    width: 400px;
-    height: 400px;
-    top: -50px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(212, 175, 55, 0) 70%);
-    animation: pulse 3s infinite ease-in-out;
-    pointer-events: none;
-    z-index: 1;
-  }
-  .lotus-wrapper {
-    position: relative;
-    width: 320px;
-    height: 320px;
-    cursor: pointer;
-    z-index: 2;
-  }
-  .sacred-lotus {
-    width: 100%;
-    height: 100%;
-    filter: drop-shadow(0 15px 30px rgba(0,0,0,0.5));
-    transition: transform 1.2s ease;
-  }
-  .petal {
-    transform-origin: 50px 80px;
-    transition: transform 1.8s cubic-bezier(0.25, 1, 0.35, 1), opacity 1.5s ease;
-  }
-  
-  /* Closed Bud State */
-  .outer-petal-left { transform: rotate(-5deg); }
-  .outer-petal-right { transform: rotate(5deg); }
-  .mid-petal-left { transform: rotate(-2deg); }
-  .mid-petal-right { transform: rotate(2deg); }
-  .center-petal { transform: scale(1); }
+/* ---- MANTRA TEXT ---- */
+#mantra-stage{position:absolute;top:18%;left:50%;transform:translateX(-50%);
+  text-align:center;opacity:0;transition:opacity 1s ease;white-space:nowrap}
+#mantra-stage.show{opacity:1}
+.mantra-dev{font-family:'Noto Serif Devanagari',serif;
+  font-size:clamp(13px,4vw,22px);color:#E8D090;letter-spacing:4px;
+  text-shadow:0 0 20px rgba(201,168,76,.8)}
+.mantra-eng{font-family:'Cinzel',serif;font-size:clamp(8px,2.2vw,12px);
+  letter-spacing:5px;color:rgba(232,213,163,.65);text-transform:uppercase;margin-top:6px}
 
-  /* Blooming transform state */
-  .lotus-wrapper.bloom .outer-petal-left { transform: rotate(-65deg) scale(0.95); opacity: 0.85; }
-  .lotus-wrapper.bloom .outer-petal-right { transform: rotate(65deg) scale(0.95); opacity: 0.85; }
-  .lotus-wrapper.bloom .mid-petal-left { transform: rotate(-35deg) scale(0.98); }
-  .lotus-wrapper.bloom .mid-petal-right { transform: rotate(35deg) scale(0.98); }
-  .lotus-wrapper.bloom .center-petal { transform: scaleY(0.4) scaleX(0.8) translateY(15px); opacity: 0.3; }
+/* ---- ENVELOPE WRAPPER ---- */
+#env-wrap{
+  position:absolute;bottom:10%;left:50%;transform:translateX(-50%) translateY(80px);
+  width:min(380px,84vw);cursor:pointer;user-select:none;
+  opacity:0;transition:opacity .8s ease,transform .8s cubic-bezier(.34,1.2,.64,1);
+}
+#env-wrap.risen{opacity:1;transform:translateX(-50%) translateY(0)}
+.tap-hint{
+  position:absolute;bottom:3%;left:50%;transform:translateX(-50%);
+  color:rgba(232,213,163,.8);font-size:clamp(11px,3vw,13px);letter-spacing:3px;
+  text-transform:uppercase;text-align:center;white-space:nowrap;
+  animation:pulse 2s ease-in-out infinite;pointer-events:none;
+}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
 
-  /* Invitation card nested in golden heart of the lotus */
-  .lotus-card {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translate(-50%, 0) scale(0);
-    width: 340px;
-    height: 240px;
-    background: var(--cream);
-    border: 3px solid var(--gold);
-    border-radius: var(--border-radius-sm);
-    box-shadow: 0 25px 65px rgba(0,0,0,0.5);
-    z-index: 10;
-    opacity: 0;
-    padding: 30px;
-    text-align: center;
-    transition: transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 1s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  .lotus-card::before {
-    content: '';
-    position: absolute;
-    top: 6px; bottom: 6px; left: 6px; right: 6px;
-    border: 1px dashed var(--gold-dark);
-    border-radius: 8px;
-    pointer-events: none;
-  }
-  .lotus-wrapper.bloom .lotus-card {
-    transform: translate(-50%, -100px) scale(1);
-    opacity: 1;
-  }
-  .lotus-card h3 {
-    font-family: 'Great Vibes', cursive;
-    font-size: 2.4rem;
-    color: var(--maroon);
-    margin-bottom: 5px;
-  }
-  .lotus-card p {
-    font-family: 'Cinzel', serif;
-    letter-spacing: 2px;
-    font-size: 0.85rem;
-    color: var(--gold-dark);
-  }
-  .click-to-enter {
-    margin-top: 15px;
-    padding: 8px 24px;
-    background: var(--maroon);
-    color: var(--gold);
-    border: 1px solid var(--gold);
-    border-radius: 20px;
-    font-family: 'Cinzel', serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    transition: all 0.3s;
-  }
-  .click-to-enter:hover {
-    background: var(--gold);
-    color: var(--maroon);
-    transform: translateY(-2px);
-  }
+.envelope{position:relative;width:100%}
 
-  /* Falling Sacred Dust & Lotus Petal Particles */
-  #particles {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 1;
-  }
-  .particle {
-    position: absolute;
-    background: radial-gradient(circle, var(--gold-light) 0%, transparent 70%);
-    border-radius: 50%;
-    opacity: 0;
-    animation: fall linear infinite;
-  }
-  .petal {
-    position: absolute;
-    background: linear-gradient(135deg, rgba(224, 122, 95, 0.8), rgba(212,175,55,0.4));
-    border-radius: 50% 0 50% 50%; /* Pure Lotus Petal shape */
-    opacity: 0;
-    animation: fall-petal linear infinite;
-  }
+/* Envelope body */
+.env-body{
+  position:relative;
+  background:linear-gradient(160deg,#f5e6c0,#e8d070 40%,#f0d898);
+  border:2px solid var(--gold);
+  border-radius:4px 4px 16px 16px;
+  overflow:visible;
+  box-shadow:0 24px 60px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.4);
+}
+/* Body inner for correct height */
+.env-body-inner{padding-bottom:60%;position:relative;overflow:hidden;border-radius:4px 4px 16px 16px;}
+.env-pattern{
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(45deg,transparent,transparent 18px,rgba(201,168,76,.06) 18px,rgba(201,168,76,.06) 19px),
+             repeating-linear-gradient(-45deg,transparent,transparent 18px,rgba(201,168,76,.06) 18px,rgba(201,168,76,.06) 19px);
+}
+/* V-flap - pure CSS triangle via clip-path, no positioning bugs */
+.env-flap{
+  position:absolute;top:0;left:0;width:100%;
+  transform-origin:top center;
+  transition:transform 1s cubic-bezier(.4,0,.2,1);
+  z-index:6;
+}
+.env-flap-shape{
+  width:100%;aspect-ratio:2/1;
+  background:linear-gradient(170deg,#e0c060,#c9a84c 50%,#f0d898);
+  clip-path:polygon(0 0,100% 0,50% 100%);
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+/* Left & right inner fold triangles */
+.env-left-fold{
+  position:absolute;bottom:0;left:0;width:0;height:0;
+  border-style:solid;
+  border-color:transparent transparent rgba(160,110,20,.5) transparent;
+  border-width:0 calc(min(440px,88vw)*.5) calc(min(440px,88vw)*.55) 0;
+  border-radius:0 0 0 16px;
+}
+.env-right-fold{
+  position:absolute;bottom:0;right:0;width:0;height:0;
+  border-style:solid;
+  border-color:transparent transparent rgba(160,110,20,.5) transparent;
+  border-width:0 0 calc(min(440px,88vw)*.55) calc(min(440px,88vw)*.5);
+  border-radius:0 0 16px 0;
+}
 
-  /* Floating Music Controls with Equalizer */
-  .music-widget {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    z-index: 100;
-  }
-  #music-btn {
-    width: 55px;
-    height: 55px;
-    background: var(--gold);
-    color: var(--maroon);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: var(--shadow-gold);
-    border: 2px solid var(--cream);
-    transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
-  }
-  #music-btn:hover {
-    transform: scale(1.1);
-    background: var(--gold-light);
-    box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4);
-  }
-  .playing { animation: pulse-ring 2s infinite; }
-  
-  .visualizer {
-    display: flex;
-    align-items: flex-end;
-    gap: 3px;
-    height: 30px;
-    background: rgba(92, 6, 18, 0.9);
-    padding: 8px 12px;
-    border-radius: 20px;
-    border: 1px solid var(--gold);
-    opacity: 0;
-    transform: translateX(20px);
-    transition: all 0.5s ease;
-    backdrop-filter: blur(5px);
-  }
-  .visualizer.active {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  .bar {
-    width: 3px;
-    height: 5px;
-    background-color: var(--gold);
-    border-radius: 3px;
-  }
-  .playing-wave .bar {
-    animation: bounce 1s ease-in-out infinite alternate;
-  }
-  .playing-wave .bar:nth-child(2) { animation-delay: 0.2s; }
-  .playing-wave .bar:nth-child(3) { animation-delay: 0.4s; }
-  .playing-wave .bar:nth-child(4) { animation-delay: 0.1s; }
-  .playing-wave .bar:nth-child(5) { animation-delay: 0.3s; }
+/* Wax seal */
+.env-seal{
+  position:absolute;bottom:-30px;left:50%;transform:translateX(-50%);
+  width:clamp(65px,15vw,85px);height:clamp(65px,15vw,85px);
+  z-index:10;cursor:pointer;
+  transition:transform .3s ease,box-shadow .3s ease;
+  filter:drop-shadow(0 6px 16px rgba(0,0,0,.6));
+}
+.env-seal:hover{transform:translateX(-50%) scale(1.08)}
+.envelope.open .env-seal{animation:sealPop .5s ease forwards}
+@keyframes sealPop{0%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.2)}100%{transform:translateX(-50%) scale(0) rotate(180deg);opacity:0}}
 
-  /* Sections */
-  section {
-    position: relative;
-    z-index: 10;
-    padding: 100px 20px;
-    overflow: hidden;
-  }
+/* Card peek */
+.env-card{
+  position:absolute;bottom:10px;left:50%;transform:translateX(-50%) translateY(110%);
+  width:88%;background:var(--cream);border:1.5px solid var(--gold);
+  border-radius:4px;padding:clamp(12px,3vw,20px);text-align:center;
+  transition:transform 1.1s cubic-bezier(.34,1.4,.64,1) .5s;
+  box-shadow:0 -6px 24px rgba(0,0,0,.35);z-index:5;
+}
+.envelope.open .env-card{transform:translateX(-50%) translateY(-6%)}
+.envelope.open .env-flap{transform:rotateX(-175deg)}
 
-  /* Hero Section */
-  .hero {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(rgba(41, 2, 7, 0.92), rgba(92, 6, 18, 0.96)), 
-                url('ChatGPT Image May 30, 2026, 02_06_24 AM.png') center/cover no-repeat;
-    background-blend-mode: multiply;
-    color: var(--cream);
-    text-align: center;
-    padding: 20px;
-    border-bottom: 5px solid var(--gold);
-  }
-  .hero-border {
-    border: 2px solid var(--gold-dark);
-    padding: 45px 30px;
-    border-radius: 24px;
-    max-width: 850px;
-    width: 100%;
-    position: relative;
-    background: rgba(92, 6, 18, 0.5);
-    backdrop-filter: blur(12px);
-    box-shadow: inset 0 0 35px rgba(212, 175, 55, 0.2);
-  }
-  
-  /* Corner Ornaments */
-  .corner-ornament {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    border-color: var(--gold);
-    border-style: solid;
-    transition: all 1s ease;
-  }
-  .top-left { top: 15px; left: 15px; border-width: 3px 0 0 3px; border-top-left-radius: 12px; }
-  .top-right { top: 15px; right: 15px; border-width: 3px 3px 0 0; border-top-right-radius: 12px; }
-  .bottom-left { bottom: 15px; left: 15px; border-width: 0 0 3px 3px; border-bottom-left-radius: 12px; }
-  .bottom-right { bottom: 15px; right: 15px; border-width: 0 3px 3px 0; border-bottom-right-radius: 12px; }
+.peek-mantra{font-family:'Noto Serif Devanagari',serif;font-size:clamp(10px,2.5vw,13px);color:var(--gold-dark);margin-bottom:6px}
+.peek-names{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,6vw,34px);font-style:italic;color:var(--brown)}
+.peek-date{font-family:'Cinzel',serif;font-size:clamp(9px,2.2vw,12px);letter-spacing:3px;color:var(--gold-dark);margin-top:4px}
 
-  /* Gilded Spiritual Hanging Bells */
-  .hanging-bell {
-    position: absolute;
-    top: 30px;
-    width: 30px;
-    height: 60px;
-    pointer-events: none;
-    animation: sway 4s ease-in-out infinite alternate;
-    transform-origin: top center;
-  }
-  .bell-left { left: 40px; }
-  .bell-right { right: 40px; }
+.tap-hint{color:rgba(232,213,163,.8);font-size:clamp(11px,3vw,14px);letter-spacing:3px;
+  text-transform:uppercase;text-align:center;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
 
-  /* ===== ELEVATED BUDDHA SHRINE & LOOPING AURA ===== */
-  .buddha-blessing-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 25px;
-    position: relative;
-    width: 100%;
-  }
-  .buddha-halo-wrapper {
-    position: absolute;
-    width: 280px;
-    height: 280px;
-    top: -50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    pointer-events: none;
-    z-index: 1;
-  }
-  /* Staggered Halo Ripples for a perfect, continuous seamless loop */
-  .buddha-halo-ring {
-    position: absolute;
-    width: 140px;
-    height: 185px;
-    border-radius: 100px 100px 20px 20px;
-    border: 2.5px dashed rgba(212, 175, 55, 0.4);
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
-    animation: radiate 6s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
-  }
-  .buddha-halo-ring:nth-child(2) {
-    animation-delay: 2s;
-  }
-  .buddha-halo-ring:nth-child(3) {
-    animation-delay: 4s;
-  }
-  @keyframes radiate {
-    0% {
-      transform: scale(0.9);
-      opacity: 0.9;
-      filter: blur(1px);
-    }
-    100% {
-      transform: scale(1.4);
-      opacity: 0;
-      filter: blur(6px);
-    }
-  }
+/* ===== MAIN INVITATION ===== */
+#invitation{display:none;opacity:0;transition:opacity 1s ease}
+#invitation.show{display:block}
+#invitation.fade{opacity:1}
 
-  .buddha-gilded-arch {
-    width: 130px;
-    height: 175px;
-    border-radius: 100px 100px 12px 12px;
-    border: 3.5px solid var(--gold);
-    padding: 3px;
-    background: var(--maroon);
-    box-shadow: 0 0 25px rgba(212, 175, 55, 0.6), inset 0 0 15px rgba(255,255,255,0.1);
-    overflow: hidden;
-    position: relative;
-    z-index: 2;
-  }
-  .buddha-gilded-arch img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 96px 96px 8px 8px;
-  }
-  /* Gilded Shimmer effect over Buddha image */
-  .buddha-gilded-arch::after {
-    content: '';
-    position: absolute;
-    top: 0; left: -150%;
-    width: 150%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.25), transparent);
-    transform: skewX(-20deg);
-    animation: image-shimmer 4s infinite linear;
-  }
-  @keyframes image-shimmer {
-    0% { left: -150%; }
-    40% { left: 150%; }
-    100% { left: 150%; }
-  }
+.page{max-width:800px;margin:0 auto;padding:clamp(10px,3vw,24px)}
 
-  /* SVG Lotus Pedestal holding the Gilded Arch */
-  .buddha-lotus-base {
-    width: 160px;
-    height: 35px;
-    margin-top: -15px;
-    z-index: 3;
-    fill: var(--gold);
-    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
-    animation: gentle-float 4s ease-in-out infinite alternate;
-  }
-  @keyframes gentle-float {
-    0% { transform: translateY(0px); }
-    100% { transform: translateY(3px); }
-  }
+.border-box{
+  border:2px solid var(--gold);position:relative;padding:clamp(16px,4vw,40px) clamp(14px,3.5vw,36px);
+  background:var(--cream);
+  box-shadow:0 0 0 5px var(--cream),0 0 0 7px rgba(201,168,76,.3),inset 0 0 60px rgba(201,168,76,.06);
+}
+.corner{position:absolute;width:28px;height:28px;background:var(--gold);
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.corner.tl{top:-14px;left:-14px}.corner.tr{top:-14px;right:-14px}
+.corner.bl{bottom:-14px;left:-14px}.corner.br{bottom:-14px;right:-14px}
 
-  .mantra-banner {
-    font-family: 'Cinzel', serif;
-    font-size: 0.85rem;
-    letter-spacing: 4px;
-    color: var(--gold-light);
-    margin-top: 15px;
-    font-weight: 700;
-    text-shadow: 0 2px 10px rgba(212,175,55,0.5);
-    animation: breathing-text 3s infinite alternate ease-in-out;
-  }
-  @keyframes breathing-text {
-    0% { opacity: 0.7; transform: scale(0.98); }
-    100% { opacity: 1; transform: scale(1.02); }
-  }
+/* Sections */
+.mantra-text{text-align:center;font-family:'Noto Serif Devanagari',serif;font-size:clamp(13px,3.5vw,20px);
+  color:var(--gold-dark);letter-spacing:3px;margin-bottom:10px}
+.sub-text{text-align:center;font-size:clamp(10px,2.5vw,13px);letter-spacing:4px;
+  text-transform:uppercase;color:var(--brown);opacity:.7;margin-bottom:16px}
 
-  /* Animated Mandala */
-  .hero-mandala {
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    opacity: 0.15;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="none" stroke="%23d4af37" stroke-width="1"/><path d="M50 5 L50 95 M5 50 L95 50 M18 18 L82 82 M18 82 L82 18" stroke="%23d4af37" stroke-width="0.75"/><circle cx="50" cy="50" r="15" fill="none" stroke="%23d4af37" stroke-width="1"/><path d="M50 35 L50 65 M35 50 L65 50" stroke="%23d4af37" stroke-width="0.75"/><circle cx="50" cy="50" r="5" fill="%23d4af37"/></svg>');
-    background-size: contain;
-    background-repeat: no-repeat;
-    animation: spin 80s linear infinite;
-    pointer-events: none;
-    z-index: -1;
-  }
+/* Buddha image */
+.buddha-wrap{text-align:center;margin:10px 0 16px}
+.buddha-img{width:clamp(60px,14vw,100px);border-radius:50%;
+  border:2px solid var(--gold-light);object-fit:cover;opacity:.9;
+  animation:glow 3s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 10px rgba(201,168,76,.3)}50%{box-shadow:0 0 24px rgba(201,168,76,.6)}}
 
-  .top-text {
-    font-size: 14px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--gold-light);
-    margin-bottom: 20px;
-    font-weight: 700;
-  }
-  .names {
-    font-size: clamp(3.2rem, 9vw, 6.2rem);
-    color: var(--gold);
-    line-height: 1.1;
-    margin: 20px 0;
-    text-shadow: 0 4px 20px rgba(0,0,0,0.6);
-    letter-spacing: 2px;
-  }
-  .ampersand {
-    font-size: clamp(2.2rem, 6vw, 4.5rem);
-    color: var(--cream);
-    display: block;
-    margin: -15px 0;
-    opacity: 0.9;
-  }
-  .date-text {
-    font-size: 1.6rem;
-    letter-spacing: 3px;
-    margin-top: 35px;
-    border-top: 1px solid var(--gold-dark);
-    border-bottom: 1px solid var(--gold-dark);
-    padding: 12px 25px;
-    display: inline-block;
-  }
+/* Names */
+.names-wrap{text-align:center;margin:16px 0 10px}
+.name-big{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,13vw,88px);
+  font-weight:300;font-style:italic;color:var(--gold-dark);line-height:.95}
+.amp-row{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0}
+.amp-line{flex:1;max-width:60px;height:1px;background:var(--gold-light)}
+.amp{font-size:clamp(22px,7vw,44px);font-style:italic;color:var(--gold)}
 
-  .reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: all 1.2s cubic-bezier(0.21, 0.6, 0.35, 1);
-  }
-  .reveal.active {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Date */
+.date-wrap{text-align:center;margin:12px 0 8px}
+.date-box{font-family:'Cinzel',serif;font-size:clamp(11px,3vw,17px);letter-spacing:6px;
+  color:var(--brown);border-top:1px solid var(--gold-light);border-bottom:1px solid var(--gold-light);
+  padding:10px 24px;display:inline-block;margin-bottom:6px}
+.venue-label{font-size:clamp(10px,2.5vw,13px);letter-spacing:4px;text-transform:uppercase;
+  color:var(--gold-dark);opacity:.8}
 
-  .divider {
-    display: flex;
-    justify-content: center;
-    margin: 40px 0;
-  }
-  .divider svg {
-    width: 240px;
-    fill: var(--gold);
-    filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.1));
-  }
+/* Dividers */
+.divider{display:flex;align-items:center;gap:10px;margin:14px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold-light),transparent)}
+.divider span{color:var(--gold);font-size:16px}
 
-  /* Countdown Section */
-  .countdown-section {
-    background: var(--cream2);
-    text-align: center;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-  }
-  .countdown-container {
-    display: flex;
-    justify-content: center;
-    gap: 25px;
-    flex-wrap: wrap;
-    margin-top: 45px;
-  }
-  .cd-box {
-    background: var(--white);
-    border: 2px solid var(--gold);
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: var(--shadow-soft);
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  .cd-box:hover {
-    transform: scale(1.08) rotate(3deg);
-    box-shadow: var(--shadow-gold);
-  }
-  .cd-box::after {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.15), transparent);
-    transform: rotate(45deg);
-    animation: shine 4s infinite;
-  }
-  .cd-num {
-    font-size: 34px;
-    font-family: 'Cinzel', serif;
-    color: var(--maroon);
-    font-weight: 700;
-  }
-  .cd-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--text-light);
-    font-weight: 600;
-    margin-top: 3px;
-  }
+/* Lotus row */
+.lotus-row{display:flex;justify-content:center;gap:clamp(10px,3vw,20px);margin:10px 0;align-items:flex-end}
+.lotus-svg{animation:float 4s ease-in-out infinite}
+.lotus-svg:nth-child(2){animation-delay:.6s}
+.lotus-svg:nth-child(3){animation-delay:1.2s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 
-  /* ===== MAJESTIC TRI-FRAME MANDALA GALLERY ===== */
-  .couple-portrait-section {
-    background: var(--white);
-    text-align: center;
-  }
-  .collage-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    max-width: 1100px;
-    margin: 50px auto;
-    padding: 0 20px;
-  }
-  
-  .collage-frame {
-    border-radius: var(--border-radius-lg);
-    overflow: hidden;
-    position: relative;
-    box-shadow: var(--shadow-soft);
-    border: 4px solid var(--white);
-    transition: all 0.5s ease;
-  }
-  
-  .collage-center {
-    width: 440px;
-    aspect-ratio: 4 / 5;
-    z-index: 5;
-    border: 6px solid var(--white);
-    box-shadow: 0 20px 50px rgba(92, 6, 18, 0.12);
-  }
-  .collage-side {
-    width: 260px;
-    aspect-ratio: 3 / 4;
-    opacity: 0.85;
-    filter: brightness(0.9);
-  }
-  .collage-side:hover {
-    opacity: 1;
-    filter: brightness(1);
-    transform: scale(1.05);
-  }
-  .collage-center:hover {
-    transform: scale(1.03);
-    box-shadow: var(--shadow-gold);
-  }
-  .collage-frame img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-  }
-  .collage-frame:hover img {
-    transform: scale(1.06);
-  }
+/* TIMER */
+.timer-section{background:linear-gradient(135deg,var(--brown),#3d2010);
+  border-radius:8px;padding:clamp(14px,4vw,24px);margin:16px 0;text-align:center;
+  box-shadow:0 4px 20px rgba(0,0,0,.25)}
+.timer-label{font-family:'Cinzel',serif;font-size:clamp(9px,2.5vw,12px);letter-spacing:4px;
+  text-transform:uppercase;color:var(--gold-light);margin-bottom:12px;opacity:.9}
+.timer-grid{display:flex;justify-content:center;gap:clamp(8px,2.5vw,20px)}
+.timer-unit{text-align:center}
+.timer-num{font-family:'Cinzel',serif;font-size:clamp(24px,7vw,48px);color:var(--gold);
+  line-height:1;display:block;min-width:clamp(44px,10vw,70px)}
+.timer-sub{font-size:clamp(8px,2vw,11px);letter-spacing:3px;text-transform:uppercase;
+  color:rgba(232,213,163,.65);display:block;margin-top:4px}
+.timer-sep{font-size:clamp(20px,5vw,36px);color:var(--gold);align-self:flex-start;padding-top:4px}
 
-  /* Buddhism Quotes on Love & Companion */
-  .buddhist-quote-box {
-    max-width: 750px;
-    margin: 60px auto 20px auto;
-    padding: 40px;
-    background: var(--cream2);
-    border-radius: 24px;
-    position: relative;
-    border-left: 6px solid var(--gold);
-    text-align: left;
-    box-shadow: var(--shadow-soft);
-  }
-  .buddhist-quote-box::after {
-    content: '“';
-    font-family: 'Cinzel', serif;
-    font-size: 120px;
-    color: rgba(212, 175, 55, 0.2);
-    position: absolute;
-    top: -20px; right: 30px;
-    line-height: 1;
-  }
-  .buddhist-quote {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
-    font-style: italic;
-    line-height: 1.8;
-    color: var(--text-light);
-  }
-  .buddhist-quote-source {
-    font-family: 'Cinzel', serif;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--maroon);
-    margin-top: 15px;
-    letter-spacing: 2px;
-    display: block;
-  }
+/* FAMILIES — clickable */
+.families-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin:16px 0}
+.family-card{
+  border:1.5px solid var(--gold-light);padding:clamp(14px,3.5vw,20px) clamp(10px,2.5vw,16px);
+  text-align:center;background:rgba(201,168,76,.05);cursor:pointer;
+  transition:all .3s ease;position:relative;border-radius:2px;
+}
+.family-card:hover{background:rgba(201,168,76,.12);transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(201,168,76,.2)}
+.family-card::before{content:'✦';position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  background:var(--cream);padding:0 6px;color:var(--gold);font-size:13px}
+.fam-label{font-family:'Cinzel',serif;font-size:clamp(7px,2vw,10px);letter-spacing:3px;
+  text-transform:uppercase;color:var(--gold-dark);margin-bottom:6px;opacity:.8}
+.fam-name{font-size:clamp(13px,4vw,20px);font-weight:600;color:var(--brown);margin-bottom:3px}
+.fam-loc{font-size:clamp(10px,2.5vw,13px);color:var(--text-dark);opacity:.65;line-height:1.5}
+.tap-badge{font-size:clamp(8px,1.8vw,10px);letter-spacing:2px;text-transform:uppercase;
+  color:var(--gold);margin-top:6px;opacity:.7}
 
-  /* Interactive Blessings Section */
-  .blessings-section {
-    background: var(--cream);
-    text-align: center;
-    padding-bottom: 80px;
-  }
-  .diya-container {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    margin: 30px auto;
-    transition: transform 0.3s;
-  }
-  .diya-container:hover {
-    transform: scale(1.05);
-  }
-  .diya-flame {
-    position: absolute;
-    top: -24px;
-    left: 49%;
-    transform: translateX(-50%);
-    width: 16px;
-    height: 26px;
-    background: radial-gradient(circle at bottom, #ff0000 0%, #ff9f00 40%, #ffea00 70%, #ffffff 100%);
-    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
-    animation: flicker 1.5s ease-in-out infinite alternate;
-    box-shadow: 0 0 15px rgba(255,160,0,0.8), 0 0 30px rgba(255,230,0,0.6);
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
-  .diya-flame.active {
-    opacity: 1;
-  }
-  .diya-body {
-    width: 90px;
-    height: 50px;
-    fill: var(--gold-dark);
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
-  }
-  .blessing-count {
-    font-family: 'Cinzel', serif;
-    font-size: 1.5rem;
-    color: var(--maroon);
-    margin-top: 15px;
-    font-weight: 700;
-  }
+/* PHOTOS */
+.photos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:clamp(6px,2vw,14px);margin:16px 0}
+.photo-frame{border:2px solid var(--gold-light);overflow:hidden;position:relative;background:linear-gradient(135deg,var(--cream-dark),var(--gold-light))}
+.photo-frame.round{border-radius:50%;aspect-ratio:1}
+.photo-frame.rect{border-radius:4px;aspect-ratio:3/4}
+.photo-frame img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;min-height:120px;color:var(--gold-dark);opacity:.5;font-size:11px;text-align:center;padding:8px}
 
-  /* Events Timeline */
-  .events-section {
-    background: var(--white);
-  }
-  .section-title {
-    font-size: 2.8rem;
-    color: var(--maroon);
-    text-align: center;
-    margin-bottom: 20px;
-    letter-spacing: 1px;
-  }
-  .section-subtitle {
-    text-align: center;
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    color: var(--text-light);
-    margin-bottom: 50px;
-    font-size: 1.1rem;
-  }
-  .timeline {
-    max-width: 900px;
-    margin: 0 auto;
-    position: relative;
-  }
-  .timeline::before {
-    content: '';
-    position: absolute;
-    width: 2px;
-    background: linear-gradient(to bottom, transparent, var(--gold) 15%, var(--gold) 85%, transparent);
-    top: 0; bottom: 0; left: 50%;
-    transform: translateX(-50%);
-  }
-  .event-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 70px;
-    position: relative;
-    width: 100%;
-  }
-  .event-card:nth-child(even) {
-    flex-direction: row-reverse;
-  }
-  .event-content {
-    width: 44%;
-    background: var(--cream);
-    padding: 35px;
-    border-radius: 20px;
-    box-shadow: var(--shadow-soft);
-    border: 1px solid var(--gold-pale);
-    text-align: center;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    position: relative;
-  }
-  .event-content:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-gold);
-    border-color: var(--gold);
-  }
-  .event-icon {
-    width: 55px;
-    height: 55px;
-    background: var(--maroon);
-    color: var(--gold);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 4px solid var(--white);
-    box-shadow: 0 4px 15px rgba(92, 6, 18, 0.2);
-    z-index: 2;
-    transition: transform 0.3s;
-  }
-  .event-icon svg {
-    width: 24px;
-    height: 24px;
-    fill: currentColor;
-  }
-  .event-card:hover .event-icon {
-    transform: translateX(-50%) scale(1.1) rotate(15deg);
-    background: var(--gold);
-    color: var(--maroon);
-  }
-  .event-content h3 {
-    color: var(--gold-dark);
-    font-size: 1.9rem;
-    margin-bottom: 12px;
-  }
-  .event-content .time {
-    font-weight: 700;
-    color: var(--maroon);
-    margin-bottom: 18px;
-    display: block;
-    letter-spacing: 1px;
-    font-size: 0.95rem;
-  }
-  .event-content p {
-    color: var(--text-light);
-    font-size: 0.98rem;
-    line-height: 1.7;
-  }
+/* SCHEDULE cards */
+.schedule-section{margin:20px 0}
+.sec-title{text-align:center;font-family:'Cinzel',serif;font-size:clamp(11px,3vw,15px);
+  letter-spacing:5px;text-transform:uppercase;color:var(--brown);margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;justify-content:center}
+.sec-title::before,.sec-title::after{content:'';flex:1;max-width:70px;height:1px;background:var(--gold-light)}
+.sched-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(8px,2.5vw,14px)}
+@media(min-width:560px){.sched-grid{grid-template-columns:repeat(4,1fr)}}
+.sched-card{border:1.5px solid var(--gold-light);padding:clamp(12px,3vw,18px) clamp(8px,2vw,12px);
+  text-align:center;background:rgba(201,168,76,.04);cursor:pointer;
+  transition:all .3s ease;position:relative;overflow:hidden;border-radius:2px}
+.sched-card:hover{background:rgba(201,168,76,.1);transform:translateY(-4px);
+  box-shadow:0 8px 24px rgba(201,168,76,.2)}
+.sched-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.scard-icon{font-size:clamp(22px,5vw,32px);display:block;margin-bottom:6px}
+.scard-name{font-family:'Cinzel',serif;font-size:clamp(7px,2vw,9px);letter-spacing:2px;
+  text-transform:uppercase;color:var(--gold-dark);margin-bottom:4px}
+.scard-time{font-size:clamp(13px,3.5vw,17px);color:var(--brown);font-weight:600}
+.scard-date{font-size:clamp(9px,2vw,11px);color:var(--text-dark);opacity:.6;margin-top:2px}
+.scard-more{font-size:clamp(7px,1.8vw,9px);letter-spacing:2px;color:var(--gold);margin-top:5px;opacity:.8}
 
-  /* Color Palette Themes */
-  .dress-code-section {
-    background: var(--cream2);
-    text-align: center;
-  }
-  .dress-grid {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
-    margin-top: 40px;
-    max-width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .dress-card {
-    background: var(--white);
-    border-radius: 16px;
-    padding: 30px 20px;
-    width: 280px;
-    box-shadow: var(--shadow-soft);
-    border: 1px solid var(--gold-pale);
-    transition: all 0.3s;
-  }
-  .dress-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(212,175,55,0.15);
-  }
-  .dress-title {
-    font-family: 'Cinzel', serif;
-    font-size: 1.2rem;
-    color: var(--maroon);
-    margin-bottom: 15px;
-    font-weight: 600;
-  }
-  .dress-palette {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 15px;
-  }
-  .color-dot {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: 2px solid var(--white);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
+/* BLESSING */
+.blessing{text-align:center;margin:20px 0 14px}
+.blessing p{font-size:clamp(11px,2.8vw,14px);letter-spacing:2px;text-transform:uppercase;
+  color:var(--brown);opacity:.7;line-height:2}
 
-  /* Venue / Map */
-  .venue-section {
-    background: var(--cream);
-    text-align: center;
-  }
-  .venue-card {
-    background: var(--white);
-    max-width: 650px;
-    margin: 0 auto;
-    padding: 60px 40px;
-    border-radius: 24px;
-    border: 2px solid var(--gold-light);
-    box-shadow: var(--shadow-soft);
-    position: relative;
-  }
-  .venue-card h3 {
-    font-size: 2.2rem;
-    color: var(--maroon);
-    margin-bottom: 20px;
-  }
-  .btn-directions, .btn-calendar {
-    display: inline-block;
-    margin-top: 25px;
-    padding: 14px 35px;
-    background: var(--maroon);
-    color: var(--gold);
-    text-decoration: none;
-    font-family: 'Cinzel', serif;
-    font-size: 0.9rem;
-    letter-spacing: 2px;
-    border-radius: 30px;
-    transition: all 0.3s;
-    border: 1px solid var(--gold);
-    font-weight: 600;
-    margin-right: 10px;
-  }
-  .btn-directions:hover, .btn-calendar:hover {
-    background: var(--gold);
-    color: var(--maroon);
-    transform: translateY(-2px);
-  }
-  .btn-calendar {
-    background: transparent;
-    color: var(--maroon);
-    border: 2px solid var(--maroon);
-  }
-  .btn-calendar:hover {
-    background: var(--maroon);
-    color: var(--gold);
-  }
+/* RSVP + NAV BUTTONS */
+.action-row{display:flex;flex-direction:column;align-items:center;gap:12px;margin:16px 0}
+.btn-rsvp{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  background:linear-gradient(135deg,var(--gold-dark),var(--brown));
+  padding:clamp(12px,3vw,16px) clamp(20px,5vw,36px);border-radius:40px;
+  cursor:pointer;box-shadow:0 4px 20px rgba(139,105,20,.4);
+  transition:transform .3s ease;border:none;font-family:inherit;
+  text-decoration:none;color:inherit;
+}
+.btn-rsvp:hover{transform:scale(1.04)}
+.btn-label{font-family:'Cinzel',serif;font-size:clamp(10px,2.5vw,13px);letter-spacing:3px;
+  color:var(--cream);text-transform:uppercase}
+.btn-num{font-family:'Cormorant Garamond',serif;font-size:clamp(15px,4vw,21px);
+  color:var(--gold-light);font-weight:600;letter-spacing:2px}
+.btn-div{width:1px;height:24px;background:rgba(232,213,163,.3)}
 
-  /* Interactive Guestbook Wall - ABSOLUTELY NO FORM TAGS */
-  .guestbook-section {
-    background: var(--white);
-    text-align: center;
-  }
-  .guestbook-container {
-    max-width: 750px;
-    margin: 40px auto 0 auto;
-    background: var(--cream);
-    border-radius: 20px;
-    padding: 40px;
-    border: 1px solid var(--gold-pale);
-    box-shadow: var(--shadow-soft);
-  }
-  .wish-input-group {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 30px;
-  }
-  .wish-input {
-    flex: 1;
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid var(--gold);
-    background: var(--white);
-    color: var(--text);
-    outline: none;
-    font-size: 1rem;
-  }
-  .wish-btn {
-    padding: 15px 30px;
-    background: var(--maroon);
-    color: var(--gold);
-    border: 1px solid var(--gold);
-    border-radius: 10px;
-    font-family: 'Cinzel', serif;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .wish-btn:hover {
-    background: var(--gold);
-    color: var(--maroon);
-  }
-  .wishes-wall {
-    max-height: 250px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding-right: 10px;
-    text-align: left;
-  }
-  .wish-card {
-    background: var(--white);
-    padding: 15px 20px;
-    border-radius: 12px;
-    border-left: 4px solid var(--gold);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-    animation: slideInUp 0.5s ease-out forwards;
-  }
-  .wish-name {
-    font-family: 'Cinzel', serif;
-    font-weight: 700;
-    font-size: 0.95rem;
-    color: var(--maroon);
-    margin-bottom: 5px;
-  }
-  .wish-text {
-    font-size: 0.92rem;
-    color: var(--text-light);
-    line-height: 1.5;
-  }
+.btn-nav{
+  display:inline-flex;align-items:center;gap:10px;
+  border:1.5px solid var(--gold);padding:clamp(10px,2.5vw,13px) clamp(18px,4vw,28px);
+  border-radius:40px;cursor:pointer;background:transparent;font-family:inherit;
+  color:var(--gold-dark);font-size:clamp(11px,2.8vw,14px);letter-spacing:2px;
+  text-transform:uppercase;transition:all .3s ease;text-decoration:none;
+}
+.btn-nav:hover{background:rgba(201,168,76,.1);transform:scale(1.03)}
+.btn-nav span{font-size:18px}
 
-  /* Mangala Verses Section */
-  .mangala-verses-section {
-    background: var(--maroon);
-    color: var(--cream);
-    text-align: center;
-    position: relative;
-    padding: 100px 20px;
-  }
-  .mangala-verses-section .section-title {
-    color: var(--gold);
-  }
-  .mandala-illustration {
-    width: 150px;
-    height: 150px;
-    margin: 30px auto;
-    fill: var(--gold);
-    opacity: 0.8;
-    animation: spin 60s linear infinite;
-  }
-  .verse-card {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 40px;
-    border: 1px solid rgba(212, 175, 55, 0.4);
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: var(--border-radius-lg);
-    backdrop-filter: blur(8px);
-  }
-  .verse-text {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.35rem;
-    font-style: italic;
-    line-height: 1.8;
-    color: var(--gold-light);
-  }
-  .verse-translation {
-    font-size: 1.05rem;
-    line-height: 1.6;
-    margin-top: 20px;
-    color: var(--cream2);
-    opacity: 0.9;
-  }
+.btn-cal{
+  display:inline-flex;align-items:center;gap:10px;
+  border:1.5px solid var(--gold);padding:clamp(10px,2.5vw,13px) clamp(18px,4vw,28px);
+  border-radius:40px;cursor:pointer;background:transparent;font-family:inherit;
+  color:var(--gold-dark);font-size:clamp(11px,2.8vw,14px);letter-spacing:2px;
+  text-transform:uppercase;transition:all .3s ease;
+}
+.btn-cal:hover{background:rgba(201,168,76,.1);transform:scale(1.03)}
 
-  /* Footer */
-  footer {
-    background: #230206;
-    color: var(--gold-light);
-    text-align: center;
-    padding: 60px 20px;
-    font-family: 'Cinzel', serif;
-    border-top: 2px solid var(--gold-dark);
-  }
-  .footer-names {
-    font-size: 28px;
-    margin-bottom: 15px;
-    letter-spacing: 2px;
-  }
+/* ====== MODAL ====== */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(10,4,0,.75);
+  z-index:2000;display:flex;align-items:center;justify-content:center;
+  padding:16px;opacity:0;pointer-events:none;transition:opacity .35s ease;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{
+  background:var(--cream);border:2px solid var(--gold);
+  max-width:520px;width:100%;max-height:90vh;overflow-y:auto;
+  border-radius:6px;position:relative;
+  transform:scale(.9) translateY(20px);transition:transform .35s cubic-bezier(.34,1.4,.64,1);
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+.modal-overlay.open .modal-box{transform:scale(1) translateY(0)}
+.modal-head{
+  background:linear-gradient(135deg,var(--brown),#2c1405);
+  padding:clamp(16px,4vw,24px);text-align:center;position:sticky;top:0;z-index:1;
+}
+.modal-icon{font-size:clamp(32px,8vw,48px);display:block;margin-bottom:8px}
+.modal-title{font-family:'Cinzel',serif;font-size:clamp(14px,4vw,20px);
+  letter-spacing:3px;color:var(--gold-light)}
+.modal-sub{font-size:clamp(11px,2.5vw,14px);color:rgba(232,213,163,.7);margin-top:4px;letter-spacing:2px}
+.modal-close{
+  position:absolute;top:12px;right:12px;width:32px;height:32px;
+  background:rgba(255,255,255,.15);border:none;border-radius:50%;cursor:pointer;
+  color:var(--gold-light);font-size:18px;display:flex;align-items:center;justify-content:center;
+  transition:background .2s ease;font-family:inherit;
+}
+.modal-close:hover{background:rgba(255,255,255,.3)}
+.modal-body{padding:clamp(16px,4vw,28px)}
+.modal-row{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;padding-bottom:16px;
+  border-bottom:1px solid rgba(201,168,76,.2)}
+.modal-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.mrow-icon{font-size:22px;min-width:30px;text-align:center;margin-top:2px}
+.mrow-label{font-family:'Cinzel',serif;font-size:clamp(8px,2vw,10px);letter-spacing:3px;
+  text-transform:uppercase;color:var(--gold-dark);margin-bottom:3px}
+.mrow-val{font-size:clamp(13px,3.5vw,16px);color:var(--text-dark);line-height:1.5}
+.mrow-note{font-size:clamp(10px,2.5vw,12px);color:var(--text-dark);opacity:.6;margin-top:3px;line-height:1.5}
 
-  /* Custom Popup Alert */
-  .custom-modal {
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%) scale(0.9);
-    background: var(--white);
-    color: var(--maroon);
-    padding: 40px 50px;
-    border-radius: 24px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
-    z-index: 10000;
-    text-align: center;
-    border: 3px solid var(--gold);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    max-width: 90%;
-    width: 450px;
-  }
-  .custom-modal.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  .modal-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
-    z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s;
-  }
-  .modal-overlay.active {
-    opacity: 1;
-    visibility: visible;
-  }
+/* Add to cal buttons */
+.cal-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.cal-btn{font-family:'Cinzel',serif;font-size:clamp(8px,2vw,10px);letter-spacing:2px;
+  border:1px solid var(--gold-light);padding:8px 14px;border-radius:20px;cursor:pointer;
+  background:transparent;color:var(--gold-dark);transition:all .25s ease;text-decoration:none;
+  display:inline-flex;align-items:center;gap:6px}
+.cal-btn:hover{background:rgba(201,168,76,.15)}
 
-  /* Animations */
-  @keyframes spin { 100% { transform: rotate(360deg); } }
-  @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-  @keyframes pulse-ring { 
-    0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); } 
-    70% { box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); } 
-    100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); } 
-  }
-  @keyframes fall {
-    0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
-    10% { opacity: 0.6; }
-    90% { opacity: 0.6; }
-    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-  }
-  @keyframes fall-petal {
-    0% { transform: translateY(-10vh) translateX(0px) rotate(0deg); opacity: 0; }
-    10% { opacity: 0.8; }
-    50% { transform: translateY(50vh) translateX(30px) rotate(180deg); opacity: 0.6; }
-    90% { opacity: 0.4; }
-    100% { transform: translateY(110vh) translateX(-20px) rotate(360deg); opacity: 0; }
-  }
-  @keyframes shine {
-    0% { left: -100%; }
-    20% { left: 100%; }
-    100% { left: 100%; }
-  }
-  @keyframes flicker {
-    0% { transform: translateX(-50%) rotate(-1deg) scale(0.9); }
-    100% { transform: translateX(-50%) rotate(2deg) scale(1.1); }
-  }
-  @keyframes bounce {
-    0% { height: 5px; }
-    100% { height: 22px; }
-  }
-  @keyframes slideInUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-  @keyframes sway {
-    0% { transform: rotate(-5deg); }
-    100% { transform: rotate(5deg); }
-  }
+/* scroll anim */
+.s-fade{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.s-fade.in{opacity:1;transform:translateY(0)}
 
-  /* Responsive Design */
-  @media (max-width: 850px) {
-    .collage-container {
-      flex-direction: column;
-      gap: 30px;
-    }
-    .collage-center {
-      width: 100%;
-      max-width: 400px;
-    }
-    .collage-side {
-      width: 80%;
-      max-width: 320px;
-    }
-    .timeline::before { left: 30px; }
-    .event-card, .event-card:nth-child(even) { flex-direction: column; align-items: flex-end; }
-    .event-content { width: calc(100% - 60px); margin-bottom: 20px; }
-    .event-icon { left: 30px; }
-    .names { font-size: 3.5rem; }
-    .hero-border { padding: 40px 20px; }
-    .wish-input-group { flex-direction: column; }
-    .wish-btn { width: 100%; }
-    .hanging-bell { display: none; }
-    .lotus-wrapper { width: 280px; height: 280px; }
-    .lotus-card { width: 270px; height: 210px; padding: 15px; }
-  }
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+
+/* Sections */
+.mantra-text{text-align:center;font-family:'Noto Serif Devanagari',serif;font-size:clamp(13px,3.5vw,20px);
+  color:var(--gold-dark);letter-spacing:3px;margin-bottom:10px}
+.sub-text{text-align:center;font-size:clamp(10px,2.5vw,13px);letter-spacing:4px;
+  text-transform:uppercase;color:var(--brown);opacity:.7;margin-bottom:16px}
+
+/* Buddha image */
+.buddha-wrap{text-align:center;margin:10px 0 16px}
+.buddha-img{width:clamp(60px,14vw,100px);border-radius:50%;
+  border:2px solid var(--gold-light);object-fit:cover;opacity:.9;
+  animation:glow 3s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 10px rgba(201,168,76,.3)}50%{box-shadow:0 0 24px rgba(201,168,76,.6)}}
+
+/* ===== CENTERED COUPLE PHOTO ===== */
+.couple-center-wrap{text-align:center;margin:16px 0 20px}
+.couple-center-frame{
+  display:inline-block;position:relative;
+  width:clamp(200px,65vw,340px);
+  border:2px solid var(--gold);
+  border-radius:4px;
+  box-shadow:0 0 0 4px var(--cream),0 0 0 6px rgba(201,168,76,.35),
+             0 12px 40px rgba(139,105,20,.25);
+  overflow:hidden;
+  background:linear-gradient(135deg,var(--cream-dark),var(--gold-light));
+}
+.couple-center-img{
+  width:100%;display:block;
+  aspect-ratio:3/4;object-fit:cover;object-position:center top;
+}
+/* decorative SVG corner flourishes */
+.ccf-corner{position:absolute;width:32px;height:32px;pointer-events:none}
+.ccf-tl{top:-1px;left:-1px}
+.ccf-tr{top:-1px;right:-1px;transform:scaleX(-1)}
+.ccf-bl{bottom:-1px;left:-1px;transform:scaleY(-1)}
+.ccf-br{bottom:-1px;right:-1px;transform:scale(-1)}
+.ccf-corner::before,.ccf-corner::after{content:'';position:absolute;background:var(--gold)}
+.ccf-corner::before{top:0;left:0;width:2px;height:14px}
+.ccf-corner::after{top:0;left:0;width:14px;height:2px}
+
+/* fallback when photo missing */
+.couple-center-frame.photo-missing .couple-center-img{display:none}
+.couple-center-missing{display:none;padding:40px 20px;text-align:center}
+.couple-center-frame.photo-missing .couple-center-missing{display:block}
+
+/* Names */
+.names-wrap{text-align:center;margin:16px 0 10px}
+.name-big{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,13vw,88px);
+  font-weight:300;font-style:italic;color:var(--gold-dark);line-height:.95}
+.amp-row{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0}
+.amp-line{flex:1;max-width:60px;height:1px;background:var(--gold-light)}
+.amp{font-size:clamp(22px,7vw,44px);font-style:italic;color:var(--gold)}
+
+/* Date */
+.date-wrap{text-align:center;margin:12px 0 8px}
+.date-box{font-family:'Cinzel',serif;font-size:clamp(11px,3vw,17px);letter-spacing:6px;
+  color:var(--brown);border-top:1px solid var(--gold-light);border-bottom:1px solid var(--gold-light);
+  padding:10px 24px;display:inline-block;margin-bottom:6px}
+.venue-label{font-size:clamp(10px,2.5vw,13px);letter-spacing:4px;text-transform:uppercase;
+  color:var(--gold-dark);opacity:.8}
+
+/* Lotus row */
+.lotus-row{display:flex;justify-content:center;gap:clamp(10px,3vw,20px);margin:10px 0;align-items:flex-end}
+.lotus-svg{animation:float 4s ease-in-out infinite}
+.lotus-svg:nth-child(2){animation-delay:.6s}
+.lotus-svg:nth-child(3){animation-delay:1.2s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.hero-section{
+  position:relative;
+  margin:-clamp(16px,4vw,40px) -clamp(14px,3.5vw,36px) clamp(20px,4vw,32px);
+  overflow:hidden;
+  border-radius:0;
+  min-height:clamp(420px,80vw,620px);
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:linear-gradient(160deg,#2a1206,#1a0c0a,#3d1a00);
+}
+.hero-bg.no-photo{background:linear-gradient(160deg,#3d1a00,#1a0a0a,#2a1206)}
+.hero-img{
+  width:100%;height:100%;object-fit:cover;object-position:center top;
+  display:block;opacity:.75;
+  animation:heroZoom 18s ease-in-out infinite alternate;
+}
+@keyframes heroZoom{from{transform:scale(1)}to{transform:scale(1.06)}}
+
+/* Multi-layer overlays for beautiful text legibility */
+.hero-overlay-top{
+  position:absolute;top:0;left:0;right:0;height:55%;
+  background:linear-gradient(180deg,rgba(10,5,2,.82) 0%,rgba(10,5,2,.45) 60%,transparent 100%);
+}
+.hero-overlay-bottom{
+  position:absolute;bottom:0;left:0;right:0;height:60%;
+  background:linear-gradient(0deg,rgba(8,4,1,.9) 0%,rgba(8,4,1,.65) 40%,transparent 100%);
+}
+.hero-overlay-vignette{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,transparent 40%,rgba(5,2,0,.55) 100%);
+}
+
+/* Floating petal decorations */
+.hero-petal{
+  position:absolute;font-size:clamp(16px,4vw,24px);opacity:.4;
+  animation:heroPetal linear infinite;pointer-events:none;
+}
+.hp1{left:8%;top:-10%;animation-duration:7s;animation-delay:0s}
+.hp2{left:85%;top:-10%;animation-duration:9s;animation-delay:2s}
+.hp3{left:50%;top:-10%;animation-duration:8s;animation-delay:4s}
+@keyframes heroPetal{0%{transform:translateY(0) rotate(0);opacity:.4}100%{transform:translateY(110%) rotate(360deg);opacity:0}}
+
+/* Content overlay */
+.hero-content{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+  min-height:clamp(420px,80vw,620px);
+  padding:clamp(20px,5vw,40px) clamp(16px,4vw,32px);
+  text-align:center;
+}
+
+/* Top block */
+.hero-top{display:flex;flex-direction:column;align-items:center;gap:10px}
+
+.hero-buddha{
+  width:clamp(52px,12vw,80px);height:clamp(52px,12vw,80px);
+  border-radius:50%;border:2px solid rgba(201,168,76,.7);
+  overflow:hidden;background:rgba(201,168,76,.1);
+  box-shadow:0 0 20px rgba(201,168,76,.4),0 0 40px rgba(201,168,76,.15);
+  animation:buddhaGlow 3s ease-in-out infinite;
+}
+@keyframes buddhaGlow{0%,100%{box-shadow:0 0 16px rgba(201,168,76,.4)}50%{box-shadow:0 0 32px rgba(201,168,76,.7),0 0 60px rgba(201,168,76,.2)}}
+.hero-buddha-img{width:100%;height:100%;object-fit:cover}
+
+.hero-mantra{
+  font-family:'Noto Serif Devanagari',serif;
+  font-size:clamp(13px,3.5vw,20px);
+  color:#E8D090;letter-spacing:3px;
+  text-shadow:0 0 24px rgba(201,168,76,.8),0 2px 8px rgba(0,0,0,.6);
+}
+.hero-sub-mantra{
+  font-size:clamp(9px,2.2vw,12px);letter-spacing:4px;text-transform:uppercase;
+  color:rgba(232,213,163,.75);line-height:1.7;max-width:280px;
+  text-shadow:0 1px 6px rgba(0,0,0,.8);
+}
+
+/* Lotus in hero */
+.hero-lotus-row{display:flex;justify-content:center;align-items:flex-end;gap:clamp(8px,2vw,16px)}
+
+/* Names */
+.hero-names{display:flex;flex-direction:column;align-items:center}
+.hero-name-big{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(48px,16vw,96px);
+  font-weight:300;font-style:italic;
+  color:#fff;line-height:.9;
+  text-shadow:0 0 40px rgba(201,168,76,.5),0 4px 16px rgba(0,0,0,.7);
+  animation:nameShimmer 4s ease-in-out infinite;
+}
+@keyframes nameShimmer{0%,100%{text-shadow:0 0 40px rgba(201,168,76,.4),0 4px 16px rgba(0,0,0,.7)}50%{text-shadow:0 0 60px rgba(201,168,76,.75),0 0 80px rgba(201,168,76,.25),0 4px 16px rgba(0,0,0,.7)}}
+.hero-amp-row{display:flex;align-items:center;justify-content:center;gap:12px;margin:4px 0}
+.hero-amp-line{flex:1;max-width:50px;height:1px;background:rgba(232,213,163,.5)}
+.hero-amp{font-size:clamp(24px,8vw,52px);font-style:italic;color:rgba(201,168,76,.9);
+  text-shadow:0 0 20px rgba(201,168,76,.6)}
+
+/* Date pill */
+.hero-date-block{display:flex;flex-direction:column;align-items:center;gap:6px}
+.hero-date-pill{
+  font-family:'Cinzel',serif;font-size:clamp(10px,2.8vw,15px);letter-spacing:5px;
+  color:#E8D090;
+  border:1px solid rgba(201,168,76,.6);
+  border-top:1px solid rgba(201,168,76,.6);
+  border-bottom:1px solid rgba(201,168,76,.6);
+  padding:8px 20px;
+  text-shadow:0 0 12px rgba(201,168,76,.5);
+  background:rgba(0,0,0,.25);
+}
+.hero-venue{font-size:clamp(9px,2.2vw,12px);letter-spacing:5px;text-transform:uppercase;
+  color:rgba(232,213,163,.65);text-shadow:0 1px 4px rgba(0,0,0,.6)}
+
+/* Gold shimmer line after hero */
+.hero-shimmer-line{
+  height:3px;margin:-2px 0 clamp(16px,4vw,28px);
+  background:linear-gradient(90deg,transparent,var(--gold),rgba(240,216,152,.8),var(--gold),transparent);
+  animation:shimmer 3s ease-in-out infinite;
+}
+@keyframes shimmer{0%,100%{opacity:.7}50%{opacity:1}}
+
+@media(max-width:480px){
+  .hero-section{margin:-20px -14px 20px}
+  .action-row{flex-direction:column;align-items:stretch}
+  .btn-nav,.btn-cal{justify-content:center}
+}
+
+
+@media(max-width:480px){
+  .families-grid{grid-template-columns:1fr;gap:10px}
+  .fam-sep{display:none}
+  .photos-grid{grid-template-columns:1fr 1fr}
+  .photos-grid .photo-frame:nth-child(3){display:none}
+}
 </style>
 </head>
-<body class="lock-scroll">
+<body>
 
-  <!-- Preloader -->
-  <div id="preloader">
-    <div class="loader-rings"></div>
-    <div class="loader-text">Invoking Sacred Blessings</div>
-  </div>
+<div class="petal-layer" id="petals"></div>
 
-  <!-- Background Particles Container -->
-  <div id="particles"></div>
+<!-- ===== BUDDHIST INTRO + ENVELOPE SCREEN ===== -->
+<div id="env-screen">
 
-  <!-- Audio Element (Sacred Meditative Flute & Gong preview) -->
-  <audio id="bg-music" loop preload="auto">
-    <source src="https://assets.mixkit.co/music/preview/mixkit-meditation-and-mindfulness-gong-sound-scape-2921.mp3" type="audio/mpeg">
-  </audio>
+  <!-- Full-screen animated pond/sky canvas -->
+  <svg id="intro-canvas" viewBox="0 0 400 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="skyGrad" cx="50%" cy="30%" r="70%">
+        <stop offset="0%" stop-color="#1a1230"/>
+        <stop offset="60%" stop-color="#0a0818"/>
+        <stop offset="100%" stop-color="#020408"/>
+      </radialGradient>
+      <radialGradient id="pondGrad" cx="50%" cy="50%" r="60%">
+        <stop offset="0%" stop-color="#0d1a2e"/>
+        <stop offset="100%" stop-color="#050c18"/>
+      </radialGradient>
+      <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fffbe8" stop-opacity=".9"/>
+        <stop offset="40%" stop-color="#f5e6a0" stop-opacity=".5"/>
+        <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lotusGlow" cx="50%" cy="70%" r="60%">
+        <stop offset="0%" stop-color="#ffb6c1" stop-opacity=".4"/>
+        <stop offset="100%" stop-color="#ff8fa3" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="softglow">
+        <feGaussianBlur stdDeviation="6" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
 
-  <!-- Floating Music Controller & Equalizer -->
-  <div class="music-widget">
-    <div class="visualizer" id="visualizer">
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
-    </div>
-    <button id="music-btn" onclick="toggleMusic()" title="Play/Pause Melody">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-        <path id="music-icon" d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-      </svg>
-    </button>
-  </div>
+    <!-- Sky -->
+    <rect width="400" height="700" fill="url(#skyGrad)"/>
 
-  <!-- ===== 3D SACRED LOTUS BLOOMING UNVEIL SCREEN ===== -->
-  <div class="lotus-unveil-overlay" id="envelopeOverlay">
-    <div style="text-align: center;">
-      <div class="lotus-shrine-container">
-        <!-- Interlaced golden halos pulsing dynamically -->
-        <div class="shrine-halo"></div>
-        
-        <!-- Lotus Wrapper: triggers bloom first, then card reveal -->
-        <div class="lotus-wrapper" id="lotusWrapper" onclick="handleLotusClick()">
-          <!-- Premium Multi-Layered SVG White Lotus -->
-          <svg class="sacred-lotus" id="sacredLotus" viewBox="0 0 100 100">
-            <defs>
-              <!-- Luminous Pearl-White Petal Gradient -->
-              <linearGradient id="whitePetalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#ffffff" />
-                <stop offset="35%" stop-color="#fcfbf7" />
-                <stop offset="75%" stop-color="#f7ebe1" />
-                <stop offset="100%" stop-color="#e9cbd1" />
-              </linearGradient>
-              <!-- Glowing Wisdom Saffron/Gold Lotus Core -->
-              <linearGradient id="lotusCoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#ffffff" />
-                <stop offset="50%" stop-color="#fff5cd" />
-                <stop offset="100%" stop-color="#ffd541" />
-              </linearGradient>
-            </defs>
+    <!-- Stars -->
+    <g id="stars" opacity=".8">
+      <circle cx="30" cy="40" r="1" fill="white" opacity=".7"><animate attributeName="opacity" values=".7;1;.7" dur="2.1s" repeatCount="indefinite"/></circle>
+      <circle cx="80" cy="20" r=".8" fill="white" opacity=".5"><animate attributeName="opacity" values=".5;.9;.5" dur="3s" repeatCount="indefinite"/></circle>
+      <circle cx="140" cy="55" r="1.1" fill="white" opacity=".8"><animate attributeName="opacity" values=".8;1;.8" dur="1.8s" repeatCount="indefinite"/></circle>
+      <circle cx="200" cy="15" r=".7" fill="white" opacity=".6"><animate attributeName="opacity" values=".6;1;.6" dur="2.5s" repeatCount="indefinite"/></circle>
+      <circle cx="260" cy="35" r="1" fill="white" opacity=".75"><animate attributeName="opacity" values=".75;1;.75" dur="2.8s" repeatCount="indefinite"/></circle>
+      <circle cx="320" cy="60" r=".9" fill="white" opacity=".6"><animate attributeName="opacity" values=".6;.95;.6" dur="2.2s" repeatCount="indefinite"/></circle>
+      <circle cx="370" cy="25" r="1.2" fill="white" opacity=".8"><animate attributeName="opacity" values=".8;1;.8" dur="1.6s" repeatCount="indefinite"/></circle>
+      <circle cx="50" cy="90" r=".7" fill="white" opacity=".5"><animate attributeName="opacity" values=".5;.9;.5" dur="3.2s" repeatCount="indefinite"/></circle>
+      <circle cx="110" cy="110" r="1" fill="#fffbe8" opacity=".6"><animate attributeName="opacity" values=".6;1;.6" dur="2s" repeatCount="indefinite"/></circle>
+      <circle cx="350" cy="80" r=".8" fill="white" opacity=".7"><animate attributeName="opacity" values=".7;.95;.7" dur="2.7s" repeatCount="indefinite"/></circle>
+      <circle cx="175" cy="80" r=".6" fill="white" opacity=".4"><animate attributeName="opacity" values=".4;.8;.4" dur="3.5s" repeatCount="indefinite"/></circle>
+      <circle cx="295" cy="100" r="1" fill="white" opacity=".65"><animate attributeName="opacity" values=".65;1;.65" dur="2.4s" repeatCount="indefinite"/></circle>
+    </g>
 
-            <!-- Outer Petals Left -->
-            <g class="petal outer-petal-left">
-              <path d="M50 80 C18 62, 5 35, 12 18 C25 15, 38 45, 50 80 Z" fill="url(#whitePetalGradient)" stroke="#dfb6bc" stroke-width="0.5"/>
-            </g>
-            <!-- Outer Petals Right -->
-            <g class="petal outer-petal-right">
-              <path d="M50 80 C82 62, 95 35, 88 18 C75 15, 62 45, 50 80 Z" fill="url(#whitePetalGradient)" stroke="#dfb6bc" stroke-width="0.5"/>
-            </g>
+    <!-- Moon -->
+    <circle cx="320" cy="70" r="28" fill="url(#moonGlow)"/>
+    <circle cx="320" cy="70" r="18" fill="#fffbe0" opacity=".95" filter="url(#glow)"/>
+    <circle cx="313" cy="65" r="14" fill="#fffbe0"/>
+    <!-- moon craters -->
+    <circle cx="316" cy="63" r="3" fill="#f5e090" opacity=".5"/>
+    <circle cx="326" cy="72" r="2" fill="#f5e090" opacity=".4"/>
 
-            <!-- Mid Petals Left -->
-            <g class="petal mid-petal-left">
-              <path d="M50 80 C26 52, 16 28, 28 10 C38 18, 44 48, 50 80 Z" fill="url(#whitePetalGradient)" stroke="#e4c4ca" stroke-width="0.5"/>
-            </g>
-            <!-- Mid Petals Right -->
-            <g class="petal mid-petal-right">
-              <path d="M50 80 C74 52, 84 28, 72 10 C62 18, 56 48, 50 80 Z" fill="url(#whitePetalGradient)" stroke="#e4c4ca" stroke-width="0.5"/>
-            </g>
+    <!-- Distant pagoda silhouette -->
+    <g opacity=".25" fill="#1a2a4a">
+      <rect x="160" y="160" width="6" height="60"/>
+      <polygon points="163,155 148,175 178,175"/>
+      <polygon points="163,145 151,162 175,162"/>
+      <polygon points="163,137 154,150 172,150"/>
+      <rect x="155" y="220" width="16" height="20"/>
+    </g>
+    <g opacity=".18" fill="#1a2a4a">
+      <rect x="50" y="190" width="4" height="40"/>
+      <polygon points="52,186 43,202 61,202"/>
+      <polygon points="52,179 45,192 59,192"/>
+      <rect x="46" y="230" width="12" height="14"/>
+    </g>
 
-            <!-- Center Shield Bud Petal representing the inner heart of wisdom -->
-            <g class="petal center-petal">
-              <path d="M50 80 C36 45, 34 20, 50 2 C66 20, 64 45, 50 80 Z" fill="url(#lotusCoreGradient)" stroke="#d4af37" stroke-width="0.75"/>
-            </g>
+    <!-- Pond water surface -->
+    <ellipse cx="200" cy="520" rx="220" ry="60" fill="url(#pondGrad)" opacity=".95"/>
+    <ellipse cx="200" cy="520" rx="220" ry="60" fill="none" stroke="#1e3a5a" stroke-width="1" opacity=".6"/>
+
+    <!-- Water ripples (animated) -->
+    <g id="ripples" opacity=".5">
+      <ellipse cx="200" cy="520" rx="30" ry="8" fill="none" stroke="#4a8aaa" stroke-width=".8">
+        <animate attributeName="rx" values="10;80;10" dur="4s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="3;22;3" dur="4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".7;0;.7" dur="4s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="200" cy="520" rx="50" ry="14" fill="none" stroke="#4a8aaa" stroke-width=".6">
+        <animate attributeName="rx" values="10;100;10" dur="4s" begin=".8s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="3;28;3" dur="4s" begin=".8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".6;0;.6" dur="4s" begin=".8s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="200" cy="520" rx="70" ry="19" fill="none" stroke="#4a8aaa" stroke-width=".5">
+        <animate attributeName="rx" values="10;130;10" dur="4s" begin="1.6s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="3;36;3" dur="4s" begin="1.6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".5;0;.5" dur="4s" begin="1.6s" repeatCount="indefinite"/>
+      </ellipse>
+    </g>
+
+    <!-- Lily pads -->
+    <ellipse cx="130" cy="535" rx="22" ry="8" fill="#1a3d1a" opacity=".8"/>
+    <ellipse cx="280" cy="528" rx="18" ry="6" fill="#1a3d1a" opacity=".7"/>
+    <ellipse cx="340" cy="542" rx="14" ry="5" fill="#1a3d1a" opacity=".6"/>
+    <ellipse cx="70" cy="540" rx="12" ry="4" fill="#1a3d1a" opacity=".6"/>
+    <!-- small lotus bud on lily pad -->
+    <ellipse cx="130" cy="530" rx="5" ry="8" fill="#e8a0b4" opacity=".6"/>
+    <ellipse cx="280" cy="523" rx="4" ry="7" fill="#f4c0ce" opacity=".55"/>
+
+    <!-- ===== MAIN ANIMATED LOTUS ===== -->
+    <g id="main-lotus" transform="translate(200,490)">
+      <!-- Stem -->
+      <path d="M0,0 Q-8,20 -4,45 Q0,60 0,70" stroke="#3a6e3a" stroke-width="2.5" fill="none" opacity=".8"/>
+      <ellipse cx="-2" cy="52" rx="18" ry="6" fill="#2a5a2a" opacity=".7"/>
+      <!-- Water surface reflection glow -->
+      <ellipse cx="0" cy="5" rx="40" ry="12" fill="url(#lotusGlow)"/>
+
+      <!-- Outer petals (8) — bloom animation staggered -->
+      <g id="outer-petals">
+        <ellipse class="lpetal" cx="0" cy="-28" rx="10" ry="26" fill="#e8a0b4" opacity=".8" style="transform-origin:0px 0px;transform:rotate(0deg)"><animate attributeName="opacity" values="0;.8" dur=".6s" begin="0.2s" fill="freeze"/></ellipse>
+        <ellipse class="lpetal" cx="0" cy="-28" rx="10" ry="26" fill="#e8a0b4" opacity=".75" style="transform-origin:0px 0px;transform:rotate(45deg)"><animate attributeName="opacity" values="0;.75" dur=".6s" begin="0.4s" fill="freeze"/></ellipse>
+        <ellipse class="lpetal" cx="0" cy="-28" rx="10" ry="26" fill="#e8a0b4" opacity=".75" style="transform-origin:0px 0px;transform:rotate(90deg)"><animate attributeName="opacity" values="0;.75" dur=".6s" begin="0.6s" fill="freeze"/></ellipse>
+        <ellipse class="lpetal" cx="0" cy="-28" rx="10" ry="26" fill="#e8a0b4" opacity=".75" style="transform-origin:0px 0px;transform:rotate(135deg)"><animate attributeName="opacity" values="0;.75" dur=".6s" begin="0.8s" fill="freeze"/></ellipse>
+        <ellipse class="lpetal" cx="0" cy="-28" rx="10" ry="26" fill="#e8a0b4" opacity=".78" style="transform-origin:0px 0px;transform:rotate(180deg)"><animate attributeName="opacity" values="0;.78" dur=".6s" begin="1s" fill="freeze"/></ellipse>
+        <ellipse class="lpetal" cx="0" cy="-28" rx="10" ry="26" fill="#e8a0b4" opacity=".75" style="transform-origin:0px 0px;transform:rotate(225deg)"><animate attributeName="opacity" values="0;.75" dur=".6s" begin="1.2s" fill="freeze"/></ellipse>
+        <ellipse class="lpetal" cx="0" cy="-28" rx="10" ry="26" fill="#e8a0b4" opacity=".75" style="transform-origin:0px 0px;transform:rotate(270deg)"><animate attributeName="opacity" values="0;.75" dur=".6s" begin="1.4s" fill="freeze"/></ellipse>
+        <ellipse class="lpetal" cx="0" cy="-28" rx="10" ry="26" fill="#e8a0b4" opacity=".75" style="transform-origin:0px 0px;transform:rotate(315deg)"><animate attributeName="opacity" values="0;.75" dur=".6s" begin="1.6s" fill="freeze"/></ellipse>
+      </g>
+      <!-- Inner petals (6 upright) -->
+      <g id="inner-petals">
+        <ellipse cx="0" cy="-22" rx="7" ry="20" fill="#f4c0ce" opacity=".0" style="transform-origin:0 0;transform:rotate(0deg)"><animate attributeName="opacity" values="0;.9" dur=".5s" begin="1.8s" fill="freeze"/></ellipse>
+        <ellipse cx="0" cy="-22" rx="7" ry="20" fill="#f4c0ce" opacity=".0" style="transform-origin:0 0;transform:rotate(60deg)"><animate attributeName="opacity" values="0;.88" dur=".5s" begin="2s" fill="freeze"/></ellipse>
+        <ellipse cx="0" cy="-22" rx="7" ry="20" fill="#f4c0ce" opacity=".0" style="transform-origin:0 0;transform:rotate(120deg)"><animate attributeName="opacity" values="0;.88" dur=".5s" begin="2.2s" fill="freeze"/></ellipse>
+        <ellipse cx="0" cy="-22" rx="7" ry="20" fill="#f4c0ce" opacity=".0" style="transform-origin:0 0;transform:rotate(180deg)"><animate attributeName="opacity" values="0;.88" dur=".5s" begin="2.4s" fill="freeze"/></ellipse>
+        <ellipse cx="0" cy="-22" rx="7" ry="20" fill="#f4c0ce" opacity=".0" style="transform-origin:0 0;transform:rotate(240deg)"><animate attributeName="opacity" values="0;.88" dur=".5s" begin="2.6s" fill="freeze"/></ellipse>
+        <ellipse cx="0" cy="-22" rx="7" ry="20" fill="#f4c0ce" opacity=".0" style="transform-origin:0 0;transform:rotate(300deg)"><animate attributeName="opacity" values="0;.88" dur=".5s" begin="2.8s" fill="freeze"/></ellipse>
+      </g>
+      <!-- Stamens / centre -->
+      <circle cx="0" cy="-8" r="10" fill="#f5e090" opacity="0"><animate attributeName="opacity" values="0;.95" dur=".4s" begin="3s" fill="freeze"/></circle>
+      <circle cx="0" cy="-8" r="6" fill="#e8c840" opacity="0" filter="url(#glow)"><animate attributeName="opacity" values="0;1" dur=".4s" begin="3.1s" fill="freeze"/></circle>
+      <!-- glow halo around lotus -->
+      <circle cx="0" cy="-8" r="32" fill="#ffb6c1" opacity="0" filter="url(#softglow)"><animate attributeName="opacity" values="0;.25;0" dur="3s" begin="3s" repeatCount="indefinite"/></circle>
+    </g>
+
+    <!-- Floating lotus leaves on water -->
+    <g opacity=".0" id="side-lotus-l"><animate attributeName="opacity" values="0;.7" dur="1s" begin="2s" fill="freeze"/><animate attributeName="opacity" values="0;.7" dur="1s" begin="2s" fill="freeze"/>
+      <ellipse cx="95" cy="505" rx="16" ry="5" fill="#2a5a2a"/>
+      <ellipse cx="95" cy="500" rx="6" ry="9" fill="#f4c0ce" opacity=".8"/>
+      <ellipse cx="88" cy="502" rx="5" ry="7" fill="#f4c0ce" opacity=".7" transform="rotate(-25 88 502)"/>
+      <ellipse cx="102" cy="502" rx="5" ry="7" fill="#f4c0ce" opacity=".7" transform="rotate(25 102 502)"/>
+    </g>
+    <g opacity=".0" id="side-lotus-r"><animate attributeName="opacity" values="0;.7" dur="1s" begin="2.5s" fill="freeze"/>
+      <ellipse cx="305" cy="508" rx="15" ry="5" fill="#2a5a2a"/>
+      <ellipse cx="305" cy="503" rx="5" ry="8" fill="#e8a0b4" opacity=".8"/>
+      <ellipse cx="298" cy="505" rx="4" ry="7" fill="#e8a0b4" opacity=".7" transform="rotate(-25 298 505)"/>
+      <ellipse cx="312" cy="505" rx="4" ry="7" fill="#e8a0b4" opacity=".7" transform="rotate(25 312 505)"/>
+    </g>
+
+    <!-- Dharma Wheel (centre, above lotus) -->
+    <g id="dharma-svg" transform="translate(200,290)" opacity="0" filter="url(#glow)">
+      <animate attributeName="opacity" values="0;0;.85" dur="4s" begin="0s" fill="freeze"/>
+      <g class="dharma-spin" style="transform-origin:0px 0px">
+        <circle cx="0" cy="0" r="50" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+        <circle cx="0" cy="0" r="38" stroke="#C9A84C" stroke-width="1" fill="none" opacity=".5"/>
+        <circle cx="0" cy="0" r="10" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+        <circle cx="0" cy="0" r="5" fill="#C9A84C"/>
+        <!-- 8 spokes -->
+        <line x1="0" y1="-49" x2="0" y2="49" stroke="#C9A84C" stroke-width="1.5"/>
+        <line x1="-49" y1="0" x2="49" y2="0" stroke="#C9A84C" stroke-width="1.5"/>
+        <line x1="-34.6" y1="-34.6" x2="34.6" y2="34.6" stroke="#C9A84C" stroke-width="1.5"/>
+        <line x1="34.6" y1="-34.6" x2="-34.6" y2="34.6" stroke="#C9A84C" stroke-width="1.5"/>
+        <!-- spoke tips -->
+        <circle cx="0" cy="-49" r="3.5" fill="#C9A84C"/>
+        <circle cx="0" cy="49" r="3.5" fill="#C9A84C"/>
+        <circle cx="-49" cy="0" r="3.5" fill="#C9A84C"/>
+        <circle cx="49" cy="0" r="3.5" fill="#C9A84C"/>
+        <circle cx="-34.6" cy="-34.6" r="3" fill="#C9A84C"/>
+        <circle cx="34.6" cy="-34.6" r="3" fill="#C9A84C"/>
+        <circle cx="-34.6" cy="34.6" r="3" fill="#C9A84C"/>
+        <circle cx="34.6" cy="34.6" r="3" fill="#C9A84C"/>
+      </g>
+      <!-- outer ring deco -->
+      <circle cx="0" cy="0" r="54" stroke="#C9A84C" stroke-width=".5" fill="none" opacity=".4"/>
+    </g>
+
+    <!-- Mantra text -->
+    <text x="200" y="220" text-anchor="middle" font-family="'Noto Serif Devanagari',serif"
+      font-size="16" fill="#E8D090" letter-spacing="3" opacity="0" filter="url(#glow)">
+      <animate attributeName="opacity" values="0;0;0;.9" dur="5s" begin="0s" fill="freeze"/>
+      ॥ बुद्धं शरणं गच्छामि ॥
+    </text>
+    <text x="200" y="244" text-anchor="middle" font-family="'Cinzel',serif"
+      font-size="9" fill="rgba(232,213,163,.7)" letter-spacing="4" opacity="0">
+      <animate attributeName="opacity" values="0;0;0;.7" dur="6s" begin="0s" fill="freeze"/>
+      A SACRED BUDDHIST UNION
+    </text>
+
+    <!-- Floating sky lanterns -->
+    <g id="lantern1" opacity="0">
+      <animate attributeName="opacity" values="0;0;.8;.6;0" dur="8s" begin="1s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" values="60,580;55,300;65,50" dur="8s" begin="1s" repeatCount="indefinite"/>
+      <ellipse cx="0" cy="0" rx="10" ry="14" fill="#c85030" opacity=".85"/>
+      <ellipse cx="0" cy="-8" rx="10" ry="6" fill="#e06040"/>
+      <ellipse cx="0" cy="12" rx="8" ry="3" fill="#a03020" opacity=".7"/>
+      <circle cx="0" cy="0" r="5" fill="#ffcc44" opacity=".9" filter="url(#glow)"/>
+      <line x1="0" y1="14" x2="0" y2="22" stroke="#888" stroke-width=".8"/>
+    </g>
+    <g id="lantern2" opacity="0">
+      <animate attributeName="opacity" values="0;0;.7;.5;0" dur="9s" begin="3s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" values="340,600;330,300;350,20" dur="9s" begin="3s" repeatCount="indefinite"/>
+      <ellipse cx="0" cy="0" rx="9" ry="12" fill="#b04028" opacity=".85"/>
+      <ellipse cx="0" cy="-7" rx="9" ry="5" fill="#d05038"/>
+      <circle cx="0" cy="0" r="4" fill="#ffcc44" opacity=".8" filter="url(#glow)"/>
+      <line x1="0" y1="12" x2="0" y2="20" stroke="#888" stroke-width=".8"/>
+    </g>
+    <g id="lantern3" opacity="0">
+      <animate attributeName="opacity" values="0;0;.75;.55;0" dur="7s" begin="5s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" values="160,590;170,280;155,30" dur="7s" begin="5s" repeatCount="indefinite"/>
+      <ellipse cx="0" cy="0" rx="8" ry="11" fill="#c84028" opacity=".85"/>
+      <ellipse cx="0" cy="-6" rx="8" ry="5" fill="#e05038"/>
+      <circle cx="0" cy="0" r="4" fill="#ffcc44" opacity=".85" filter="url(#glow)"/>
+    </g>
+    <g id="lantern4" opacity="0">
+      <animate attributeName="opacity" values="0;0;.7;.4;0" dur="10s" begin="2s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" values="240,595;250,330;235,60" dur="10s" begin="2s" repeatCount="indefinite"/>
+      <ellipse cx="0" cy="0" rx="7" ry="10" fill="#a83018" opacity=".85"/>
+      <circle cx="0" cy="0" r="3.5" fill="#ffcc44" opacity=".8" filter="url(#glow)"/>
+    </g>
+
+    <!-- Candle flames at bottom edge -->
+    <g transform="translate(60,620)">
+      <ellipse cx="0" cy="0" rx="4" ry="10" fill="#ffcc44" opacity=".85"><animate attributeName="ry" values="10;12;9;11;10" dur="1.3s" repeatCount="indefinite"/></ellipse>
+      <ellipse cx="0" cy="5" rx="2.5" ry="5" fill="#ff8800" opacity=".7"/>
+      <rect x="-3" y="10" width="6" height="14" fill="#d4b060" rx="1"/>
+    </g>
+    <g transform="translate(340,625)">
+      <ellipse cx="0" cy="0" rx="3.5" ry="9" fill="#ffcc44" opacity=".85"><animate attributeName="ry" values="9;11;8;10;9" dur="1.6s" repeatCount="indefinite"/></ellipse>
+      <ellipse cx="0" cy="4" rx="2" ry="4" fill="#ff8800" opacity=".7"/>
+      <rect x="-2.5" y="9" width="5" height="12" fill="#d4b060" rx="1"/>
+    </g>
+    <g transform="translate(30,635)">
+      <ellipse cx="0" cy="0" rx="3" ry="8" fill="#ffcc44" opacity=".7"><animate attributeName="ry" values="8;10;7;9;8" dur="1.1s" repeatCount="indefinite"/></ellipse>
+      <rect x="-2" y="8" width="4" height="10" fill="#d4b060" rx="1"/>
+    </g>
+    <g transform="translate(370,630)">
+      <ellipse cx="0" cy="0" rx="3" ry="8" fill="#ffcc44" opacity=".7"><animate attributeName="ry" values="8;10;7;9;8" dur="1.4s" repeatCount="indefinite"/></ellipse>
+      <rect x="-2" y="8" width="4" height="10" fill="#d4b060" rx="1"/>
+    </g>
+
+    <!-- Gold sparkle particles -->
+    <g id="sparkles" opacity=".7">
+      <circle cx="170" cy="460" r="2" fill="#C9A84C" opacity="0"><animate attributeName="opacity" values="0;1;0" dur="2s" begin="3.2s" repeatCount="indefinite"/><animate attributeName="cy" values="460;440;420" dur="2s" begin="3.2s" repeatCount="indefinite"/></circle>
+      <circle cx="220" cy="450" r="1.5" fill="#E8D090" opacity="0"><animate attributeName="opacity" values="0;1;0" dur="2.4s" begin="3.8s" repeatCount="indefinite"/><animate attributeName="cy" values="450;430;410" dur="2.4s" begin="3.8s" repeatCount="indefinite"/></circle>
+      <circle cx="195" cy="455" r="1.8" fill="#C9A84C" opacity="0"><animate attributeName="opacity" values="0;1;0" dur="1.8s" begin="4.2s" repeatCount="indefinite"/><animate attributeName="cy" values="455;435;415" dur="1.8s" begin="4.2s" repeatCount="indefinite"/></circle>
+      <circle cx="210" cy="465" r="1.3" fill="#F0D898" opacity="0"><animate attributeName="opacity" values="0;1;0" dur="2.2s" begin="4.8s" repeatCount="indefinite"/><animate attributeName="cy" values="465;445;425" dur="2.2s" begin="4.8s" repeatCount="indefinite"/></circle>
+      <circle cx="185" cy="470" r="1.5" fill="#C9A84C" opacity="0"><animate attributeName="opacity" values="0;1;0" dur="2s" begin="5s" repeatCount="indefinite"/><animate attributeName="cy" values="470;450;430" dur="2s" begin="5s" repeatCount="indefinite"/></circle>
+    </g>
+
+    <!-- Incense smoke wisps -->
+    <path d="M 120 640 Q 118 620 122 600 Q 118 580 121 560" stroke="rgba(232,213,163,.2)" stroke-width="2" fill="none">
+      <animate attributeName="d" values="M 120 640 Q 118 620 122 600 Q 118 580 121 560;M 120 640 Q 124 620 118 600 Q 122 580 119 560;M 120 640 Q 118 620 122 600 Q 118 580 121 560" dur="3s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 280 640 Q 282 620 278 600 Q 282 580 279 560" stroke="rgba(232,213,163,.2)" stroke-width="2" fill="none">
+      <animate attributeName="d" values="M 280 640 Q 282 620 278 600 Q 282 580 279 560;M 280 640 Q 276 620 282 600 Q 278 580 281 560;M 280 640 Q 282 620 278 600 Q 282 580 279 560" dur="3.5s" repeatCount="indefinite"/>
+    </path>
+  </svg>
+
+  <!-- Envelope (rises from lotus) -->
+  <div id="env-wrap" onclick="openEnvelope()">
+    <div class="envelope" id="the-env">
+      <!-- Flap -->
+      <div class="env-flap" id="env-flap">
+        <div class="env-flap-shape"></div>
+      </div>
+      <!-- Body -->
+      <div class="env-body">
+        <div class="env-body-inner">
+          <div class="env-pattern"></div>
+          <div class="env-left-fold"></div>
+          <div class="env-right-fold"></div>
+          <!-- Peeking card -->
+          <div class="env-card" id="env-card">
+            <div class="peek-mantra">॥ बुद्धं शरणं गच्छामि ॥</div>
+            <div class="peek-names">Sakshi &amp; Sidhodhan</div>
+            <div class="peek-date">18 · November · 2027 · Pune</div>
+          </div>
+        </div>
+        <!-- Wax seal -->
+        <div class="env-seal" id="env-seal">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="46" fill="#7A5510" stroke="#C9A84C" stroke-width="2.5"/>
+            <circle cx="50" cy="50" r="40" fill="#9A6B18"/>
+            <ellipse cx="50" cy="60" rx="8" ry="5" fill="#E8D090" opacity=".9"/>
+            <ellipse cx="40" cy="54" rx="7" ry="4" fill="#E8D090" opacity=".8" transform="rotate(-30 40 54)"/>
+            <ellipse cx="60" cy="54" rx="7" ry="4" fill="#E8D090" opacity=".8" transform="rotate(30 60 54)"/>
+            <ellipse cx="50" cy="48" rx="6" ry="11" fill="#F0D898"/>
+            <ellipse cx="40" cy="51" rx="5" ry="9" fill="#F0D898" opacity=".85" transform="rotate(-28 40 51)"/>
+            <ellipse cx="60" cy="51" rx="5" ry="9" fill="#F0D898" opacity=".85" transform="rotate(28 60 51)"/>
+            <text x="50" y="33" text-anchor="middle" fill="#F5E6C0" font-size="9" font-family="serif" letter-spacing="1">S &amp; S</text>
+            <circle cx="50" cy="50" r="40" fill="none" stroke="#E8D090" stroke-width=".5"/>
           </svg>
-
-          <!-- Invitation card hidden inside the lotus, rises up during blooming -->
-          <div class="lotus-card" id="lotusCard" onclick="event.stopPropagation();">
-            <h3>Sakshi & Sidhodhan</h3>
-            <p style="margin: 4px 0; color: var(--maroon); font-weight: bold; letter-spacing: 1.5px;">SADARA AMANTRAN</p>
-            <p style="font-size: 0.72rem; font-style: italic;">Enter into the bliss of our sacred matrimony</p>
-            <div class="click-to-enter" onclick="revealWeddingSite()">Enter Invitation</div>
-          </div>
         </div>
       </div>
-      <div class="open-hint" id="unveilHint">Touch the White Lotus to Bloom the Invitation</div>
     </div>
   </div>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-mandala"></div>
-    <div class="hero-border reveal">
-      <div class="corner-ornament top-left"></div>
-      <div class="corner-ornament top-right"></div>
-      <div class="corner-ornament bottom-left"></div>
-      <div class="corner-ornament bottom-right"></div>
+  <p class="tap-hint" id="tap-hint">🪷 &nbsp; Tap to open your invitation &nbsp; 🪷</p>
+</div>
 
-      <!-- Sacred Hanging Bells SVGs -->
-      <svg class="hanging-bell bell-left" viewBox="0 0 30 60" fill="var(--gold)">
-        <line x1="15" y1="0" x2="15" y2="40" stroke="var(--gold)" stroke-width="2"/>
-        <path d="M7 40 C 7 30, 23 30, 23 40 L 25 50 L 5 50 Z" />
-        <circle cx="15" cy="54" r="3" />
-      </svg>
-      <svg class="hanging-bell bell-right" viewBox="0 0 30 60" fill="var(--gold)">
-        <line x1="15" y1="0" x2="15" y2="40" stroke="var(--gold)" stroke-width="2"/>
-        <path d="M7 40 C 7 30, 23 30, 23 40 L 25 50 L 5 50 Z" />
-        <circle cx="15" cy="54" r="3" />
-      </svg>
+<!-- ===== MAIN INVITATION ===== -->
+<div id="invitation">
+<div class="page">
+<div class="border-box">
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
 
-      <!-- EXQUISITE BUDDHA BLESSING MODULE -->
-      <div class="buddha-blessing-container">
-        <!-- Seamless radiating loops -->
-        <div class="buddha-halo-wrapper">
-          <div class="buddha-halo-ring"></div>
-          <div class="buddha-halo-ring"></div>
-          <div class="buddha-halo-ring"></div>
-        </div>
-        <div class="buddha-gilded-arch">
-          <!-- Main framed sacred Buddha image -->
-          <img src="ChatGPT Image May 30, 2026, 02_06_24 AM.png" alt="Lord Buddha Blessing" onerror="this.src='https://images.unsplash.com/photo-1542385151-efd9000785a0?auto=format&fit=crop&q=80&w=300'">
-        </div>
-        
-        <!-- Sacred Lotus Pedestal supporting the Gilded Arch -->
-        <svg class="buddha-lotus-base" viewBox="0 0 100 24">
-          <path d="M10 20 C20 5, 30 5, 40 20 C45 10, 55 10, 60 20 C70 5, 80 5, 90 20 C95 24, 5 24, 10 20 Z" />
-          <path d="M25 20 C35 10, 45 10, 50 20 C55 10, 65 10, 75 20" stroke="var(--gold-dark)" stroke-width="1" fill="none"/>
-        </svg>
+  <!-- Mantra -->
+  <div class="mantra-text" style="animation:fadeInDown .8s ease both">॥ बुद्धं शरणं गच्छामि ॥</div>
+  <div class="sub-text" style="animation:fadeInDown .9s ease .1s both">Together with their families invite you to celebrate their sacred union</div>
 
-        <div class="mantra-banner">☸ Namo Buddhaya ☸</div>
-      </div>
-
-      <div class="top-text playfair">With the blessings of Lord Buddha</div>
-      
-      <h1 class="names script-font">Sakshi</h1>
-      <span class="ampersand script-font">&amp;</span>
-      <h1 class="names script-font">Sidhodhan</h1>
-      
-      <!-- Lotus Flower SVG Divider -->
-      <div class="divider" style="margin: 25px 0;">
-        <svg viewBox="0 0 200 40" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M100 5 C110 20, 130 20, 100 35 C70 20, 90 20, 100 5 Z" fill="var(--gold)" opacity="0.6"/>
-          <path d="M100 12 C105 22, 115 22, 100 32 C85 22, 95 22, 100 12 Z" fill="var(--cream)"/>
-          <path d="M100 20 L100 35 M90 28 Q100 24 110 28" stroke="var(--gold)"/>
-          <path d="M10 25 Q 50 15, 80 25 M120 25 Q 150 15, 190 25" stroke="var(--gold)"/>
-        </svg>
-      </div>
-
-      <p class="playfair" style="font-size: 1.3rem; font-style: italic; letter-spacing: 1px;">Request your esteemed presence on our auspicious Wedding vows</p>
-      
-      <div class="date-text playfair">
-        <span style="display:block; font-family:'Cinzel', serif; font-size:1.9rem; font-weight:700; color:var(--gold);">18 . 11 . 2027</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Countdown Section -->
-  <section class="countdown-section">
-    <div class="reveal">
-      <h2 class="section-title">The Sacred Day Approaches</h2>
-      <div class="divider">
-        <svg viewBox="0 0 100 30"><path d="M0,15 L40,15 M60,15 L100,15 M50,5 L50,25 M40,15 Q50,0 60,15 Q50,30 40,15 Z" fill="var(--gold)"/></svg>
-      </div>
-      
-      <div class="countdown-container" id="countdown-wrapper">
-        <div class="cd-box">
-          <div class="cd-num" id="cd-d">00</div>
-          <div class="cd-label">Days</div>
-        </div>
-        <div class="cd-box">
-          <div class="cd-num" id="cd-h">00</div>
-          <div class="cd-label">Hours</div>
-        </div>
-        <div class="cd-box">
-          <div class="cd-num" id="cd-m">00</div>
-          <div class="cd-label">Mins</div>
-        </div>
-        <div class="cd-box">
-          <div class="cd-num" id="cd-s">00</div>
-          <div class="cd-label">Secs</div>
-        </div>
-      </div>
-      <p id="countdown-msg" style="display:none; color:var(--maroon); font-family:'Playfair Display',serif; font-size:24px; font-weight:600; margin-top:20px;">🎉 The Sacred Ceremony has commenced! 🎉</p>
-    </div>
-  </section>
-
-  <!-- ===== MAJESTIC TRI-FRAME MANDALA GALLERY ===== -->
-  <section class="couple-portrait-section">
-    <div class="reveal">
-      <h2 class="section-title">The Sacred Union</h2>
-      <p class="section-subtitle">Entering the path of life together in harmony, guided by Buddha's light</p>
-      
-      <!-- Unified collage layout using the exact 3 specified local filenames -->
-      <div class="collage-container">
-        <!-- Flanking Arch Left: Image (2) -->
-        <div class="collage-frame collage-side">
-          <img src="ChatGPT Image May 30, 2026, 02_15_19 AM (2).png" 
-               alt="Sacred Spiritual Vibe"
-               onerror="this.src='https://images.unsplash.com/photo-1594144365743-3ea7b702ecff?auto=format&fit=crop&q=80&w=600'">
-        </div>
-        
-        <!-- Centerpiece Union Image: Image (1) -->
-        <div class="collage-frame collage-center">
-          <img src="ChatGPT Image May 30, 2026, 02_15_19 AM (1).png" 
-               alt="Sakshi & Sidhodhan Combined"
-               onerror="this.src='https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=800'">
-        </div>
-        
-        <!-- Flanking Arch Right: Image (3) -->
-        <div class="collage-frame collage-side">
-          <img src="ChatGPT Image May 30, 2026, 02_15_19 AM (3).png" 
-               alt="Sacred Blessings Icon"
-               onerror="this.src='https://images.unsplash.com/photo-1605001011156-cbf0b0f67a51?auto=format&fit=crop&q=80&w=600'">
-        </div>
-      </div>
-
-      <!-- Buddhism Quotes on Love & Companion -->
-      <div class="buddhist-quote-box">
-        <p class="buddhist-quote">
-          "If two companions can live together in harmony, maintaining pure minds, keeping matching virtues, and acting in supreme wisdom, they shall rise in happiness and peace as one."
-        </p>
-        <span class="buddhist-quote-source">— Inspired by Sigalovada Sutta</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Interactive Blessings (Diya Lighting) Section -->
-  <section class="blessings-section">
-    <div class="reveal">
-      <h2 class="section-title">Mangala Lamp</h2>
-      <p class="section-subtitle">Click below to light the sacred lamp and send your blessings to the happy couple</p>
-      
-      <div class="diya-container" onclick="lightDiya(this)">
-        <div class="diya-flame" id="diya-flame"></div>
-        <svg class="diya-body" viewBox="0 0 100 60">
-          <path d="M10 30 C 10 50, 90 50, 90 30 C 85 25, 15 25, 10 30 Z" fill="#d4af37"/>
-          <path d="M15 30 Q 50 15 85 30" fill="none" stroke="#aa8529" stroke-width="2"/>
-          <ellipse cx="50" cy="30" rx="35" ry="8" fill="#8a6d1c" opacity="0.7"/>
-          <circle cx="50" cy="30" r="4" fill="#ff9f00"/>
-        </svg>
-      </div>
-      <div class="blessing-count">Sacred Blessings: <span id="bless-count">658</span></div>
-    </div>
-  </section>
-
-  <!-- Timeline Section styled with Buddhist Milestones -->
-  <section class="events-section">
-    <h2 class="section-title reveal">Sacred Rituals</h2>
-    <p class="section-subtitle reveal">Please join us across these beautiful moments of spiritual transition</p>
-    
-    <div class="timeline">
-      <!-- Ritual 1: Vandana & Blessings -->
-      <div class="event-card reveal">
-        <div class="event-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 21a9 9 0 0 1-9-9 9 9 0 0 1 9-9 9 9 0 0 1 9 9 9 9 0 0 1-9 9zm0-16a7 7 0 0 0-7 7 7 7 0 0 0 7 7 7 7 0 0 0 7-7 7 7 0 0 0-7-7z M12 6v12M6 12h12" stroke="currentColor" stroke-width="2"/></svg>
-        </div>
-        <div class="event-content">
-          <h3>Buddha Vandana & Sangha Blessings</h3>
-          <span class="time">Nov 17, 2027 • 10:00 AM</span>
-          <p>The commencement of our holy union, marked with pure chantings of Vandana, Tri-Sarana, and Panchsheel to invoke peaceful spiritual vibes.</p>
-        </div>
-      </div>
-
-      <!-- Ritual 2: Sangeet Night / Celebration -->
-      <div class="event-card reveal">
-        <div class="event-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-        </div>
-        <div class="event-content">
-          <h3>Sangeet & Mangala Utsav</h3>
-          <span class="time">Nov 17, 2027 • 7:00 PM</span>
-          <p>An evening filled with spiritual joy, beautiful folk melodies, and traditional dance to celebrate the bonding of Sakshi & Sidhodhan's families.</p>
-        </div>
-      </div>
-
-      <!-- Ritual 3: Wedding Muhurat -->
-      <div class="event-card reveal">
-        <div class="event-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm0-13a5 5 0 1 0 5 5 5 5 0 0 0-5-5z" stroke="currentColor" stroke-width="1.5"/></svg>
-        </div>
-        <div class="event-content">
-          <h3>Sacred Wedding (Vivah)</h3>
-          <span class="time">Nov 18, 2027 • 11:30 AM</span>
-          <p>The highly auspicious main wedding Muhurat. The couple will walk the path of Dharma, perform sacred rounds, exchange vows, and unite eternally.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Dress Code Section -->
-  <section class="dress-code-section">
-    <div class="reveal">
-      <h2 class="section-title">Color Themes</h2>
-      <p class="section-subtitle">We suggest these elegant natural colors to add serenity to our celebrations</p>
-      
-      <div class="dress-grid">
-        <div class="dress-card">
-          <div class="dress-title">Blessings Chants</div>
-          <p style="color: var(--text-light); font-size: 0.9rem;">Pure Ivory, Creams & Saffrons</p>
-          <div class="dress-palette">
-            <div class="color-dot" style="background: #ffffff; border:1px solid #ddd;"></div>
-            <div class="color-dot" style="background: #e07a5f;"></div>
-            <div class="color-dot" style="background: #fdf8ef;"></div>
-          </div>
-        </div>
-        <div class="dress-card">
-          <div class="dress-title">Mangala Utsav</div>
-          <p style="color: var(--text-light); font-size: 0.9rem;">Glorious Pastel Blues, Peaches & Silvers</p>
-          <div class="dress-palette">
-            <div class="color-dot" style="background: #a8dadc;"></div>
-            <div class="color-dot" style="background: #f3c68f;"></div>
-            <div class="color-dot" style="background: #e5e5e5;"></div>
-          </div>
-        </div>
-        <div class="dress-card">
-          <div class="dress-title">The Vivah Ceremony</div>
-          <p style="color: var(--text-light); font-size: 0.9rem;">Traditional Maroon, Deep Orange & Gold</p>
-          <div class="dress-palette">
-            <div class="color-dot" style="background: var(--maroon);"></div>
-            <div class="color-dot" style="background: #e76f51;"></div>
-            <div class="color-dot" style="background: var(--gold);"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Venue Section -->
-  <section class="venue-section">
-    <div class="reveal venue-card">
-      <h3>The Venue</h3>
-      <div class="divider">
-        <svg viewBox="0 0 100 20"><line x1="0" y1="10" x2="100" y2="10" stroke="var(--gold)" stroke-width="1"/><rect x="45" y="5" width="10" height="10" fill="var(--gold)" transform="rotate(45 50 10)"/></svg>
-      </div>
-      <h4 class="playfair" style="font-size: 1.6rem; color: var(--text); margin-bottom: 12px; font-weight:700;">The Grand Heritage Palace</h4>
-      <p class="playfair" style="color: var(--text-light); font-size: 1.15rem; margin-bottom: 25px; line-height: 1.6;">
-        123 Royal Estate Boulevard,<br>
-        Majestic View City, State 400001
-      </p>
-      
-      <div>
-        <a href="https://maps.google.com" target="_blank" class="btn-directions">Get Directions</a>
-        <a href="#" class="btn-calendar" onclick="addToCalendar(event)">Add To Calendar</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Interactive Wishes / Blessings Wall - ABSOLUTELY NO FORM TAGS -->
-  <section class="guestbook-section">
-    <div class="reveal">
-      <h2 class="section-title">Wishes Wall</h2>
-      <p class="section-subtitle">Leave your peaceful words and sacred blessings for the couple</p>
-      
-      <div class="guestbook-container">
-        <!-- Interactive DIV Container instead of a Form element to guarantee no browser reload or action errors -->
-        <div class="wish-input-group">
-          <input type="text" id="wishName" class="wish-input" placeholder="Your Noble Name" required>
-          <input type="text" id="wishText" class="wish-input" placeholder="Write your warm blessings..." required>
-          <div class="wish-btn" onclick="addWish()">Send Blessings</div>
-        </div>
-        
-        <div class="wishes-wall" id="wishesWall">
-          <!-- Default Wishes -->
-          <div class="wish-card">
-            <div class="wish-name">Venerable Bhante Bodhidharma</div>
-            <div class="wish-text">"Sabba-mangalal-avantu." May you walk together with peaceful minds, kindness, and eternal devotion. Blessings to Sakshi & Sidhodhan.</div>
-          </div>
-          <div class="wish-card">
-            <div class="wish-name">Family Elder Priyadarshi</div>
-            <div class="wish-text">Highly delighted to see this spiritual and noble beginning of your life journey. Namo Buddhaya! ❤️</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Mangala Verses Section -->
-  <section class="mangala-verses-section">
-    <div class="reveal">
-      <h2 class="section-title">Mangala Gatha</h2>
-      
-      <svg class="mandala-illustration" viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="2"/>
-        <circle cx="50" cy="50" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
-        <line x1="50" y1="10" x2="50" y2="90" stroke="currentColor" stroke-width="2"/>
-        <line x1="10" y1="50" x2="90" y2="50" stroke="currentColor" stroke-width="2"/>
-        <line x1="22" y1="22" x2="78" y2="78" stroke="currentColor" stroke-width="1.5"/>
-        <line x1="22" y1="78" x2="78" y2="22" stroke="currentColor" stroke-width="1.5"/>
-      </svg>
-
-      <div class="verse-card">
-        <p class="verse-text">
-          "Arogya parama labha, santutthi paramam dhanam,<br>
-          vissasa parama nati, nibbanam paramam sukham."
-        </p>
-        <p class="verse-translation">
-          "Health is the greatest gift, contentment is the greatest wealth,<br>
-          a trusted companion is the best relative, and supreme peace is the highest bliss."
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <h3 class="footer-names script-font">Sakshi & Sidhodhan</h3>
-    <p style="font-family: 'Nunito', sans-serif; font-size: 0.95rem; opacity: 0.8; letter-spacing: 1px;">Sukhino va khemino hontu — May all beings be happy and safe!</p>
-  </footer>
-
-  <!-- Custom Popup Structure -->
-  <div class="modal-overlay" id="modalOverlay"></div>
-  <div class="custom-modal" id="customModal">
-    <h3 id="modalTitle" style="font-family:'Cinzel', serif; margin-bottom: 15px; font-size: 1.6rem;">Peace & Blessings</h3>
-    <p id="modalMsg" style="font-family:'Nunito', sans-serif; line-height: 1.6; color: var(--text-light);"></p>
-    <button onclick="closeModal()" style="margin-top:25px; padding:10px 30px; background:var(--gold); border:none; border-radius:30px; color:var(--maroon); font-family:'Cinzel', serif; font-weight:700; cursor:pointer; transition: 0.3s; box-shadow: var(--shadow-gold);">Close</button>
+  <!-- Buddha image -->
+  <div class="buddha-wrap" style="animation:scaleIn .8s ease .2s both">
+    <img class="buddha-img"
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/BuddhaGautama.jpg/220px-BuddhaGautama.jpg"
+      alt="Lord Buddha"
+      onerror="this.style.display='none'">
   </div>
 
-  <script>
-    /* ===== WEBAUDIO REALTIME SYNTHESIZER FALLBACK ENGINE ===== */
-    // This synthesizer generates incredibly beautiful singing bowl & chime sounds in real-time.
-    // It works perfectly on all devices even if external MP3 links are blocked.
-    let audioCtx = null;
+  <!-- Centered couple photo -->
+  <div class="couple-center-wrap s-fade">
+    <div class="couple-center-frame">
+      <!-- decorative corner flourishes -->
+      <div class="ccf-corner ccf-tl"></div>
+      <div class="ccf-corner ccf-tr"></div>
+      <div class="ccf-corner ccf-bl"></div>
+      <div class="ccf-corner ccf-br"></div>
+      <img
+        src="ChatGPT Image May 30, 2026, 02_15_19 AM (2).png"
+        alt="Sakshi & Sidhodhan"
+        class="couple-center-img"
+        onerror="this.parentElement.classList.add('photo-missing')">
+      <div class="couple-center-missing">
+        <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="28" stroke="#C9A84C" stroke-width="1" fill="rgba(201,168,76,.08)"/><text x="30" y="36" text-anchor="middle" fill="#C9A84C" font-size="24">💑</text></svg>
+        <div style="font-size:11px;color:var(--gold-dark);margin-top:6px;letter-spacing:2px">Couple Photo</div>
+      </div>
+    </div>
+  </div>
 
-    function initAudioSynth() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
+  <!-- Lotus top -->
+  <div class="lotus-row s-fade">
+    <svg class="lotus-svg" width="44" height="42" viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="30" cy="37" rx="9" ry="5" fill="#E8A0B4" opacity=".75"/><ellipse cx="19" cy="31" rx="8" ry="5" fill="#E8A0B4" opacity=".65" transform="rotate(-25 19 31)"/><ellipse cx="41" cy="31" rx="8" ry="5" fill="#E8A0B4" opacity=".65" transform="rotate(25 41 31)"/><ellipse cx="30" cy="25" rx="7" ry="14" fill="#F4C0CE" opacity=".9"/><ellipse cx="17" cy="29" rx="6" ry="11" fill="#F4C0CE" opacity=".8" transform="rotate(-30 17 29)"/><ellipse cx="43" cy="29" rx="6" ry="11" fill="#F4C0CE" opacity=".8" transform="rotate(30 43 29)"/><line x1="30" y1="42" x2="30" y2="50" stroke="#6B8C5E" stroke-width="1.5"/>
+    </svg>
+    <svg class="lotus-svg" width="56" height="52" viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="30" cy="37" rx="10" ry="6" fill="#C9A84C" opacity=".55"/><ellipse cx="18" cy="30" rx="9" ry="5" fill="#C9A84C" opacity=".45" transform="rotate(-25 18 30)"/><ellipse cx="42" cy="30" rx="9" ry="5" fill="#C9A84C" opacity=".45" transform="rotate(25 42 30)"/><ellipse cx="30" cy="23" rx="8" ry="16" fill="#E8D090" opacity=".9"/><ellipse cx="16" cy="27" rx="7" ry="13" fill="#E8D090" opacity=".8" transform="rotate(-30 16 27)"/><ellipse cx="44" cy="27" rx="7" ry="13" fill="#E8D090" opacity=".8" transform="rotate(30 44 27)"/><line x1="30" y1="43" x2="30" y2="50" stroke="#6B8C5E" stroke-width="2"/><ellipse cx="30" cy="46" rx="10" ry="4" fill="#8FBB80" opacity=".35"/>
+    </svg>
+    <svg class="lotus-svg" width="44" height="42" viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="30" cy="37" rx="9" ry="5" fill="#E8A0B4" opacity=".75"/><ellipse cx="19" cy="31" rx="8" ry="5" fill="#E8A0B4" opacity=".65" transform="rotate(-25 19 31)"/><ellipse cx="41" cy="31" rx="8" ry="5" fill="#E8A0B4" opacity=".65" transform="rotate(25 41 31)"/><ellipse cx="30" cy="25" rx="7" ry="14" fill="#F4C0CE" opacity=".9"/><ellipse cx="17" cy="29" rx="6" ry="11" fill="#F4C0CE" opacity=".8" transform="rotate(-30 17 29)"/><ellipse cx="43" cy="29" rx="6" ry="11" fill="#F4C0CE" opacity=".8" transform="rotate(30 43 29)"/><line x1="30" y1="42" x2="30" y2="50" stroke="#6B8C5E" stroke-width="1.5"/>
+    </svg>
+  </div>
+
+  <!-- Names -->
+  <div class="names-wrap s-fade">
+    <div class="name-big">Sakshi</div>
+    <div class="amp-row"><div class="amp-line"></div><span class="amp">&amp;</span><div class="amp-line"></div></div>
+    <div class="name-big">Sidhodhan</div>
+  </div>
+
+  <!-- Date -->
+  <div class="date-wrap s-fade">
+    <div class="date-box">18 November 2027</div>
+    <div class="venue-label">Pune, Maharashtra</div>
+  </div>
+
+  <div class="divider s-fade"><span>☸</span></div>
+
+  <!-- COUNTDOWN TIMER -->
+  <div class="timer-section s-fade">
+    <div class="timer-label">☸ Auspicious Moments Until The Sacred Union ☸</div>
+    <div class="timer-grid">
+      <div class="timer-unit"><span class="timer-num" id="t-days">000</span><span class="timer-sub">Days</span></div>
+      <span class="timer-sep" style="line-height:1.1">:</span>
+      <div class="timer-unit"><span class="timer-num" id="t-hours">00</span><span class="timer-sub">Hours</span></div>
+      <span class="timer-sep" style="line-height:1.1">:</span>
+      <div class="timer-unit"><span class="timer-num" id="t-mins">00</span><span class="timer-sub">Mins</span></div>
+      <span class="timer-sep" style="line-height:1.1">:</span>
+      <div class="timer-unit"><span class="timer-num" id="t-secs">00</span><span class="timer-sub">Secs</span></div>
+    </div>
+  </div>
+
+  <div class="divider s-fade"><span>☸</span></div>
+
+  <!-- FAMILIES -->
+  <div class="families-grid s-fade">
+    <div class="family-card" onclick="openModal('bride')">
+      <div class="fam-label">Bride's Family</div>
+      <div class="fam-name">Sandeep Gaikwad</div>
+      <div class="fam-loc">Panvel, Mumbai<br>Maharashtra</div>
+      <div class="tap-badge">Tap to view details ✦</div>
+    </div>
+    <div class="fam-sep" style="text-align:center;color:var(--gold);font-size:26px;font-style:italic">❈</div>
+    <div class="family-card" onclick="openModal('groom')">
+      <div class="fam-label">Groom's Family</div>
+      <div class="fam-name">Kiran Kamble</div>
+      <div class="fam-loc">Pune<br>Maharashtra</div>
+      <div class="tap-badge">Tap to view details ✦</div>
+    </div>
+  </div>
+
+  <!-- PHOTOS -->
+  <div class="photos-grid s-fade">
+    <div class="photo-frame round">
+      <img src="ChatGPT Image May 30, 2026, 02_15_19 AM (1).png" alt="Sakshi & Sidhodhan"
+        onerror="this.style.display='none';this.parentNode.querySelector('.photo-ph').style.display='flex'">
+      <div class="photo-ph" style="display:none">🪷<br>Couple Photo 1</div>
+    </div>
+    <div class="photo-frame rect">
+      <img src="ChatGPT Image May 30, 2026, 02_15_19 AM (2).png" alt="Wedding photo"
+        onerror="this.style.display='none';this.parentNode.querySelector('.photo-ph').style.display='flex'">
+      <div class="photo-ph" style="display:none">💑<br>Couple Photo 2</div>
+    </div>
+    <div class="photo-frame round">
+      <img src="ChatGPT Image May 30, 2026, 02_15_19 AM (3).png" alt="Wedding photo"
+        onerror="this.style.display='none';this.parentNode.querySelector('.photo-ph').style.display='flex'">
+      <div class="photo-ph" style="display:none">🛕<br>Venue Photo</div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div class="schedule-section s-fade">
+    <div class="sec-title">Wedding Schedule</div>
+    <div class="sched-grid">
+      <div class="sched-card" onclick="openModal('vandana')">
+        <span class="scard-icon">🪷</span>
+        <div class="scard-name">Buddha Vandana</div>
+        <div class="scard-time">6:00 PM</div>
+        <div class="scard-date">17 Nov 2027</div>
+        <div class="scard-more">Tap for details</div>
+      </div>
+      <div class="sched-card" onclick="openModal('haldi')">
+        <span class="scard-icon">🌿</span>
+        <div class="scard-name">Haldi Ceremony</div>
+        <div class="scard-time">9:00 AM</div>
+        <div class="scard-date">18 Nov 2027</div>
+        <div class="scard-more">Tap for details</div>
+      </div>
+      <div class="sched-card" onclick="openModal('wedding')">
+        <span class="scard-icon">☸️</span>
+        <div class="scard-name">Buddhist Wedding</div>
+        <div class="scard-time">11:30 AM</div>
+        <div class="scard-date">18 Nov 2027</div>
+        <div class="scard-more">Tap for details</div>
+      </div>
+      <div class="sched-card" onclick="openModal('reception')">
+        <span class="scard-icon">🥂</span>
+        <div class="scard-name">Reception</div>
+        <div class="scard-time">7:00 PM</div>
+        <div class="scard-date">18 Nov 2027</div>
+        <div class="scard-more">Tap for details</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lotus bottom -->
+  <div class="lotus-row s-fade">
+    <svg width="36" height="38" viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="30" cy="37" rx="9" ry="5" fill="#E8A0B4" opacity=".7"/><ellipse cx="30" cy="24" rx="7" ry="14" fill="#F4C0CE" opacity=".85"/><ellipse cx="17" cy="29" rx="6" ry="11" fill="#F4C0CE" opacity=".75" transform="rotate(-30 17 29)"/><ellipse cx="43" cy="29" rx="6" ry="11" fill="#F4C0CE" opacity=".75" transform="rotate(30 43 29)"/><line x1="30" y1="42" x2="30" y2="50" stroke="#6B8C5E" stroke-width="1.5"/>
+    </svg>
+    <svg width="48" height="46" viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="30" cy="37" rx="10" ry="6" fill="#C9A84C" opacity=".5"/><ellipse cx="30" cy="22" rx="8" ry="16" fill="#E8D090" opacity=".88"/><ellipse cx="16" cy="27" rx="7" ry="13" fill="#E8D090" opacity=".78" transform="rotate(-30 16 27)"/><ellipse cx="44" cy="27" rx="7" ry="13" fill="#E8D090" opacity=".78" transform="rotate(30 44 27)"/><line x1="30" y1="43" x2="30" y2="50" stroke="#6B8C5E" stroke-width="2"/><ellipse cx="30" cy="46" rx="10" ry="4" fill="#8FBB80" opacity=".3"/>
+    </svg>
+    <svg width="36" height="38" viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="30" cy="37" rx="9" ry="5" fill="#E8A0B4" opacity=".7"/><ellipse cx="30" cy="24" rx="7" ry="14" fill="#F4C0CE" opacity=".85"/><ellipse cx="17" cy="29" rx="6" ry="11" fill="#F4C0CE" opacity=".75" transform="rotate(-30 17 29)"/><ellipse cx="43" cy="29" rx="6" ry="11" fill="#F4C0CE" opacity=".75" transform="rotate(30 43 29)"/><line x1="30" y1="42" x2="30" y2="50" stroke="#6B8C5E" stroke-width="1.5"/>
+    </svg>
+  </div>
+
+  <!-- Blessing -->
+  <div class="blessing s-fade">
+    <p>May your union be blessed with<br>Love · Compassion · Happiness & Peace Always</p>
+  </div>
+
+  <div class="divider s-fade"><span>✦</span></div>
+
+  <!-- Action buttons -->
+  <div class="action-row s-fade">
+    <button class="btn-nav" onclick="openGoogleMaps()"><span>📍</span> Get Directions</button>
+    <button class="btn-cal" onclick="openModal('addcal')"><span>📅</span> Add to Calendar</button>
+    <a class="btn-nav" href="tel:9309951100"><span>📞</span> 93099 51100</a>
+  </div>
+
+</div><!-- /border-box -->
+</div><!-- /page -->
+</div><!-- /invitation -->
+
+<!-- ===== MODALS ===== -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal-box" id="modal-box">
+    <div class="modal-head">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <span class="modal-icon" id="m-icon">🪷</span>
+      <div class="modal-title" id="m-title">Title</div>
+      <div class="modal-sub" id="m-sub">Sub</div>
+    </div>
+    <div class="modal-body" id="m-body"></div>
+  </div>
+</div>
+
+<script>
+// ===== PETALS =====
+(function(){
+  var layer=document.getElementById('petals');
+  var colors=['#F4C0CE','#E8A0B4','#E8D090','#C9A84C','#F0E0B0','#FADADD','#D4E8A0'];
+  for(var i=0;i<28;i++){
+    var p=document.createElement('div');p.className='petal';
+    var s=Math.random()*10+6;
+    p.style.cssText='left:'+Math.random()*100+'%;width:'+s+'px;height:'+(s*1.5)+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';animation-duration:'+(Math.random()*7+5)+'s;animation-delay:'+(Math.random()*10)+'s;opacity:.7;';
+    layer.appendChild(p);
+  }
+})();
+
+// ===== DHARMA WHEEL SPIN (CSS anim on SVG element) =====
+(function(){
+  var style=document.createElement('style');
+  style.textContent='.dharma-spin{animation:dspin 12s linear infinite;transform-origin:0px 0px}@keyframes dspin{to{transform:rotate(360deg)}}';
+  document.head.appendChild(style);
+})();
+
+// ===== ENVELOPE RISES AFTER LOTUS BLOOMS =====
+window.addEventListener('load',function(){
+  setTimeout(function(){
+    var wrap=document.getElementById('env-wrap');
+    if(wrap)wrap.classList.add('risen');
+  },3800);
+});
+
+// ===== ENVELOPE =====
+var opened=false;
+function openEnvelope(){
+  if(opened)return;
+  // Wait until risen
+  if(!document.getElementById('env-wrap').classList.contains('risen'))return;
+  opened=true;
+  document.getElementById('tap-hint').style.opacity='0';
+  // Flap opens
+  var flap=document.getElementById('env-flap');
+  flap.style.transition='transform 1s cubic-bezier(.4,0,.2,1)';
+  flap.style.transform='rotateX(-180deg)';
+  flap.style.transformOrigin='top center';
+  // Card rises
+  setTimeout(function(){
+    var card=document.getElementById('env-card');
+    card.style.transition='transform 1.1s cubic-bezier(.34,1.4,.64,1)';
+    card.style.transform='translateX(-50%) translateY(-8%)';
+  },550);
+  // Seal pops away
+  setTimeout(function(){
+    var seal=document.getElementById('env-seal');
+    seal.style.transition='transform .55s ease,opacity .55s ease';
+    seal.style.transform='translateX(-50%) scale(0) rotate(200deg)';
+    seal.style.opacity='0';
+  },350);
+  // Transition to main invite
+  setTimeout(function(){
+    document.getElementById('env-screen').classList.add('out');
+    setTimeout(function(){
+      document.getElementById('env-screen').style.display='none';
+      var inv=document.getElementById('invitation');
+      inv.classList.add('show');
+      requestAnimationFrame(function(){requestAnimationFrame(function(){
+        inv.classList.add('fade');
+        setupScroll();
+        startTimer();
+      })});
+    },1400);
+  },2000);
+}
+
+// ===== TIMER =====
+function startTimer(){
+  var target=new Date('2027-11-18T11:30:00');
+  function tick(){
+    var now=new Date();
+    var diff=target-now;
+    if(diff<=0){
+      document.getElementById('t-days').textContent='000';
+      document.getElementById('t-hours').textContent='00';
+      document.getElementById('t-mins').textContent='00';
+      document.getElementById('t-secs').textContent='00';
+      return;
     }
+    var days=Math.floor(diff/864e5);
+    var hrs=Math.floor((diff%864e5)/36e5);
+    var mins=Math.floor((diff%36e5)/6e4);
+    var secs=Math.floor((diff%6e4)/1e3);
+    document.getElementById('t-days').textContent=String(days).padStart(3,'0');
+    document.getElementById('t-hours').textContent=String(hrs).padStart(2,'0');
+    document.getElementById('t-mins').textContent=String(mins).padStart(2,'0');
+    document.getElementById('t-secs').textContent=String(secs).padStart(2,'0');
+  }
+  tick();setInterval(tick,1000);
+}
 
-    // Synthesize a majestic deep Buddhist Singing Bowl/Bell strike
-    function playSingingBowl(freq = 144) {
-      initAudioSynth();
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+// ===== SCROLL =====
+function setupScroll(){
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in');});
+  },{threshold:.12});
+  document.querySelectorAll('.s-fade').forEach(function(el){obs.observe(el);});
+}
 
-      const strikeTime = audioCtx.currentTime;
-      const duration = 12; // 12 seconds deep resonance decay
+// ===== GOOGLE MAPS =====
+function openGoogleMaps(){
+  window.open('https://www.google.com/maps/search/?api=1&query=Pune+Maharashtra+India','_blank');
+}
 
-      // Master output gain
-      const masterGain = audioCtx.createGain();
-      masterGain.gain.setValueAtTime(0, strikeTime);
-      masterGain.gain.linearRampToValueAtTime(0.35, strikeTime + 0.1);
-      masterGain.gain.exponentialRampToValueAtTime(0.0001, strikeTime + duration);
-      masterGain.connect(audioCtx.destination);
+// ===== MODAL DATA =====
+var modalData={
+  bride:{
+    icon:'👰',title:"Bride's Family",sub:'Gaikwad Family · Panvel, Mumbai',
+    rows:[
+      {icon:'👨‍👩‍👧',label:'Father',val:'Sandeep Gaikwad',note:'Head of the Gaikwad family'},
+      {icon:'📍',label:'Hometown',val:'Panvel, Mumbai, Maharashtra',note:'Konkan region'},
+      {icon:'🏠',label:'Family Background',val:'Prominent Buddhist family from Panvel',note:'Long-standing community leaders and devotees of Lord Buddha'},
+      {icon:'🪷',label:'Religion',val:'Buddhist (Navayana / Ambedkarite Buddhism)',note:'The family follows Dr. B.R. Ambedkar\'s path of Buddhism'},
+      {icon:'📞',label:'Contact',val:'93099 51100',note:'RSVP & enquiries welcome'},
+      {icon:'💌',label:'Message',val:'The Gaikwad family warmly welcomes you to share in the joy of their daughter Sakshi\'s sacred union with Sidhodhan.'}
+    ]
+  },
+  groom:{
+    icon:'🤵',title:"Groom's Family",sub:'Kamble Family · Pune, Maharashtra',
+    rows:[
+      {icon:'👨‍👩‍👦',label:'Father',val:'Kiran Kamble',note:'Head of the Kamble family'},
+      {icon:'📍',label:'Hometown',val:'Pune, Maharashtra',note:'City of culture and heritage'},
+      {icon:'🏠',label:'Family Background',val:'Respected Buddhist family of Pune',note:'Deep-rooted in Buddhist traditions and social service'},
+      {icon:'🪷',label:'Religion',val:'Buddhist (Navayana / Ambedkarite Buddhism)',note:'Followers of the Dhamma as shown by Dr. Babasaheb Ambedkar'},
+      {icon:'📞',label:'Contact',val:'93099 51100',note:'RSVP & enquiries welcome'},
+      {icon:'💌',label:'Message',val:'The Kamble family is delighted to invite you to witness the blessed wedding of their son Sidhodhan with Sakshi.'}
+    ]
+  },
+  vandana:{
+    icon:'🙏',title:'Buddha Vandana',sub:'Prayer Ceremony & Family Gathering',
+    rows:[
+      {icon:'📅',label:'Date',val:'Thursday, 17 November 2027'},
+      {icon:'⏰',label:'Time',val:'6:00 PM onwards',note:'Please arrive by 5:45 PM'},
+      {icon:'📍',label:'Venue',val:'TBD - Pune Venue',note:'Location details will be shared soon'},
+      {icon:'👗',label:'Dress Code',val:'Traditional attire preferred',note:'White, cream or soft pastel colours welcome'},
+      {icon:'📖',label:'Program',val:'Chanting of Buddhist prayers (Pali suttas), Three Jewels recitation, Family gathering & blessings',note:'Led by a Buddhist monk / bhante'},
+      {icon:'🌸',label:'Note',val:'Please come with a calm and joyful heart. Bring marigold flowers or lotus offerings if you wish.'},
+      {icon:'🍽️',label:'Prasad',val:'Light refreshments & sweets will be served after the ceremony'}
+    ],
+    cal:{start:'20271117T180000',end:'20271117T210000',title:'Buddha Vandana - Sakshi & Sidhodhan'}
+  },
+  haldi:{
+    icon:'🌿',title:'Haldi Ceremony',sub:'Traditional Turmeric Celebration',
+    rows:[
+      {icon:'📅',label:'Date',val:'Friday, 18 November 2027'},
+      {icon:'⏰',label:'Time',val:'9:00 AM – 11:00 AM',note:'Please arrive by 8:45 AM'},
+      {icon:'📍',label:'Venue',val:'TBD - Pune Venue',note:'Location details to follow'},
+      {icon:'👗',label:'Dress Code',val:'Wear old or yellow clothes',note:'You will get haldi — expect colour!'},
+      {icon:'🌿',label:'About',val:'Turmeric paste is applied to the bride and groom by family and friends. It is a purification ritual ahead of the wedding.'},
+      {icon:'🎵',label:'Program',val:'Traditional folk songs, haldi application, photos & fun with family',note:'Dhol & traditional music'},
+      {icon:'🍽️',label:'Food',val:'Morning snacks and fresh juice served'},
+      {icon:'💛',label:'Bring',val:'Joy, laughter, and a change of clothes!'}
+    ],
+    cal:{start:'20271118T090000',end:'20271118T110000',title:'Haldi Ceremony - Sakshi & Sidhodhan'}
+  },
+  wedding:{
+    icon:'☸️',title:'Buddhist Wedding Ceremony',sub:'Sacred Buddhist Marriage Rituals',
+    rows:[
+      {icon:'📅',label:'Date',val:'Friday, 18 November 2027'},
+      {icon:'⏰',label:'Time',val:'11:30 AM – 1:30 PM',note:'Please be seated by 11:15 AM'},
+      {icon:'📍',label:'Venue',val:'TBD - Pune, Maharashtra',note:'Exact address will be shared with invitees'},
+      {icon:'👗',label:'Dress Code',val:'Traditional Indian attire',note:'Saree, kurta, or ethnic wear preferred. White & gold are auspicious.'},
+      {icon:'📖',label:'Ceremony',val:'Recitation of Three Refuges & Five Precepts, Exchange of garlands (Jaimala), Mangalsutra ceremony, Seven steps (Saptapadi), Blessings by Bhante (Buddhist monk)'},
+      {icon:'🪷',label:'Significance',val:'This ceremony follows Navayana Buddhist wedding traditions as inspired by Dr. Babasaheb Ambedkar\'s teachings of equality, love and compassion.'},
+      {icon:'📸',label:'Photography',val:'Professional photography & videography will be arranged'},
+      {icon:'🍽️',label:'After Ceremony',val:'Lunch will be served following the wedding rituals'}
+    ],
+    cal:{start:'20271118T113000',end:'20271118T133000',title:'Buddhist Wedding - Sakshi & Sidhodhan'}
+  },
+  reception:{
+    icon:'🥂',title:'Wedding Reception',sub:'Dinner & Celebration Night',
+    rows:[
+      {icon:'📅',label:'Date',val:'Friday, 18 November 2027'},
+      {icon:'⏰',label:'Time',val:'7:00 PM – 11:00 PM',note:'Doors open at 6:30 PM'},
+      {icon:'📍',label:'Venue',val:'TBD - Pune, Maharashtra',note:'Grand banquet hall — details to follow'},
+      {icon:'👗',label:'Dress Code',val:'Festive / Formal Indian or Western',note:'Suit, sherwani, saree, or lehenga all welcome'},
+      {icon:'🎊',label:'Program',val:'Grand entry of the couple, Stage ceremony & blessings, Cultural performances, Photo sessions, DJ & music, Dinner'},
+      {icon:'🍽️',label:'Dinner',val:'Elaborate vegetarian dinner buffet',note:'Special dietary needs can be accommodated'},
+      {icon:'🎁',label:'Gifts',val:'Your blessings are our greatest gift.',note:'If you wish to give a gift, cash gifts are preferred'},
+      {icon:'📞',label:'RSVP',val:'93099 51100',note:'Please confirm attendance by 1 November 2027'}
+    ],
+    cal:{start:'20271118T190000',end:'20271118T230000',title:'Wedding Reception - Sakshi & Sidhodhan'}
+  },
+  addcal:{
+    icon:'📅',title:'Add to Calendar',sub:'Save the date — 18 November 2027',
+    rows:[
+      {icon:'🪷',label:'Wedding Date',val:'18 November 2027, Pune Maharashtra'}
+    ]
+  }
+};
 
-      // We combine several harmonics to create a highly complex, metallic resonance of a Tibetan bowl
-      const harmonics = [1, 2, 2.76, 3.4, 4.1, 5.2];
-      const gains = [1, 0.4, 0.25, 0.15, 0.1, 0.05];
-
-      harmonics.forEach((mult, i) => {
-        const osc = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
-
-        osc.type = i === 0 ? 'sine' : 'triangle';
-        osc.frequency.setValueAtTime(freq * mult, strikeTime);
-
-        // Add slow tremolo to make it feel alive
-        const lfo = audioCtx.createOscillator();
-        const lfoGain = audioCtx.createGain();
-        lfo.frequency.value = 1.5 + Math.random(); // Gentle breathing pitch shift
-        lfoGain.gain.value = 1.2;
-        lfo.connect(lfoGain);
-        lfoGain.connect(osc.frequency);
-        lfo.start();
-
-        g.gain.setValueAtTime(gains[i] * 0.45, strikeTime);
-        g.gain.exponentialRampToValueAtTime(0.0001, strikeTime + (duration * (1 - (i * 0.12))));
-
-        osc.connect(g);
-        g.connect(masterGain);
-
-        osc.start(strikeTime);
-        osc.stop(strikeTime + duration);
-      });
-    }
-
-    // Synthesize tiny, magical shimmering wind chimes
-    function playWindChime() {
-      initAudioSynth();
-      const strikeTime = audioCtx.currentTime;
-      const freq = 900 + Math.random() * 800; // Sparkling high tones
-
-      const osc = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, strikeTime);
-      
-      gainNode.gain.setValueAtTime(0.08, strikeTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.0001, strikeTime + 2.5);
-
-      osc.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-
-      osc.start(strikeTime);
-      osc.stop(strikeTime + 2.5);
-    }
-
-    // Trigger intermittent wind chimes
-    let chimeInterval = null;
-    function startWindChimesLoop() {
-      if (chimeInterval) clearInterval(chimeInterval);
-      chimeInterval = setInterval(() => {
-        if (Math.random() > 0.4) {
-          playWindChime();
-          // Occasionally trigger a dual chime
-          if (Math.random() > 0.7) {
-            setTimeout(playWindChime, 150 + Math.random() * 200);
-          }
-        }
-      }, 3000);
-    }
-
-    /* ===== PRELOADER WITH FAIL-SAFE FALLBACKS ===== */
-    const preloader = document.getElementById('preloader');
-    
-    function removePreloader() {
-      if (preloader && preloader.style.display !== 'none') {
-        preloader.style.opacity = '0';
-        setTimeout(() => { 
-          preloader.style.display = 'none'; 
-          // Auto trigger initial reveals for anything in current view
-          document.querySelectorAll('.reveal').forEach((el) => {
-            if (el.getBoundingClientRect().top < window.innerHeight) {
-              el.classList.add('active');
-            }
-          });
-        }, 800);
-      }
-    }
-
-    window.addEventListener('load', removePreloader);
-    document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(removePreloader, 1000);
+function openModal(key){
+  var d=modalData[key];if(!d)return;
+  document.getElementById('m-icon').textContent=d.icon;
+  document.getElementById('m-title').textContent=d.title;
+  document.getElementById('m-sub').textContent=d.sub;
+  var body='';
+  d.rows.forEach(function(r){
+    body+='<div class="modal-row"><div class="mrow-icon">'+r.icon+'</div><div><div class="mrow-label">'+r.label+'</div><div class="mrow-val">'+r.val+'</div>'+(r.note?'<div class="mrow-note">'+r.note+'</div>':'')+'</div></div>';
+  });
+  // Calendar buttons
+  if(d.cal){
+    var c=d.cal;
+    var gcal='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(c.title)+'&dates='+c.start+'/'+c.end+'&details='+encodeURIComponent('Wedding of Sakshi & Sidhodhan. Contact: 93099 51100')+'&location='+encodeURIComponent('Pune, Maharashtra, India');
+    var ical='BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nDTSTART:'+c.start+'\nDTEND:'+c.end+'\nSUMMARY:'+c.title+'\nLOCATION:Pune, Maharashtra, India\nDESCRIPTION:Wedding of Sakshi & Sidhodhan. Contact: 93099 51100\nEND:VEVENT\nEND:VCALENDAR';
+    var icalBlob='data:text/calendar;charset=utf-8,'+encodeURIComponent(ical);
+    body+='<div style="margin-top:14px"><div class="mrow-label">Add to calendar</div><div class="cal-btns"><a class="cal-btn" href="'+gcal+'" target="_blank">📅 Google Calendar</a><a class="cal-btn" href="'+icalBlob+'" download="wedding.ics">📱 iPhone / Apple</a><a class="cal-btn" href="'+icalBlob+'" download="wedding.ics">💻 Outlook / ICS</a></div></div>';
+  }
+  // If addcal — show all events
+  if(key==='addcal'){
+    body+='<div style="margin-top:16px"><div class="mrow-label" style="margin-bottom:10px">All Events — Add each to your calendar</div>';
+    ['vandana','haldi','wedding','reception'].forEach(function(k){
+      var ev=modalData[k];var c=ev.cal;
+      var gcal='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(c.title)+'&dates='+c.start+'/'+c.end+'&details='+encodeURIComponent('Wedding of Sakshi & Sidhodhan. Contact: 93099 51100')+'&location='+encodeURIComponent('Pune, Maharashtra, India');
+      body+='<div class="modal-row"><div class="mrow-icon">'+ev.icon+'</div><div style="flex:1"><div class="mrow-label">'+ev.title+'</div><div class="mrow-val" style="font-size:13px">'+c.start.substring(9,11)+':'+c.start.substring(11,13)+' · '+(k==='vandana'?'17':'18')+' Nov 2027</div><div class="cal-btns" style="margin-top:6px"><a class="cal-btn" href="'+gcal+'" target="_blank">📅 Google Cal</a></div></div></div>';
     });
-    setTimeout(removePreloader, 2500);
+    body+='</div>';
+  }
+  document.getElementById('m-body').innerHTML=body;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
 
-    /* ===== SACRED LOTUS BLOOMING ENGINE ===== */
-    let lotusBloomed = false;
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function closeModalOutside(e){if(e.target===document.getElementById('modal'))closeModal();}
 
-    // Handles the click on the Lotus Bud OR Hint Text
-    function handleLotusClick() {
-      if (!lotusBloomed) {
-        bloomLotus();
-      } else {
-        // If already bloomed, clicking the lotus container instantly enters the wedding site
-        revealWeddingSite();
-      }
-    }
-
-    function bloomLotus() {
-      const lotusWrapper = document.getElementById('lotusWrapper');
-      const hint = document.getElementById('unveilHint');
-      
-      lotusWrapper.classList.add('bloom');
-      if (hint) hint.innerHTML = "<span style='color:var(--gold-light); font-weight:bold; animation: pulse 1s infinite;'>Invitation Bloomed! Click to Enter</span>";
-      lotusBloomed = true;
-
-      // Play the Web Audio Singing Bowl strike on first interaction (Guaranteed Audible)
-      try {
-        playSingingBowl(144); // Deep 144Hz spiritual base tone
-        startWindChimesLoop(); // Kickoff ambient wind chimes
-      } catch (e) {
-        console.log("Synthesizer bypassed:", e);
-      }
-
-      // Simultaneously prepare background MP3
-      const bgMusic = document.getElementById('bg-music');
-      bgMusic.play().then(() => {
-        isPlaying = true;
-        document.getElementById('music-btn').classList.add('playing');
-        document.getElementById('visualizer').classList.add('active', 'playing-wave');
-        document.getElementById('music-icon').setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
-      }).catch(err => {
-        console.log("Audio MP3 blocked, Web Audio Synthesizer remains active.");
-      });
-    }
-
-    function revealWeddingSite() {
-      const overlay = document.getElementById('envelopeOverlay');
-      const card = document.getElementById('lotusCard');
-      
-      // Zoom card into viewport before hiding overlay
-      card.style.transform = "translate(-50%, -100px) scale(2.2)";
-      card.style.opacity = "0";
-      
-      // Secondary Singing Bowl bells for the main entrance
-      try {
-        playSingingBowl(180); 
-        setTimeout(() => playSingingBowl(240), 200);
-      } catch(e){}
-
-      setTimeout(() => {
-        overlay.classList.add('hide');
-        document.body.classList.remove('lock-scroll');
-        
-        // Auto trigger scroll reveals for elements inside the Hero section
-        setTimeout(() => {
-          document.querySelectorAll('.reveal').forEach((el) => {
-            if (el.getBoundingClientRect().top < window.innerHeight) {
-              el.classList.add('active');
-            }
-          });
-        }, 400);
-      }, 800);
-    }
-
-    /* ===== SCROLL REVEAL ANIMATION ===== */
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.15
-    };
-
-    const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    document.querySelectorAll('.reveal').forEach((el) => {
-      observer.observe(el);
-    });
-
-    /* ===== PARTICLE GENERATOR ===== */
-    function createParticles() {
-      const container = document.getElementById('particles');
-      if (!container) return;
-      const particleCount = 40;
-      const petalCount = 15;
-
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        
-        const size = Math.random() * 5 + 2; 
-        const left = Math.random() * 100; 
-        const delay = Math.random() * 15; 
-        const duration = Math.random() * 12 + 8; 
-        
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${left}vw`;
-        particle.style.animationDelay = `${delay}s`;
-        particle.style.animationDuration = `${duration}s`;
-        
-        container.appendChild(particle);
-      }
-
-      for (let j = 0; j < petalCount; j++) {
-        const petal = document.createElement('div');
-        petal.classList.add('petal');
-        
-        const size = Math.random() * 18 + 12; 
-        const left = Math.random() * 100;
-        const delay = Math.random() * 20;
-        const duration = Math.random() * 15 + 12;
-        
-        petal.style.width = `${size}px`;
-        petal.style.height = `${size}px`;
-        petal.style.left = `${left}vw`;
-        petal.style.animationDelay = `${delay}s`;
-        petal.style.animationDuration = `${duration}s`;
-        
-        container.appendChild(petal);
-      }
-    }
-    createParticles();
-
-    /* ===== COUNTDOWN LOGIC ===== */
-    function countdown(){
-      const target = new Date('November 18, 2027 11:30:00').getTime();
-      
-      function tick(){
-        const now = Date.now();
-        const diff = target - now;
-        
-        if(diff <= 0){
-          const wrapper = document.getElementById('countdown-wrapper');
-          if (wrapper) wrapper.style.display = 'none';
-          const msg = document.getElementById('countdown-msg');
-          if (msg) msg.style.display = 'block';
-          return;
-        }
-        
-        const d = Math.floor(diff / 86400000);
-        const h = Math.floor((diff % 86400000) / 3600000);
-        const m = Math.floor((diff % 3600000) / 60000);
-        const s = Math.floor((diff % 60000) / 1000);
-        
-        const dEl = document.getElementById('cd-d');
-        const hEl = document.getElementById('cd-h');
-        const mEl = document.getElementById('cd-m');
-        const sEl = document.getElementById('cd-s');
-
-        if (dEl) dEl.textContent = String(d).padStart(2,'0');
-        if (hEl) hEl.textContent = String(h).padStart(2,'0');
-        if (mEl) mEl.textContent = String(m).padStart(2,'0');
-        if (sEl) sEl.textContent = String(s).padStart(2,'0');
-      }
-      tick();
-      setInterval(tick, 1000);
-    }
-    countdown();
-
-    /* ===== BACKGROUND MUSIC CONTROL ===== */
-    let isPlaying = false;
-    const bgMusic = document.getElementById('bg-music');
-    const musicBtn = document.getElementById('music-btn');
-    const musicIcon = document.getElementById('music-icon');
-    const visualizer = document.getElementById('visualizer');
-
-    function toggleMusic() {
-      if (!bgMusic) return;
-      if (isPlaying) {
-        bgMusic.pause();
-        if (chimeInterval) clearInterval(chimeInterval); // Stop wind chime synth
-        if (musicBtn) musicBtn.classList.remove('playing');
-        if (visualizer) {
-          visualizer.classList.remove('active');
-          visualizer.classList.remove('playing-wave');
-        }
-        if (musicIcon) musicIcon.setAttribute('d', 'M8 5v14l11-7z');
-      } else {
-        // Resume synthesis & background stream
-        try {
-          playSingingBowl(144);
-          startWindChimesLoop();
-        } catch(e){}
-
-        bgMusic.play().then(() => {
-          if (musicBtn) musicBtn.classList.add('playing');
-          if (visualizer) {
-            visualizer.classList.add('active');
-            visualizer.classList.add('playing-wave');
-          }
-          if (musicIcon) musicIcon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
-        }).catch(e => {
-          showNotification('Mantra Melody', 'Your device locked the media streaming. Simply touch anywhere on screen to unlock!');
-        });
-      }
-      isPlaying = !isPlaying;
-    }
-
-    /* ===== INTERACTIVE DIYA (VIRTUAL LAMP LIGHTING) ===== */
-    let blessingsCount = 658;
-    let diyaLit = false;
-
-    function lightDiya(el) {
-      const flame = document.getElementById('diya-flame');
-      
-      if(!diyaLit) {
-        if (flame) flame.classList.add('active');
-        blessingsCount++;
-        const countEl = document.getElementById('bless-count');
-        if (countEl) countEl.textContent = blessingsCount;
-        diyaLit = true;
-        
-        try { playSingingBowl(216); } catch(e){} // Higher octave bell strike for lighting diya
-        triggerDustExplosion(el);
-        showNotification('Blessing Ignited', 'You have lighted the virtual Mangala Diya and shared spiritual merits with Sakshi & Sidhodhan! ☸️');
-      }
-    }
-
-    function triggerDustExplosion(el) {
-      const rect = el.getBoundingClientRect();
-      const container = document.getElementById('particles');
-      if (!container) return;
-      
-      for (let i = 0; i < 25; i++) {
-        const p = document.createElement('div');
-        p.classList.add('particle');
-        p.style.width = '6px';
-        p.style.height = '6px';
-        p.style.left = `${rect.left + rect.width/2 + (Math.random() - 0.5) * 40}px`;
-        p.style.top = `${rect.top + window.scrollY + (Math.random() - 0.5) * 20}px`;
-        p.style.animation = 'fall 3s ease-out forwards';
-        p.style.animationDelay = '0s';
-        
-        container.appendChild(p);
-        setTimeout(() => p.remove(), 3000);
-      }
-    }
-
-    /* ===== INTERACTIVE GUESTBOOK WALL (NO FORM REQUIRED) ===== */
-    function addWish() {
-      const nameInput = document.getElementById('wishName');
-      const textInput = document.getElementById('wishText');
-      const wall = document.getElementById('wishesWall');
-
-      if (!nameInput || !textInput || !wall) return;
-      if (!nameInput.value.trim() || !textInput.value.trim()) {
-        showNotification('Fields Required', 'Please enter your name and a blessing message.');
-        return;
-      }
-
-      const wishCard = document.createElement('div');
-      wishCard.className = 'wish-card';
-      wishCard.innerHTML = `
-        <div class="wish-name">${escapeHTML(nameInput.value)}</div>
-        <div class="wish-text">${escapeHTML(textInput.value)}</div>
-      `;
-
-      wall.insertBefore(wishCard, wall.firstChild);
-      wall.scrollTop = 0;
-
-      nameInput.value = '';
-      textInput.value = '';
-
-      try { playWindChime(); } catch(e){} // Sparkle chime for posting a blessing
-      showNotification('Sacred Wish Sent', 'Your gorgeous blessing has been preserved on the Wishes Wall.');
-    }
-
-    function escapeHTML(str) {
-      return str.replace(/[&<>'"]/g, 
-        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-      );
-    }
-
-    /* ===== ADD TO CALENDAR INTEGRATION ===== */
-    function addToCalendar(e) {
-      e.preventDefault();
-      const title = encodeURIComponent("Sakshi & Sidhodhan's Buddhist Wedding Vivah");
-      const details = encodeURIComponent("Join us to celebrate the sacred wedding ceremonies of Sakshi & Sidhodhan.");
-      const location = encodeURIComponent("The Grand Heritage Palace, Majestic View City");
-      const startDate = "20271118T113000";
-      const endDate = "20271118T223000";
-
-      const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startDate}/${endDate}&details=${details}&location=${location}`;
-      window.open(googleCalUrl, '_blank');
-    }
-
-    /* ===== CUSTOM DIALOG/MODAL HANDLERS ===== */
-    function showNotification(title, msg) {
-      const modalTitle = document.getElementById('modalTitle');
-      const modalMsg = document.getElementById('modalMsg');
-      const overlay = document.getElementById('modalOverlay');
-      const modal = document.getElementById('customModal');
-
-      if (modalTitle) modalTitle.textContent = title;
-      if (modalMsg) modalMsg.textContent = msg;
-      
-      if (overlay) overlay.classList.add('active');
-      if (modal) modal.classList.add('active');
-    }
-
-    function closeModal() {
-      const overlay = document.getElementById('modalOverlay');
-      const modal = document.getElementById('customModal');
-
-      if (overlay) overlay.classList.remove('active');
-      if (modal) modal.classList.remove('active');
-    }
-  </script>
+// Escape key
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+</script>
 </body>
 </html>
