@@ -1,0 +1,2102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sakshi & Sidhodhan — Sacred Buddhist Wedding</title>
+
+<!-- Elegant Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=0,400;0,500;0,600;0,700;1,400;1,500&family=Cinzel:wght@400;500;600;700;800&family=Nunito:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --cream: #fffbf2; /* Zen Warm Ivory */
+    --cream2: #fcf1df;
+    --gold: #d4af37; /* Sacred Temple Gold */
+    --gold-light: #f3e5ab;
+    --gold-pale: #fcf7e8;
+    --gold-dark: #aa8529;
+    --maroon: #5c0612; /* Royal Buddhist Maroon */
+    --maroon-light: #800a1d;
+    --text: #2c1a12;
+    --text-light: #70554a;
+    --saffron: #e07a5f; /* Holy Saffron */
+    --white: #ffffff;
+    --shadow-soft: 0 15px 35px rgba(92, 6, 18, 0.08);
+    --shadow-gold: 0 10px 30px rgba(212, 175, 55, 0.35);
+    --border-radius-lg: 24px;
+    --border-radius-sm: 12px;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    background-color: var(--cream);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Prevent scroll while lotus is closed */
+  body.lock-scroll {
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--cream);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--gold);
+    border-radius: 5px;
+  }
+
+  /* Typography */
+  h1, h2, h3, h4 {
+    font-family: 'Cinzel', serif;
+    font-weight: 500;
+  }
+  
+  .script-font {
+    font-family: 'Great Vibes', cursive;
+  }
+
+  .playfair {
+    font-family: 'Playfair Display', serif;
+  }
+
+  .text-gold { color: var(--gold); }
+  .text-maroon { color: var(--maroon); }
+  .text-center { text-align: center; }
+
+  /* Preloader */
+  #preloader {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--maroon);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: opacity 0.8s ease, visibility 0.8s;
+  }
+  .loader-rings {
+    width: 120px;
+    height: 120px;
+    border: 3px solid transparent;
+    border-top-color: var(--gold);
+    border-bottom-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+    position: relative;
+  }
+  .loader-rings::before {
+    content: '';
+    position: absolute;
+    top: 10px; left: 10px; right: 10px; bottom: 10px;
+    border: 3px solid transparent;
+    border-left-color: var(--cream);
+    border-right-color: var(--cream);
+    border-radius: 50%;
+    animation: spin-reverse 1.5s linear infinite;
+  }
+  .loader-text {
+    margin-top: 25px;
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    animation: pulse 1.5s infinite;
+  }
+
+  /* ===== 3D SACRED LOTUS BLOOMING UNVEIL SCREEN ===== */
+  .lotus-unveil-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, rgba(41, 2, 7, 0.94) 0%, #0c0103 100%), 
+                url('ChatGPT Image May 30, 2026, 02_06_24 AM.png') center/cover no-repeat;
+    background-blend-mode: multiply;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 1.5s cubic-bezier(0.85, 0, 0.15, 1), opacity 1.2s ease;
+  }
+  .lotus-unveil-overlay.hide {
+    transform: scale(1.1) translateY(-100vh);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .lotus-shrine-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  .shrine-halo {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    top: -50px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(212, 175, 55, 0) 70%);
+    animation: pulse 3s infinite ease-in-out;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .lotus-wrapper {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    cursor: pointer;
+    z-index: 2;
+  }
+  .sacred-lotus {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 15px 30px rgba(0,0,0,0.5));
+    transition: transform 1.2s ease;
+  }
+  .petal {
+    transform-origin: 50px 80px;
+    transition: transform 1.8s cubic-bezier(0.25, 1, 0.35, 1), opacity 1.5s ease;
+  }
+  
+  /* Closed Bud State */
+  .outer-petal-left { transform: rotate(-5deg); }
+  .outer-petal-right { transform: rotate(5deg); }
+  .mid-petal-left { transform: rotate(-2deg); }
+  .mid-petal-right { transform: rotate(2deg); }
+  .center-petal { transform: scale(1); }
+
+  /* Blooming transform state */
+  .lotus-wrapper.bloom .outer-petal-left { transform: rotate(-65deg) scale(0.95); opacity: 0.85; }
+  .lotus-wrapper.bloom .outer-petal-right { transform: rotate(65deg) scale(0.95); opacity: 0.85; }
+  .lotus-wrapper.bloom .mid-petal-left { transform: rotate(-35deg) scale(0.98); }
+  .lotus-wrapper.bloom .mid-petal-right { transform: rotate(35deg) scale(0.98); }
+  .lotus-wrapper.bloom .center-petal { transform: scaleY(0.4) scaleX(0.8) translateY(15px); opacity: 0.3; }
+
+  /* Invitation card nested in golden heart of the lotus */
+  .lotus-card {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translate(-50%, 0) scale(0);
+    width: 340px;
+    height: 240px;
+    background: var(--cream);
+    border: 3px solid var(--gold);
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 25px 65px rgba(0,0,0,0.5);
+    z-index: 10;
+    opacity: 0;
+    padding: 30px;
+    text-align: center;
+    transition: transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 1s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .lotus-card::before {
+    content: '';
+    position: absolute;
+    top: 6px; bottom: 6px; left: 6px; right: 6px;
+    border: 1px dashed var(--gold-dark);
+    border-radius: 8px;
+    pointer-events: none;
+  }
+  .lotus-wrapper.bloom .lotus-card {
+    transform: translate(-50%, -100px) scale(1);
+    opacity: 1;
+  }
+  .lotus-card h3 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.4rem;
+    color: var(--maroon);
+    margin-bottom: 5px;
+  }
+  .lotus-card p {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 2px;
+    font-size: 0.85rem;
+    color: var(--gold-dark);
+  }
+  .click-to-enter {
+    margin-top: 15px;
+    padding: 8px 24px;
+    background: var(--maroon);
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    border-radius: 20px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    transition: all 0.3s;
+  }
+  .click-to-enter:hover {
+    background: var(--gold);
+    color: var(--maroon);
+    transform: translateY(-2px);
+  }
+
+  /* Falling Sacred Dust & Lotus Petal Particles */
+  #particles {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .particle {
+    position: absolute;
+    background: radial-gradient(circle, var(--gold-light) 0%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0;
+    animation: fall linear infinite;
+  }
+  .petal {
+    position: absolute;
+    background: linear-gradient(135deg, rgba(224, 122, 95, 0.8), rgba(212,175,55,0.4));
+    border-radius: 50% 0 50% 50%; /* Pure Lotus Petal shape */
+    opacity: 0;
+    animation: fall-petal linear infinite;
+  }
+
+  /* Floating Music Controls with Equalizer */
+  .music-widget {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 100;
+  }
+  #music-btn {
+    width: 55px;
+    height: 55px;
+    background: var(--gold);
+    color: var(--maroon);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-gold);
+    border: 2px solid var(--cream);
+    transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+  }
+  #music-btn:hover {
+    transform: scale(1.1);
+    background: var(--gold-light);
+    box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4);
+  }
+  .playing { animation: pulse-ring 2s infinite; }
+  
+  .visualizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 30px;
+    background: rgba(92, 6, 18, 0.9);
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--gold);
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.5s ease;
+    backdrop-filter: blur(5px);
+  }
+  .visualizer.active {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .bar {
+    width: 3px;
+    height: 5px;
+    background-color: var(--gold);
+    border-radius: 3px;
+  }
+  .playing-wave .bar {
+    animation: bounce 1s ease-in-out infinite alternate;
+  }
+  .playing-wave .bar:nth-child(2) { animation-delay: 0.2s; }
+  .playing-wave .bar:nth-child(3) { animation-delay: 0.4s; }
+  .playing-wave .bar:nth-child(4) { animation-delay: 0.1s; }
+  .playing-wave .bar:nth-child(5) { animation-delay: 0.3s; }
+
+  /* Sections */
+  section {
+    position: relative;
+    z-index: 10;
+    padding: 100px 20px;
+    overflow: hidden;
+  }
+
+  /* Hero Section */
+  .hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(rgba(41, 2, 7, 0.92), rgba(92, 6, 18, 0.96)), 
+                url('ChatGPT Image May 30, 2026, 02_06_24 AM.png') center/cover no-repeat;
+    background-blend-mode: multiply;
+    color: var(--cream);
+    text-align: center;
+    padding: 20px;
+    border-bottom: 5px solid var(--gold);
+  }
+  .hero-border {
+    border: 2px solid var(--gold-dark);
+    padding: 45px 30px;
+    border-radius: 24px;
+    max-width: 850px;
+    width: 100%;
+    position: relative;
+    background: rgba(92, 6, 18, 0.5);
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 35px rgba(212, 175, 55, 0.2);
+  }
+  
+  /* Corner Ornaments */
+  .corner-ornament {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-color: var(--gold);
+    border-style: solid;
+    transition: all 1s ease;
+  }
+  .top-left { top: 15px; left: 15px; border-width: 3px 0 0 3px; border-top-left-radius: 12px; }
+  .top-right { top: 15px; right: 15px; border-width: 3px 3px 0 0; border-top-right-radius: 12px; }
+  .bottom-left { bottom: 15px; left: 15px; border-width: 0 0 3px 3px; border-bottom-left-radius: 12px; }
+  .bottom-right { bottom: 15px; right: 15px; border-width: 0 3px 3px 0; border-bottom-right-radius: 12px; }
+
+  /* Gilded Spiritual Hanging Bells */
+  .hanging-bell {
+    position: absolute;
+    top: 30px;
+    width: 30px;
+    height: 60px;
+    pointer-events: none;
+    animation: sway 4s ease-in-out infinite alternate;
+    transform-origin: top center;
+  }
+  .bell-left { left: 40px; }
+  .bell-right { right: 40px; }
+
+  /* ===== ELEVATED BUDDHA SHRINE & LOOPING AURA ===== */
+  .buddha-blessing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 25px;
+    position: relative;
+    width: 100%;
+  }
+  .buddha-halo-wrapper {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    top: -50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    z-index: 1;
+  }
+  /* Staggered Halo Ripples for a perfect, continuous seamless loop */
+  .buddha-halo-ring {
+    position: absolute;
+    width: 140px;
+    height: 185px;
+    border-radius: 100px 100px 20px 20px;
+    border: 2.5px dashed rgba(212, 175, 55, 0.4);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+    animation: radiate 6s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+  }
+  .buddha-halo-ring:nth-child(2) {
+    animation-delay: 2s;
+  }
+  .buddha-halo-ring:nth-child(3) {
+    animation-delay: 4s;
+  }
+  @keyframes radiate {
+    0% {
+      transform: scale(0.9);
+      opacity: 0.9;
+      filter: blur(1px);
+    }
+    100% {
+      transform: scale(1.4);
+      opacity: 0;
+      filter: blur(6px);
+    }
+  }
+
+  .buddha-gilded-arch {
+    width: 130px;
+    height: 175px;
+    border-radius: 100px 100px 12px 12px;
+    border: 3.5px solid var(--gold);
+    padding: 3px;
+    background: var(--maroon);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.6), inset 0 0 15px rgba(255,255,255,0.1);
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+  }
+  .buddha-gilded-arch img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 96px 96px 8px 8px;
+  }
+  /* Gilded Shimmer effect over Buddha image */
+  .buddha-gilded-arch::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -150%;
+    width: 150%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.25), transparent);
+    transform: skewX(-20deg);
+    animation: image-shimmer 4s infinite linear;
+  }
+  @keyframes image-shimmer {
+    0% { left: -150%; }
+    40% { left: 150%; }
+    100% { left: 150%; }
+  }
+
+  /* SVG Lotus Pedestal holding the Gilded Arch */
+  .buddha-lotus-base {
+    width: 160px;
+    height: 35px;
+    margin-top: -15px;
+    z-index: 3;
+    fill: var(--gold);
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+    animation: gentle-float 4s ease-in-out infinite alternate;
+  }
+  @keyframes gentle-float {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(3px); }
+  }
+
+  .mantra-banner {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 4px;
+    color: var(--gold-light);
+    margin-top: 15px;
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(212,175,55,0.5);
+    animation: breathing-text 3s infinite alternate ease-in-out;
+  }
+  @keyframes breathing-text {
+    0% { opacity: 0.7; transform: scale(0.98); }
+    100% { opacity: 1; transform: scale(1.02); }
+  }
+
+  /* Animated Mandala */
+  .hero-mandala {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    opacity: 0.15;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="none" stroke="%23d4af37" stroke-width="1"/><path d="M50 5 L50 95 M5 50 L95 50 M18 18 L82 82 M18 82 L82 18" stroke="%23d4af37" stroke-width="0.75"/><circle cx="50" cy="50" r="15" fill="none" stroke="%23d4af37" stroke-width="1"/><path d="M50 35 L50 65 M35 50 L65 50" stroke="%23d4af37" stroke-width="0.75"/><circle cx="50" cy="50" r="5" fill="%23d4af37"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    animation: spin 80s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .top-text {
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  .names {
+    font-size: clamp(3.2rem, 9vw, 6.2rem);
+    color: var(--gold);
+    line-height: 1.1;
+    margin: 20px 0;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    letter-spacing: 2px;
+  }
+  .ampersand {
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    color: var(--cream);
+    display: block;
+    margin: -15px 0;
+    opacity: 0.9;
+  }
+  .date-text {
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    margin-top: 35px;
+    border-top: 1px solid var(--gold-dark);
+    border-bottom: 1px solid var(--gold-dark);
+    padding: 12px 25px;
+    display: inline-block;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1.2s cubic-bezier(0.21, 0.6, 0.35, 1);
+  }
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .divider {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0;
+  }
+  .divider svg {
+    width: 240px;
+    fill: var(--gold);
+    filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.1));
+  }
+
+  /* Countdown Section */
+  .countdown-section {
+    background: var(--cream2);
+    text-align: center;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  }
+  .countdown-container {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    margin-top: 45px;
+  }
+  .cd-box {
+    background: var(--white);
+    border: 2px solid var(--gold);
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .cd-box:hover {
+    transform: scale(1.08) rotate(3deg);
+    box-shadow: var(--shadow-gold);
+  }
+  .cd-box::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.15), transparent);
+    transform: rotate(45deg);
+    animation: shine 4s infinite;
+  }
+  .cd-num {
+    font-size: 34px;
+    font-family: 'Cinzel', serif;
+    color: var(--maroon);
+    font-weight: 700;
+  }
+  .cd-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-light);
+    font-weight: 600;
+    margin-top: 3px;
+  }
+
+  /* ===== MAJESTIC TRI-FRAME MANDALA GALLERY ===== */
+  .couple-portrait-section {
+    background: var(--white);
+    text-align: center;
+  }
+  .collage-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 0 20px;
+  }
+  
+  .collage-frame {
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--shadow-soft);
+    border: 4px solid var(--white);
+    transition: all 0.5s ease;
+  }
+  
+  .collage-center {
+    width: 440px;
+    aspect-ratio: 4 / 5;
+    z-index: 5;
+    border: 6px solid var(--white);
+    box-shadow: 0 20px 50px rgba(92, 6, 18, 0.12);
+  }
+  .collage-side {
+    width: 260px;
+    aspect-ratio: 3 / 4;
+    opacity: 0.85;
+    filter: brightness(0.9);
+  }
+  .collage-side:hover {
+    opacity: 1;
+    filter: brightness(1);
+    transform: scale(1.05);
+  }
+  .collage-center:hover {
+    transform: scale(1.03);
+    box-shadow: var(--shadow-gold);
+  }
+  .collage-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .collage-frame:hover img {
+    transform: scale(1.06);
+  }
+
+  /* Buddhism Quotes on Love & Companion */
+  .buddhist-quote-box {
+    max-width: 750px;
+    margin: 60px auto 20px auto;
+    padding: 40px;
+    background: var(--cream2);
+    border-radius: 24px;
+    position: relative;
+    border-left: 6px solid var(--gold);
+    text-align: left;
+    box-shadow: var(--shadow-soft);
+  }
+  .buddhist-quote-box::after {
+    content: '“';
+    font-family: 'Cinzel', serif;
+    font-size: 120px;
+    color: rgba(212, 175, 55, 0.2);
+    position: absolute;
+    top: -20px; right: 30px;
+    line-height: 1;
+  }
+  .buddhist-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--text-light);
+  }
+  .buddhist-quote-source {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--maroon);
+    margin-top: 15px;
+    letter-spacing: 2px;
+    display: block;
+  }
+
+  /* Interactive Blessings Section */
+  .blessings-section {
+    background: var(--cream);
+    text-align: center;
+    padding-bottom: 80px;
+  }
+  .diya-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin: 30px auto;
+    transition: transform 0.3s;
+  }
+  .diya-container:hover {
+    transform: scale(1.05);
+  }
+  .diya-flame {
+    position: absolute;
+    top: -24px;
+    left: 49%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 26px;
+    background: radial-gradient(circle at bottom, #ff0000 0%, #ff9f00 40%, #ffea00 70%, #ffffff 100%);
+    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+    animation: flicker 1.5s ease-in-out infinite alternate;
+    box-shadow: 0 0 15px rgba(255,160,0,0.8), 0 0 30px rgba(255,230,0,0.6);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .diya-flame.active {
+    opacity: 1;
+  }
+  .diya-body {
+    width: 90px;
+    height: 50px;
+    fill: var(--gold-dark);
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+  }
+  .blessing-count {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    color: var(--maroon);
+    margin-top: 15px;
+    font-weight: 700;
+  }
+
+  /* Events Timeline */
+  .events-section {
+    background: var(--white);
+  }
+  .section-title {
+    font-size: 2.8rem;
+    color: var(--maroon);
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+  .section-subtitle {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--text-light);
+    margin-bottom: 50px;
+    font-size: 1.1rem;
+  }
+  .timeline {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, var(--gold) 15%, var(--gold) 85%, transparent);
+    top: 0; bottom: 0; left: 50%;
+    transform: translateX(-50%);
+  }
+  .event-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 70px;
+    position: relative;
+    width: 100%;
+  }
+  .event-card:nth-child(even) {
+    flex-direction: row-reverse;
+  }
+  .event-content {
+    width: 44%;
+    background: var(--cream);
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--gold-pale);
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: relative;
+  }
+  .event-content:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-gold);
+    border-color: var(--gold);
+  }
+  .event-icon {
+    width: 55px;
+    height: 55px;
+    background: var(--maroon);
+    color: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid var(--white);
+    box-shadow: 0 4px 15px rgba(92, 6, 18, 0.2);
+    z-index: 2;
+    transition: transform 0.3s;
+  }
+  .event-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+  }
+  .event-card:hover .event-icon {
+    transform: translateX(-50%) scale(1.1) rotate(15deg);
+    background: var(--gold);
+    color: var(--maroon);
+  }
+  .event-content h3 {
+    color: var(--gold-dark);
+    font-size: 1.9rem;
+    margin-bottom: 12px;
+  }
+  .event-content .time {
+    font-weight: 700;
+    color: var(--maroon);
+    margin-bottom: 18px;
+    display: block;
+    letter-spacing: 1px;
+    font-size: 0.95rem;
+  }
+  .event-content p {
+    color: var(--text-light);
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  /* Color Palette Themes */
+  .dress-code-section {
+    background: var(--cream2);
+    text-align: center;
+  }
+  .dress-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .dress-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 30px 20px;
+    width: 280px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--gold-pale);
+    transition: all 0.3s;
+  }
+  .dress-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(212,175,55,0.15);
+  }
+  .dress-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: var(--maroon);
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+  .dress-palette {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  .color-dot {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--white);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  /* Venue / Map */
+  .venue-section {
+    background: var(--cream);
+    text-align: center;
+  }
+  .venue-card {
+    background: var(--white);
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 60px 40px;
+    border-radius: 24px;
+    border: 2px solid var(--gold-light);
+    box-shadow: var(--shadow-soft);
+    position: relative;
+  }
+  .venue-card h3 {
+    font-size: 2.2rem;
+    color: var(--maroon);
+    margin-bottom: 20px;
+  }
+  .btn-directions, .btn-calendar {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 14px 35px;
+    background: var(--maroon);
+    color: var(--gold);
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    border-radius: 30px;
+    transition: all 0.3s;
+    border: 1px solid var(--gold);
+    font-weight: 600;
+    margin-right: 10px;
+  }
+  .btn-directions:hover, .btn-calendar:hover {
+    background: var(--gold);
+    color: var(--maroon);
+    transform: translateY(-2px);
+  }
+  .btn-calendar {
+    background: transparent;
+    color: var(--maroon);
+    border: 2px solid var(--maroon);
+  }
+  .btn-calendar:hover {
+    background: var(--maroon);
+    color: var(--gold);
+  }
+
+  /* Interactive Guestbook Wall - ABSOLUTELY NO FORM TAGS */
+  .guestbook-section {
+    background: var(--white);
+    text-align: center;
+  }
+  .guestbook-container {
+    max-width: 750px;
+    margin: 40px auto 0 auto;
+    background: var(--cream);
+    border-radius: 20px;
+    padding: 40px;
+    border: 1px solid var(--gold-pale);
+    box-shadow: var(--shadow-soft);
+  }
+  .wish-input-group {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+  .wish-input {
+    flex: 1;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid var(--gold);
+    background: var(--white);
+    color: var(--text);
+    outline: none;
+    font-size: 1rem;
+  }
+  .wish-btn {
+    padding: 15px 30px;
+    background: var(--maroon);
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    font-family: 'Cinzel', serif;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .wish-btn:hover {
+    background: var(--gold);
+    color: var(--maroon);
+  }
+  .wishes-wall {
+    max-height: 250px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-right: 10px;
+    text-align: left;
+  }
+  .wish-card {
+    background: var(--white);
+    padding: 15px 20px;
+    border-radius: 12px;
+    border-left: 4px solid var(--gold);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    animation: slideInUp 0.5s ease-out forwards;
+  }
+  .wish-name {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--maroon);
+    margin-bottom: 5px;
+  }
+  .wish-text {
+    font-size: 0.92rem;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+
+  /* Mangala Verses Section */
+  .mangala-verses-section {
+    background: var(--maroon);
+    color: var(--cream);
+    text-align: center;
+    position: relative;
+    padding: 100px 20px;
+  }
+  .mangala-verses-section .section-title {
+    color: var(--gold);
+  }
+  .mandala-illustration {
+    width: 150px;
+    height: 150px;
+    margin: 30px auto;
+    fill: var(--gold);
+    opacity: 0.8;
+    animation: spin 60s linear infinite;
+  }
+  .verse-card {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius-lg);
+    backdrop-filter: blur(8px);
+  }
+  .verse-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--gold-light);
+  }
+  .verse-translation {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-top: 20px;
+    color: var(--cream2);
+    opacity: 0.9;
+  }
+
+  /* Footer */
+  footer {
+    background: #230206;
+    color: var(--gold-light);
+    text-align: center;
+    padding: 60px 20px;
+    font-family: 'Cinzel', serif;
+    border-top: 2px solid var(--gold-dark);
+  }
+  .footer-names {
+    font-size: 28px;
+    margin-bottom: 15px;
+    letter-spacing: 2px;
+  }
+
+  /* Custom Popup Alert */
+  .custom-modal {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: var(--white);
+    color: var(--maroon);
+    padding: 40px 50px;
+    border-radius: 24px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    z-index: 10000;
+    text-align: center;
+    border: 3px solid var(--gold);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    max-width: 90%;
+    width: 450px;
+  }
+  .custom-modal.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s;
+  }
+  .modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Animations */
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+  @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  @keyframes pulse-ring { 
+    0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); } 
+    70% { box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); } 
+    100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); } 
+  }
+  @keyframes fall {
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+  @keyframes fall-petal {
+    0% { transform: translateY(-10vh) translateX(0px) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.8; }
+    50% { transform: translateY(50vh) translateX(30px) rotate(180deg); opacity: 0.6; }
+    90% { opacity: 0.4; }
+    100% { transform: translateY(110vh) translateX(-20px) rotate(360deg); opacity: 0; }
+  }
+  @keyframes shine {
+    0% { left: -100%; }
+    20% { left: 100%; }
+    100% { left: 100%; }
+  }
+  @keyframes flicker {
+    0% { transform: translateX(-50%) rotate(-1deg) scale(0.9); }
+    100% { transform: translateX(-50%) rotate(2deg) scale(1.1); }
+  }
+  @keyframes bounce {
+    0% { height: 5px; }
+    100% { height: 22px; }
+  }
+  @keyframes slideInUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes sway {
+    0% { transform: rotate(-5deg); }
+    100% { transform: rotate(5deg); }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 850px) {
+    .collage-container {
+      flex-direction: column;
+      gap: 30px;
+    }
+    .collage-center {
+      width: 100%;
+      max-width: 400px;
+    }
+    .collage-side {
+      width: 80%;
+      max-width: 320px;
+    }
+    .timeline::before { left: 30px; }
+    .event-card, .event-card:nth-child(even) { flex-direction: column; align-items: flex-end; }
+    .event-content { width: calc(100% - 60px); margin-bottom: 20px; }
+    .event-icon { left: 30px; }
+    .names { font-size: 3.5rem; }
+    .hero-border { padding: 40px 20px; }
+    .wish-input-group { flex-direction: column; }
+    .wish-btn { width: 100%; }
+    .hanging-bell { display: none; }
+    .lotus-wrapper { width: 280px; height: 280px; }
+    .lotus-card { width: 270px; height: 210px; padding: 15px; }
+  }
+</style>
+</head>
+<body class="lock-scroll">
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="loader-rings"></div>
+    <div class="loader-text">Invoking Sacred Blessings</div>
+  </div>
+
+  <!-- Background Particles Container -->
+  <div id="particles"></div>
+
+  <!-- Audio Element (Sacred Meditative Flute & Gong preview) -->
+  <audio id="bg-music" loop preload="auto">
+    <source src="https://assets.mixkit.co/music/preview/mixkit-meditation-and-mindfulness-gong-sound-scape-2921.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Floating Music Controller & Equalizer -->
+  <div class="music-widget">
+    <div class="visualizer" id="visualizer">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+    <button id="music-btn" onclick="toggleMusic()" title="Play/Pause Melody">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <path id="music-icon" d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ===== 3D SACRED LOTUS BLOOMING UNVEIL SCREEN ===== -->
+  <div class="lotus-unveil-overlay" id="envelopeOverlay">
+    <div style="text-align: center;">
+      <div class="lotus-shrine-container">
+        <!-- Interlaced golden halos pulsing dynamically -->
+        <div class="shrine-halo"></div>
+        
+        <!-- Lotus Wrapper: triggers bloom first, then card reveal -->
+        <div class="lotus-wrapper" id="lotusWrapper" onclick="handleLotusClick()">
+          <!-- Premium Multi-Layered SVG White Lotus -->
+          <svg class="sacred-lotus" id="sacredLotus" viewBox="0 0 100 100">
+            <defs>
+              <!-- Luminous Pearl-White Petal Gradient -->
+              <linearGradient id="whitePetalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="35%" stop-color="#fcfbf7" />
+                <stop offset="75%" stop-color="#f7ebe1" />
+                <stop offset="100%" stop-color="#e9cbd1" />
+              </linearGradient>
+              <!-- Glowing Wisdom Saffron/Gold Lotus Core -->
+              <linearGradient id="lotusCoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="50%" stop-color="#fff5cd" />
+                <stop offset="100%" stop-color="#ffd541" />
+              </linearGradient>
+            </defs>
+
+            <!-- Outer Petals Left -->
+            <g class="petal outer-petal-left">
+              <path d="M50 80 C18 62, 5 35, 12 18 C25 15, 38 45, 50 80 Z" fill="url(#whitePetalGradient)" stroke="#dfb6bc" stroke-width="0.5"/>
+            </g>
+            <!-- Outer Petals Right -->
+            <g class="petal outer-petal-right">
+              <path d="M50 80 C82 62, 95 35, 88 18 C75 15, 62 45, 50 80 Z" fill="url(#whitePetalGradient)" stroke="#dfb6bc" stroke-width="0.5"/>
+            </g>
+
+            <!-- Mid Petals Left -->
+            <g class="petal mid-petal-left">
+              <path d="M50 80 C26 52, 16 28, 28 10 C38 18, 44 48, 50 80 Z" fill="url(#whitePetalGradient)" stroke="#e4c4ca" stroke-width="0.5"/>
+            </g>
+            <!-- Mid Petals Right -->
+            <g class="petal mid-petal-right">
+              <path d="M50 80 C74 52, 84 28, 72 10 C62 18, 56 48, 50 80 Z" fill="url(#whitePetalGradient)" stroke="#e4c4ca" stroke-width="0.5"/>
+            </g>
+
+            <!-- Center Shield Bud Petal representing the inner heart of wisdom -->
+            <g class="petal center-petal">
+              <path d="M50 80 C36 45, 34 20, 50 2 C66 20, 64 45, 50 80 Z" fill="url(#lotusCoreGradient)" stroke="#d4af37" stroke-width="0.75"/>
+            </g>
+          </svg>
+
+          <!-- Invitation card hidden inside the lotus, rises up during blooming -->
+          <div class="lotus-card" id="lotusCard" onclick="event.stopPropagation();">
+            <h3>Sakshi & Sidhodhan</h3>
+            <p style="margin: 4px 0; color: var(--maroon); font-weight: bold; letter-spacing: 1.5px;">SADARA AMANTRAN</p>
+            <p style="font-size: 0.72rem; font-style: italic;">Enter into the bliss of our sacred matrimony</p>
+            <div class="click-to-enter" onclick="revealWeddingSite()">Enter Invitation</div>
+          </div>
+        </div>
+      </div>
+      <div class="open-hint" id="unveilHint">Touch the White Lotus to Bloom the Invitation</div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-mandala"></div>
+    <div class="hero-border reveal">
+      <div class="corner-ornament top-left"></div>
+      <div class="corner-ornament top-right"></div>
+      <div class="corner-ornament bottom-left"></div>
+      <div class="corner-ornament bottom-right"></div>
+
+      <!-- Sacred Hanging Bells SVGs -->
+      <svg class="hanging-bell bell-left" viewBox="0 0 30 60" fill="var(--gold)">
+        <line x1="15" y1="0" x2="15" y2="40" stroke="var(--gold)" stroke-width="2"/>
+        <path d="M7 40 C 7 30, 23 30, 23 40 L 25 50 L 5 50 Z" />
+        <circle cx="15" cy="54" r="3" />
+      </svg>
+      <svg class="hanging-bell bell-right" viewBox="0 0 30 60" fill="var(--gold)">
+        <line x1="15" y1="0" x2="15" y2="40" stroke="var(--gold)" stroke-width="2"/>
+        <path d="M7 40 C 7 30, 23 30, 23 40 L 25 50 L 5 50 Z" />
+        <circle cx="15" cy="54" r="3" />
+      </svg>
+
+      <!-- EXQUISITE BUDDHA BLESSING MODULE -->
+      <div class="buddha-blessing-container">
+        <!-- Seamless radiating loops -->
+        <div class="buddha-halo-wrapper">
+          <div class="buddha-halo-ring"></div>
+          <div class="buddha-halo-ring"></div>
+          <div class="buddha-halo-ring"></div>
+        </div>
+        <div class="buddha-gilded-arch">
+          <!-- Main framed sacred Buddha image -->
+          <img src="ChatGPT Image May 30, 2026, 02_06_24 AM.png" alt="Lord Buddha Blessing" onerror="this.src='https://images.unsplash.com/photo-1542385151-efd9000785a0?auto=format&fit=crop&q=80&w=300'">
+        </div>
+        
+        <!-- Sacred Lotus Pedestal supporting the Gilded Arch -->
+        <svg class="buddha-lotus-base" viewBox="0 0 100 24">
+          <path d="M10 20 C20 5, 30 5, 40 20 C45 10, 55 10, 60 20 C70 5, 80 5, 90 20 C95 24, 5 24, 10 20 Z" />
+          <path d="M25 20 C35 10, 45 10, 50 20 C55 10, 65 10, 75 20" stroke="var(--gold-dark)" stroke-width="1" fill="none"/>
+        </svg>
+
+        <div class="mantra-banner">☸ Namo Buddhaya ☸</div>
+      </div>
+
+      <div class="top-text playfair">With the blessings of Lord Buddha</div>
+      
+      <h1 class="names script-font">Sakshi</h1>
+      <span class="ampersand script-font">&amp;</span>
+      <h1 class="names script-font">Sidhodhan</h1>
+      
+      <!-- Lotus Flower SVG Divider -->
+      <div class="divider" style="margin: 25px 0;">
+        <svg viewBox="0 0 200 40" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M100 5 C110 20, 130 20, 100 35 C70 20, 90 20, 100 5 Z" fill="var(--gold)" opacity="0.6"/>
+          <path d="M100 12 C105 22, 115 22, 100 32 C85 22, 95 22, 100 12 Z" fill="var(--cream)"/>
+          <path d="M100 20 L100 35 M90 28 Q100 24 110 28" stroke="var(--gold)"/>
+          <path d="M10 25 Q 50 15, 80 25 M120 25 Q 150 15, 190 25" stroke="var(--gold)"/>
+        </svg>
+      </div>
+
+      <p class="playfair" style="font-size: 1.3rem; font-style: italic; letter-spacing: 1px;">Request your esteemed presence on our auspicious Wedding vows</p>
+      
+      <div class="date-text playfair">
+        <span style="display:block; font-family:'Cinzel', serif; font-size:1.9rem; font-weight:700; color:var(--gold);">18 . 11 . 2027</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Countdown Section -->
+  <section class="countdown-section">
+    <div class="reveal">
+      <h2 class="section-title">The Sacred Day Approaches</h2>
+      <div class="divider">
+        <svg viewBox="0 0 100 30"><path d="M0,15 L40,15 M60,15 L100,15 M50,5 L50,25 M40,15 Q50,0 60,15 Q50,30 40,15 Z" fill="var(--gold)"/></svg>
+      </div>
+      
+      <div class="countdown-container" id="countdown-wrapper">
+        <div class="cd-box">
+          <div class="cd-num" id="cd-d">00</div>
+          <div class="cd-label">Days</div>
+        </div>
+        <div class="cd-box">
+          <div class="cd-num" id="cd-h">00</div>
+          <div class="cd-label">Hours</div>
+        </div>
+        <div class="cd-box">
+          <div class="cd-num" id="cd-m">00</div>
+          <div class="cd-label">Mins</div>
+        </div>
+        <div class="cd-box">
+          <div class="cd-num" id="cd-s">00</div>
+          <div class="cd-label">Secs</div>
+        </div>
+      </div>
+      <p id="countdown-msg" style="display:none; color:var(--maroon); font-family:'Playfair Display',serif; font-size:24px; font-weight:600; margin-top:20px;">🎉 The Sacred Ceremony has commenced! 🎉</p>
+    </div>
+  </section>
+
+  <!-- ===== MAJESTIC TRI-FRAME MANDALA GALLERY ===== -->
+  <section class="couple-portrait-section">
+    <div class="reveal">
+      <h2 class="section-title">The Sacred Union</h2>
+      <p class="section-subtitle">Entering the path of life together in harmony, guided by Buddha's light</p>
+      
+      <!-- Unified collage layout using the exact 3 specified local filenames -->
+      <div class="collage-container">
+        <!-- Flanking Arch Left: Image (2) -->
+        <div class="collage-frame collage-side">
+          <img src="ChatGPT Image May 30, 2026, 02_15_19 AM (2).png" 
+               alt="Sacred Spiritual Vibe"
+               onerror="this.src='https://images.unsplash.com/photo-1594144365743-3ea7b702ecff?auto=format&fit=crop&q=80&w=600'">
+        </div>
+        
+        <!-- Centerpiece Union Image: Image (1) -->
+        <div class="collage-frame collage-center">
+          <img src="ChatGPT Image May 30, 2026, 02_15_19 AM (1).png" 
+               alt="Sakshi & Sidhodhan Combined"
+               onerror="this.src='https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=800'">
+        </div>
+        
+        <!-- Flanking Arch Right: Image (3) -->
+        <div class="collage-frame collage-side">
+          <img src="ChatGPT Image May 30, 2026, 02_15_19 AM (3).png" 
+               alt="Sacred Blessings Icon"
+               onerror="this.src='https://images.unsplash.com/photo-1605001011156-cbf0b0f67a51?auto=format&fit=crop&q=80&w=600'">
+        </div>
+      </div>
+
+      <!-- Buddhism Quotes on Love & Companion -->
+      <div class="buddhist-quote-box">
+        <p class="buddhist-quote">
+          "If two companions can live together in harmony, maintaining pure minds, keeping matching virtues, and acting in supreme wisdom, they shall rise in happiness and peace as one."
+        </p>
+        <span class="buddhist-quote-source">— Inspired by Sigalovada Sutta</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Blessings (Diya Lighting) Section -->
+  <section class="blessings-section">
+    <div class="reveal">
+      <h2 class="section-title">Mangala Lamp</h2>
+      <p class="section-subtitle">Click below to light the sacred lamp and send your blessings to the happy couple</p>
+      
+      <div class="diya-container" onclick="lightDiya(this)">
+        <div class="diya-flame" id="diya-flame"></div>
+        <svg class="diya-body" viewBox="0 0 100 60">
+          <path d="M10 30 C 10 50, 90 50, 90 30 C 85 25, 15 25, 10 30 Z" fill="#d4af37"/>
+          <path d="M15 30 Q 50 15 85 30" fill="none" stroke="#aa8529" stroke-width="2"/>
+          <ellipse cx="50" cy="30" rx="35" ry="8" fill="#8a6d1c" opacity="0.7"/>
+          <circle cx="50" cy="30" r="4" fill="#ff9f00"/>
+        </svg>
+      </div>
+      <div class="blessing-count">Sacred Blessings: <span id="bless-count">658</span></div>
+    </div>
+  </section>
+
+  <!-- Timeline Section styled with Buddhist Milestones -->
+  <section class="events-section">
+    <h2 class="section-title reveal">Sacred Rituals</h2>
+    <p class="section-subtitle reveal">Please join us across these beautiful moments of spiritual transition</p>
+    
+    <div class="timeline">
+      <!-- Ritual 1: Vandana & Blessings -->
+      <div class="event-card reveal">
+        <div class="event-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 21a9 9 0 0 1-9-9 9 9 0 0 1 9-9 9 9 0 0 1 9 9 9 9 0 0 1-9 9zm0-16a7 7 0 0 0-7 7 7 7 0 0 0 7 7 7 7 0 0 0 7-7 7 7 0 0 0-7-7z M12 6v12M6 12h12" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <div class="event-content">
+          <h3>Buddha Vandana & Sangha Blessings</h3>
+          <span class="time">Nov 17, 2027 • 10:00 AM</span>
+          <p>The commencement of our holy union, marked with pure chantings of Vandana, Tri-Sarana, and Panchsheel to invoke peaceful spiritual vibes.</p>
+        </div>
+      </div>
+
+      <!-- Ritual 2: Sangeet Night / Celebration -->
+      <div class="event-card reveal">
+        <div class="event-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+        </div>
+        <div class="event-content">
+          <h3>Sangeet & Mangala Utsav</h3>
+          <span class="time">Nov 17, 2027 • 7:00 PM</span>
+          <p>An evening filled with spiritual joy, beautiful folk melodies, and traditional dance to celebrate the bonding of Sakshi & Sidhodhan's families.</p>
+        </div>
+      </div>
+
+      <!-- Ritual 3: Wedding Muhurat -->
+      <div class="event-card reveal">
+        <div class="event-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm0-13a5 5 0 1 0 5 5 5 5 0 0 0-5-5z" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="event-content">
+          <h3>Sacred Wedding (Vivah)</h3>
+          <span class="time">Nov 18, 2027 • 11:30 AM</span>
+          <p>The highly auspicious main wedding Muhurat. The couple will walk the path of Dharma, perform sacred rounds, exchange vows, and unite eternally.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dress Code Section -->
+  <section class="dress-code-section">
+    <div class="reveal">
+      <h2 class="section-title">Color Themes</h2>
+      <p class="section-subtitle">We suggest these elegant natural colors to add serenity to our celebrations</p>
+      
+      <div class="dress-grid">
+        <div class="dress-card">
+          <div class="dress-title">Blessings Chants</div>
+          <p style="color: var(--text-light); font-size: 0.9rem;">Pure Ivory, Creams & Saffrons</p>
+          <div class="dress-palette">
+            <div class="color-dot" style="background: #ffffff; border:1px solid #ddd;"></div>
+            <div class="color-dot" style="background: #e07a5f;"></div>
+            <div class="color-dot" style="background: #fdf8ef;"></div>
+          </div>
+        </div>
+        <div class="dress-card">
+          <div class="dress-title">Mangala Utsav</div>
+          <p style="color: var(--text-light); font-size: 0.9rem;">Glorious Pastel Blues, Peaches & Silvers</p>
+          <div class="dress-palette">
+            <div class="color-dot" style="background: #a8dadc;"></div>
+            <div class="color-dot" style="background: #f3c68f;"></div>
+            <div class="color-dot" style="background: #e5e5e5;"></div>
+          </div>
+        </div>
+        <div class="dress-card">
+          <div class="dress-title">The Vivah Ceremony</div>
+          <p style="color: var(--text-light); font-size: 0.9rem;">Traditional Maroon, Deep Orange & Gold</p>
+          <div class="dress-palette">
+            <div class="color-dot" style="background: var(--maroon);"></div>
+            <div class="color-dot" style="background: #e76f51;"></div>
+            <div class="color-dot" style="background: var(--gold);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Venue Section -->
+  <section class="venue-section">
+    <div class="reveal venue-card">
+      <h3>The Venue</h3>
+      <div class="divider">
+        <svg viewBox="0 0 100 20"><line x1="0" y1="10" x2="100" y2="10" stroke="var(--gold)" stroke-width="1"/><rect x="45" y="5" width="10" height="10" fill="var(--gold)" transform="rotate(45 50 10)"/></svg>
+      </div>
+      <h4 class="playfair" style="font-size: 1.6rem; color: var(--text); margin-bottom: 12px; font-weight:700;">The Grand Heritage Palace</h4>
+      <p class="playfair" style="color: var(--text-light); font-size: 1.15rem; margin-bottom: 25px; line-height: 1.6;">
+        123 Royal Estate Boulevard,<br>
+        Majestic View City, State 400001
+      </p>
+      
+      <div>
+        <a href="https://maps.google.com" target="_blank" class="btn-directions">Get Directions</a>
+        <a href="#" class="btn-calendar" onclick="addToCalendar(event)">Add To Calendar</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Wishes / Blessings Wall - ABSOLUTELY NO FORM TAGS -->
+  <section class="guestbook-section">
+    <div class="reveal">
+      <h2 class="section-title">Wishes Wall</h2>
+      <p class="section-subtitle">Leave your peaceful words and sacred blessings for the couple</p>
+      
+      <div class="guestbook-container">
+        <!-- Interactive DIV Container instead of a Form element to guarantee no browser reload or action errors -->
+        <div class="wish-input-group">
+          <input type="text" id="wishName" class="wish-input" placeholder="Your Noble Name" required>
+          <input type="text" id="wishText" class="wish-input" placeholder="Write your warm blessings..." required>
+          <div class="wish-btn" onclick="addWish()">Send Blessings</div>
+        </div>
+        
+        <div class="wishes-wall" id="wishesWall">
+          <!-- Default Wishes -->
+          <div class="wish-card">
+            <div class="wish-name">Venerable Bhante Bodhidharma</div>
+            <div class="wish-text">"Sabba-mangalal-avantu." May you walk together with peaceful minds, kindness, and eternal devotion. Blessings to Sakshi & Sidhodhan.</div>
+          </div>
+          <div class="wish-card">
+            <div class="wish-name">Family Elder Priyadarshi</div>
+            <div class="wish-text">Highly delighted to see this spiritual and noble beginning of your life journey. Namo Buddhaya! ❤️</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mangala Verses Section -->
+  <section class="mangala-verses-section">
+    <div class="reveal">
+      <h2 class="section-title">Mangala Gatha</h2>
+      
+      <svg class="mandala-illustration" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="50" cy="50" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+        <line x1="50" y1="10" x2="50" y2="90" stroke="currentColor" stroke-width="2"/>
+        <line x1="10" y1="50" x2="90" y2="50" stroke="currentColor" stroke-width="2"/>
+        <line x1="22" y1="22" x2="78" y2="78" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="22" y1="78" x2="78" y2="22" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+
+      <div class="verse-card">
+        <p class="verse-text">
+          "Arogya parama labha, santutthi paramam dhanam,<br>
+          vissasa parama nati, nibbanam paramam sukham."
+        </p>
+        <p class="verse-translation">
+          "Health is the greatest gift, contentment is the greatest wealth,<br>
+          a trusted companion is the best relative, and supreme peace is the highest bliss."
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <h3 class="footer-names script-font">Sakshi & Sidhodhan</h3>
+    <p style="font-family: 'Nunito', sans-serif; font-size: 0.95rem; opacity: 0.8; letter-spacing: 1px;">Sukhino va khemino hontu — May all beings be happy and safe!</p>
+  </footer>
+
+  <!-- Custom Popup Structure -->
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="custom-modal" id="customModal">
+    <h3 id="modalTitle" style="font-family:'Cinzel', serif; margin-bottom: 15px; font-size: 1.6rem;">Peace & Blessings</h3>
+    <p id="modalMsg" style="font-family:'Nunito', sans-serif; line-height: 1.6; color: var(--text-light);"></p>
+    <button onclick="closeModal()" style="margin-top:25px; padding:10px 30px; background:var(--gold); border:none; border-radius:30px; color:var(--maroon); font-family:'Cinzel', serif; font-weight:700; cursor:pointer; transition: 0.3s; box-shadow: var(--shadow-gold);">Close</button>
+  </div>
+
+  <script>
+    /* ===== WEBAUDIO REALTIME SYNTHESIZER FALLBACK ENGINE ===== */
+    // This synthesizer generates incredibly beautiful singing bowl & chime sounds in real-time.
+    // It works perfectly on all devices even if external MP3 links are blocked.
+    let audioCtx = null;
+
+    function initAudioSynth() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    // Synthesize a majestic deep Buddhist Singing Bowl/Bell strike
+    function playSingingBowl(freq = 144) {
+      initAudioSynth();
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      const strikeTime = audioCtx.currentTime;
+      const duration = 12; // 12 seconds deep resonance decay
+
+      // Master output gain
+      const masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(0, strikeTime);
+      masterGain.gain.linearRampToValueAtTime(0.35, strikeTime + 0.1);
+      masterGain.gain.exponentialRampToValueAtTime(0.0001, strikeTime + duration);
+      masterGain.connect(audioCtx.destination);
+
+      // We combine several harmonics to create a highly complex, metallic resonance of a Tibetan bowl
+      const harmonics = [1, 2, 2.76, 3.4, 4.1, 5.2];
+      const gains = [1, 0.4, 0.25, 0.15, 0.1, 0.05];
+
+      harmonics.forEach((mult, i) => {
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+
+        osc.type = i === 0 ? 'sine' : 'triangle';
+        osc.frequency.setValueAtTime(freq * mult, strikeTime);
+
+        // Add slow tremolo to make it feel alive
+        const lfo = audioCtx.createOscillator();
+        const lfoGain = audioCtx.createGain();
+        lfo.frequency.value = 1.5 + Math.random(); // Gentle breathing pitch shift
+        lfoGain.gain.value = 1.2;
+        lfo.connect(lfoGain);
+        lfoGain.connect(osc.frequency);
+        lfo.start();
+
+        g.gain.setValueAtTime(gains[i] * 0.45, strikeTime);
+        g.gain.exponentialRampToValueAtTime(0.0001, strikeTime + (duration * (1 - (i * 0.12))));
+
+        osc.connect(g);
+        g.connect(masterGain);
+
+        osc.start(strikeTime);
+        osc.stop(strikeTime + duration);
+      });
+    }
+
+    // Synthesize tiny, magical shimmering wind chimes
+    function playWindChime() {
+      initAudioSynth();
+      const strikeTime = audioCtx.currentTime;
+      const freq = 900 + Math.random() * 800; // Sparkling high tones
+
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, strikeTime);
+      
+      gainNode.gain.setValueAtTime(0.08, strikeTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, strikeTime + 2.5);
+
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      osc.start(strikeTime);
+      osc.stop(strikeTime + 2.5);
+    }
+
+    // Trigger intermittent wind chimes
+    let chimeInterval = null;
+    function startWindChimesLoop() {
+      if (chimeInterval) clearInterval(chimeInterval);
+      chimeInterval = setInterval(() => {
+        if (Math.random() > 0.4) {
+          playWindChime();
+          // Occasionally trigger a dual chime
+          if (Math.random() > 0.7) {
+            setTimeout(playWindChime, 150 + Math.random() * 200);
+          }
+        }
+      }, 3000);
+    }
+
+    /* ===== PRELOADER WITH FAIL-SAFE FALLBACKS ===== */
+    const preloader = document.getElementById('preloader');
+    
+    function removePreloader() {
+      if (preloader && preloader.style.display !== 'none') {
+        preloader.style.opacity = '0';
+        setTimeout(() => { 
+          preloader.style.display = 'none'; 
+          // Auto trigger initial reveals for anything in current view
+          document.querySelectorAll('.reveal').forEach((el) => {
+            if (el.getBoundingClientRect().top < window.innerHeight) {
+              el.classList.add('active');
+            }
+          });
+        }, 800);
+      }
+    }
+
+    window.addEventListener('load', removePreloader);
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(removePreloader, 1000);
+    });
+    setTimeout(removePreloader, 2500);
+
+    /* ===== SACRED LOTUS BLOOMING ENGINE ===== */
+    let lotusBloomed = false;
+
+    // Handles the click on the Lotus Bud OR Hint Text
+    function handleLotusClick() {
+      if (!lotusBloomed) {
+        bloomLotus();
+      } else {
+        // If already bloomed, clicking the lotus container instantly enters the wedding site
+        revealWeddingSite();
+      }
+    }
+
+    function bloomLotus() {
+      const lotusWrapper = document.getElementById('lotusWrapper');
+      const hint = document.getElementById('unveilHint');
+      
+      lotusWrapper.classList.add('bloom');
+      if (hint) hint.innerHTML = "<span style='color:var(--gold-light); font-weight:bold; animation: pulse 1s infinite;'>Invitation Bloomed! Click to Enter</span>";
+      lotusBloomed = true;
+
+      // Play the Web Audio Singing Bowl strike on first interaction (Guaranteed Audible)
+      try {
+        playSingingBowl(144); // Deep 144Hz spiritual base tone
+        startWindChimesLoop(); // Kickoff ambient wind chimes
+      } catch (e) {
+        console.log("Synthesizer bypassed:", e);
+      }
+
+      // Simultaneously prepare background MP3
+      const bgMusic = document.getElementById('bg-music');
+      bgMusic.play().then(() => {
+        isPlaying = true;
+        document.getElementById('music-btn').classList.add('playing');
+        document.getElementById('visualizer').classList.add('active', 'playing-wave');
+        document.getElementById('music-icon').setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
+      }).catch(err => {
+        console.log("Audio MP3 blocked, Web Audio Synthesizer remains active.");
+      });
+    }
+
+    function revealWeddingSite() {
+      const overlay = document.getElementById('envelopeOverlay');
+      const card = document.getElementById('lotusCard');
+      
+      // Zoom card into viewport before hiding overlay
+      card.style.transform = "translate(-50%, -100px) scale(2.2)";
+      card.style.opacity = "0";
+      
+      // Secondary Singing Bowl bells for the main entrance
+      try {
+        playSingingBowl(180); 
+        setTimeout(() => playSingingBowl(240), 200);
+      } catch(e){}
+
+      setTimeout(() => {
+        overlay.classList.add('hide');
+        document.body.classList.remove('lock-scroll');
+        
+        // Auto trigger scroll reveals for elements inside the Hero section
+        setTimeout(() => {
+          document.querySelectorAll('.reveal').forEach((el) => {
+            if (el.getBoundingClientRect().top < window.innerHeight) {
+              el.classList.add('active');
+            }
+          });
+        }, 400);
+      }, 800);
+    }
+
+    /* ===== SCROLL REVEAL ANIMATION ===== */
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.15
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach((el) => {
+      observer.observe(el);
+    });
+
+    /* ===== PARTICLE GENERATOR ===== */
+    function createParticles() {
+      const container = document.getElementById('particles');
+      if (!container) return;
+      const particleCount = 40;
+      const petalCount = 15;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        const size = Math.random() * 5 + 2; 
+        const left = Math.random() * 100; 
+        const delay = Math.random() * 15; 
+        const duration = Math.random() * 12 + 8; 
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${left}vw`;
+        particle.style.animationDelay = `${delay}s`;
+        particle.style.animationDuration = `${duration}s`;
+        
+        container.appendChild(particle);
+      }
+
+      for (let j = 0; j < petalCount; j++) {
+        const petal = document.createElement('div');
+        petal.classList.add('petal');
+        
+        const size = Math.random() * 18 + 12; 
+        const left = Math.random() * 100;
+        const delay = Math.random() * 20;
+        const duration = Math.random() * 15 + 12;
+        
+        petal.style.width = `${size}px`;
+        petal.style.height = `${size}px`;
+        petal.style.left = `${left}vw`;
+        petal.style.animationDelay = `${delay}s`;
+        petal.style.animationDuration = `${duration}s`;
+        
+        container.appendChild(petal);
+      }
+    }
+    createParticles();
+
+    /* ===== COUNTDOWN LOGIC ===== */
+    function countdown(){
+      const target = new Date('November 18, 2027 11:30:00').getTime();
+      
+      function tick(){
+        const now = Date.now();
+        const diff = target - now;
+        
+        if(diff <= 0){
+          const wrapper = document.getElementById('countdown-wrapper');
+          if (wrapper) wrapper.style.display = 'none';
+          const msg = document.getElementById('countdown-msg');
+          if (msg) msg.style.display = 'block';
+          return;
+        }
+        
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor((diff % 86400000) / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        
+        const dEl = document.getElementById('cd-d');
+        const hEl = document.getElementById('cd-h');
+        const mEl = document.getElementById('cd-m');
+        const sEl = document.getElementById('cd-s');
+
+        if (dEl) dEl.textContent = String(d).padStart(2,'0');
+        if (hEl) hEl.textContent = String(h).padStart(2,'0');
+        if (mEl) mEl.textContent = String(m).padStart(2,'0');
+        if (sEl) sEl.textContent = String(s).padStart(2,'0');
+      }
+      tick();
+      setInterval(tick, 1000);
+    }
+    countdown();
+
+    /* ===== BACKGROUND MUSIC CONTROL ===== */
+    let isPlaying = false;
+    const bgMusic = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('music-btn');
+    const musicIcon = document.getElementById('music-icon');
+    const visualizer = document.getElementById('visualizer');
+
+    function toggleMusic() {
+      if (!bgMusic) return;
+      if (isPlaying) {
+        bgMusic.pause();
+        if (chimeInterval) clearInterval(chimeInterval); // Stop wind chime synth
+        if (musicBtn) musicBtn.classList.remove('playing');
+        if (visualizer) {
+          visualizer.classList.remove('active');
+          visualizer.classList.remove('playing-wave');
+        }
+        if (musicIcon) musicIcon.setAttribute('d', 'M8 5v14l11-7z');
+      } else {
+        // Resume synthesis & background stream
+        try {
+          playSingingBowl(144);
+          startWindChimesLoop();
+        } catch(e){}
+
+        bgMusic.play().then(() => {
+          if (musicBtn) musicBtn.classList.add('playing');
+          if (visualizer) {
+            visualizer.classList.add('active');
+            visualizer.classList.add('playing-wave');
+          }
+          if (musicIcon) musicIcon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
+        }).catch(e => {
+          showNotification('Mantra Melody', 'Your device locked the media streaming. Simply touch anywhere on screen to unlock!');
+        });
+      }
+      isPlaying = !isPlaying;
+    }
+
+    /* ===== INTERACTIVE DIYA (VIRTUAL LAMP LIGHTING) ===== */
+    let blessingsCount = 658;
+    let diyaLit = false;
+
+    function lightDiya(el) {
+      const flame = document.getElementById('diya-flame');
+      
+      if(!diyaLit) {
+        if (flame) flame.classList.add('active');
+        blessingsCount++;
+        const countEl = document.getElementById('bless-count');
+        if (countEl) countEl.textContent = blessingsCount;
+        diyaLit = true;
+        
+        try { playSingingBowl(216); } catch(e){} // Higher octave bell strike for lighting diya
+        triggerDustExplosion(el);
+        showNotification('Blessing Ignited', 'You have lighted the virtual Mangala Diya and shared spiritual merits with Sakshi & Sidhodhan! ☸️');
+      }
+    }
+
+    function triggerDustExplosion(el) {
+      const rect = el.getBoundingClientRect();
+      const container = document.getElementById('particles');
+      if (!container) return;
+      
+      for (let i = 0; i < 25; i++) {
+        const p = document.createElement('div');
+        p.classList.add('particle');
+        p.style.width = '6px';
+        p.style.height = '6px';
+        p.style.left = `${rect.left + rect.width/2 + (Math.random() - 0.5) * 40}px`;
+        p.style.top = `${rect.top + window.scrollY + (Math.random() - 0.5) * 20}px`;
+        p.style.animation = 'fall 3s ease-out forwards';
+        p.style.animationDelay = '0s';
+        
+        container.appendChild(p);
+        setTimeout(() => p.remove(), 3000);
+      }
+    }
+
+    /* ===== INTERACTIVE GUESTBOOK WALL (NO FORM REQUIRED) ===== */
+    function addWish() {
+      const nameInput = document.getElementById('wishName');
+      const textInput = document.getElementById('wishText');
+      const wall = document.getElementById('wishesWall');
+
+      if (!nameInput || !textInput || !wall) return;
+      if (!nameInput.value.trim() || !textInput.value.trim()) {
+        showNotification('Fields Required', 'Please enter your name and a blessing message.');
+        return;
+      }
+
+      const wishCard = document.createElement('div');
+      wishCard.className = 'wish-card';
+      wishCard.innerHTML = `
+        <div class="wish-name">${escapeHTML(nameInput.value)}</div>
+        <div class="wish-text">${escapeHTML(textInput.value)}</div>
+      `;
+
+      wall.insertBefore(wishCard, wall.firstChild);
+      wall.scrollTop = 0;
+
+      nameInput.value = '';
+      textInput.value = '';
+
+      try { playWindChime(); } catch(e){} // Sparkle chime for posting a blessing
+      showNotification('Sacred Wish Sent', 'Your gorgeous blessing has been preserved on the Wishes Wall.');
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+
+    /* ===== ADD TO CALENDAR INTEGRATION ===== */
+    function addToCalendar(e) {
+      e.preventDefault();
+      const title = encodeURIComponent("Sakshi & Sidhodhan's Buddhist Wedding Vivah");
+      const details = encodeURIComponent("Join us to celebrate the sacred wedding ceremonies of Sakshi & Sidhodhan.");
+      const location = encodeURIComponent("The Grand Heritage Palace, Majestic View City");
+      const startDate = "20271118T113000";
+      const endDate = "20271118T223000";
+
+      const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startDate}/${endDate}&details=${details}&location=${location}`;
+      window.open(googleCalUrl, '_blank');
+    }
+
+    /* ===== CUSTOM DIALOG/MODAL HANDLERS ===== */
+    function showNotification(title, msg) {
+      const modalTitle = document.getElementById('modalTitle');
+      const modalMsg = document.getElementById('modalMsg');
+      const overlay = document.getElementById('modalOverlay');
+      const modal = document.getElementById('customModal');
+
+      if (modalTitle) modalTitle.textContent = title;
+      if (modalMsg) modalMsg.textContent = msg;
+      
+      if (overlay) overlay.classList.add('active');
+      if (modal) modal.classList.add('active');
+    }
+
+    function closeModal() {
+      const overlay = document.getElementById('modalOverlay');
+      const modal = document.getElementById('customModal');
+
+      if (overlay) overlay.classList.remove('active');
+      if (modal) modal.classList.remove('active');
+    }
+  </script>
+</body>
+</html>
