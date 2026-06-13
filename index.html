@@ -536,13 +536,13 @@ const QUESTIONS = [
   // ── LEVEL 2 — Who Does What ──────────────────
   {
     level:"💞 Level 2 — Who Does What?",
-    emoji:"😤",
-    type:"mcq",
-    q:"Who gets <span>angry first?</span>",
-    opts:["Sai 😤","Sakshi 😠","Both at same time 💥","Neither, we're calm 😇"],
-    correct:0,
-    funny:"Wrong! It's definitely not Sakshi who gets angry first 😂",
-    right:"SAI! Yes, I admit it 😤😂❤️"
+    emoji:"🎬",
+    type:"type",
+    q:"What is my <span>favourite movie?</span>",
+    answers:["avengers endgame","avenger endgame","endgame","avengers","Avengers Endgame","Endgame"],
+    hint:"It's a Marvel movie 🦸",
+    funny:"Nope! You don't know my favourite movie? 😭🎬",
+    right:"AVENGERS ENDGAME! 🔥 Yes! You know me so well! 😍"
   },
   {
     level:"💞 Level 2 — Who Does What?",
@@ -675,7 +675,7 @@ const QUESTIONS = [
     level:"❤️ Final Question",
     emoji:"💍",
     type:"mcq",
-    q:"Will you <span>stay with me forever,</span> Sai?",
+    q:"Will you <span>stay with me forever,</span> Sakshi? 💖",
     opts:["Yes ❤️","Absolutely Yes 💕","Forever and Ever 💖","All of the Above 😍"],
     correct:3,
     funny:"There's no wrong answer here... but All of the Above is the only right one 💖",
@@ -865,8 +865,8 @@ function selectMCQ(chosen){
   if(isRight)score++;
   btns.forEach((btn,i)=>{
     btn.style.pointerEvents="none";
-    if(i===q.correct)btn.classList.add("correct");
-    else if(i===chosen&&!isRight)btn.classList.add("wrong");
+    if(i===chosen&&!isRight)btn.classList.add("wrong");
+    else if(i===chosen&&isRight)btn.classList.add("correct");
   });
   showFeedback(isRight?q.right:q.funny, isRight);
   $("score-display").textContent=score;
