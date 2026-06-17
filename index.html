@@ -759,19 +759,19 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
     <h2 class="sec-title">Our Movie 🎬</h2>
     <div id="slideshow" style="position:relative;border-radius:24px;overflow:hidden;aspect-ratio:16/9;background:#0d0209;box-shadow:0 20px 60px rgba(0,0,0,.6)">
       <div class="slide active" data-caption="The day everything changed ❤️">
-        <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&q=80" alt="Slide 1">
+        <img src="us7.jpeg" alt="Slide 1">
       </div>
       <div class="slide" data-caption="You make every moment magical ✨">
-        <img src="https://images.unsplash.com/photo-1529180615058-0a964b13b819?w=800&q=80" alt="Slide 2">
+        <img src="us8.jpeg" alt="Slide 2">
       </div>
       <div class="slide" data-caption="My favourite person in the whole world 💕">
-        <img src="https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=800&q=80" alt="Slide 3">
+        <img src="us9.jpeg" alt="Slide 3">
       </div>
       <div class="slide" data-caption="I kept staring at this photo for an hour 😍">
-        <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&q=80" alt="Slide 4">
+        <img src="us10.jpeg" alt="Slide 4">
       </div>
       <div class="slide" data-caption="Byko — my everything, forever 💖">
-        <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&q=80" alt="Slide 5">
+        <img src="us11.jpeg" alt="Slide 5">
       </div>
       <div id="slide-caption" style="position:absolute;bottom:0;left:0;right:0;padding:20px 20px 16px;background:linear-gradient(to top,rgba(0,0,0,.85),transparent);font-family:'Playfair Display',serif;font-style:italic;color:#fff;font-size:1rem;text-align:left"></div>
       <div id="slide-dots" style="position:absolute;top:14px;right:14px;display:flex;gap:6px"></div>
@@ -847,27 +847,67 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
 <section class="sec dark bday-hidden" id="scratch-sec">
   <div class="sec-in" style="max-width:560px;text-align:center">
     <p class="sec-lbl" style="color:rgba(245,184,200,.6)">Secret Just For You</p>
-    <h2 class="sec-title">Password of My Favourite Email 💌</h2>
+    <h2 class="sec-title">Password of Your Favourite Email 💌</h2>
     <p style="font-family:'Playfair Display',serif;font-style:italic;color:rgba(245,184,200,.6);font-size:.9rem;line-height:1.7;margin-bottom:28px">
-      "I trust you with everything, Sakshi.<br>Scratch to reveal my secret. 💕"
+      "I trust you with everything, Sakshi.<br>Scratch to reveal your gift. 💕"
     </p>
-    <div style="position:relative;display:inline-block;border-radius:20px;overflow:hidden;box-shadow:0 16px 50px rgba(232,99,122,.3)">
-      <!-- hidden password underneath -->
-      <div id="scratch-reveal" style="width:300px;height:120px;background:linear-gradient(135deg,#1c0810,#2d0d1a);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1.5px solid rgba(232,99,122,.3);border-radius:20px">
-        <div style="font-size:1.4rem">🔐</div>
-        <div style="font-family:'Playfair Display',serif;color:var(--gold);font-size:1.3rem;font-weight:700;letter-spacing:2px">Sakshi@1926</div>
-        <div style="font-size:.68rem;color:rgba(245,184,200,.45);letter-spacing:2px;text-transform:uppercase">Your gift 💕</div>
+
+    <!-- SCRATCH CARD — gift photo underneath -->
+    <div style="position:relative;display:inline-block;border-radius:20px;overflow:hidden;box-shadow:0 16px 50px rgba(232,99,122,.4);width:min(300px,90vw)">
+      <!-- ✏️ gift.jpeg = your gift photo shown after scratch -->
+      <img id="scratch-gift-img" src="gift.jpeg" alt="Gift"
+        style="width:100%;display:block;border-radius:20px"
+        onerror="this.style.display='none';document.getElementById('scratch-gift-fallback').style.display='flex'">
+      <!-- fallback if no image -->
+      <div id="scratch-gift-fallback" style="display:none;width:100%;height:200px;background:linear-gradient(135deg,#1c0810,#2d0d1a);align-items:center;justify-content:center;flex-direction:column;gap:10px;border-radius:20px">
+        <div style="font-size:3rem">🎁</div>
+        <div style="font-family:'Playfair Display',serif;color:var(--gold);font-size:1.2rem;letter-spacing:2px">Your Gift!</div>
       </div>
-      <!-- scratch canvas on top -->
-      <canvas id="scratch-canvas" width="300" height="120"
-        style="position:absolute;inset:0;border-radius:20px;cursor:crosshair;touch-action:none"></canvas>
+      <!-- scratch overlay canvas -->
+      <canvas id="scratch-canvas"
+        style="position:absolute;inset:0;width:100%;height:100%;border-radius:20px;cursor:crosshair;touch-action:none"></canvas>
     </div>
+
     <p id="scratch-hint" style="color:rgba(245,184,200,.4);font-size:.75rem;margin-top:14px;letter-spacing:1px">
-      ✏️ Scratch the card to reveal the password
+      ✏️ Scratch the card to reveal your gift 🎁
     </p>
-    <p id="scratch-done" style="display:none;color:var(--rose);font-size:.82rem;margin-top:10px;font-family:'Playfair Display',serif;font-style:italic">
-      "Now you have a piece of my trust, Sakshi. Keep it safe. 💖"
-    </p>
+
+    <!-- REVEALED AFTER SCRATCH — password + 2 celebration photos -->
+    <div id="scratch-done" style="display:none;margin-top:28px;animation:fadeUp .6s both">
+
+      <!-- password box -->
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(212,160,87,.35);border-radius:18px;padding:20px 24px;margin-bottom:20px">
+        <div style="font-size:.68rem;color:rgba(245,184,200,.45);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px">Your Email Password</div>
+        <div style="font-family:'Playfair Display',serif;color:var(--gold);font-size:1.5rem;font-weight:700;letter-spacing:3px">Sakshi@1926</div>
+        <div style="font-size:.72rem;color:rgba(245,184,200,.4);margin-top:8px;font-family:'Playfair Display',serif;font-style:italic">"Keep it safe, just for you. 💕"</div>
+      </div>
+
+      <!-- celebration photos -->
+      <p style="font-size:.72rem;color:rgba(245,184,200,.45);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">Our Celebration 🎉</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <!-- ✏️ Replace cele1.jpeg & cele2.jpeg with your celebration photos -->
+        <div style="border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4)">
+          <img src="cele1.jpeg" alt="Celebration 1"
+            style="width:100%;height:160px;object-fit:cover;display:block;transition:transform .4s"
+            onmouseover="this.style.transform='scale(1.04)'"
+            onmouseout="this.style.transform='scale(1)'"
+            onclick="openLbSrc(this.src)"
+            onerror="this.parentNode.style.background='rgba(232,99,122,.1)';this.parentNode.innerHTML='<div style=height:160px;display:flex;align-items:center;justify-content:center;font-size:2rem>🎂</div>'">
+        </div>
+        <div style="border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4)">
+          <img src="cele2.jpeg" alt="Celebration 2"
+            style="width:100%;height:160px;object-fit:cover;display:block;transition:transform .4s"
+            onmouseover="this.style.transform='scale(1.04)'"
+            onmouseout="this.style.transform='scale(1)'"
+            onclick="openLbSrc(this.src)"
+            onerror="this.parentNode.style.background='rgba(212,160,87,.1)';this.parentNode.innerHTML='<div style=height:160px;display:flex;align-items:center;justify-content:center;font-size:2rem>🎉</div>'">
+        </div>
+      </div>
+      <p style="font-family:'Playfair Display',serif;font-style:italic;color:rgba(245,184,200,.55);font-size:.82rem;margin-top:14px">
+        Happy Birthday, Sakshi! 🎊💖
+      </p>
+    </div>
+
   </div>
 </section>
 
@@ -894,7 +934,7 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
         <div class="ti-tag">✨ Day One</div>
         <div class="ti-date">The Day It All Began</div>
         <div class="ti-txt">November 18, 2019. The day we officially became <em>us</em>. I don't know if you know how nervous I was. How much I wanted it to be perfect. And it was — because you said yes. You chose me. And that changed everything, Sakshi. Every single thing.</div>
-        <div class="ti-img"><img src="https://images.unsplash.com/photo-1529180615058-0a964b13b819?w=500&q=80" alt="Day One"></div>
+        <div class="ti-img"><img src="us1.jpeg" alt="Day One"></div>
       </div>
 
       <div class="ti">
@@ -903,7 +943,7 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
         <div class="ti-tag">💬 The Beginning</div>
         <div class="ti-date">Late Night Calls & First Everything</div>
         <div class="ti-txt">Those early days when every call felt electric. When we'd talk for hours about everything and nothing. When I started calling you <em>Byko</em> and you called me <em>Navra</em> back — I thought, this is our own little language. No one else gets it. Just us. When every good morning text made my whole day. We were figuring each other out, and I loved every second of it.</div>
-        <div class="ti-img"><img src="https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=500&q=80" alt="Beginning"></div>
+        <div class="ti-img"><img src="us2.jpeg" alt="Beginning"></div>
       </div>
 
       <div class="ti">
@@ -912,7 +952,7 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
         <div class="ti-tag">❤️ That Moment</div>
         <div class="ti-date">You Said "I Love You" First</div>
         <div class="ti-txt">You were braver than me, Sakshi. You always are. You said it first, and my heart just — stopped for a second. Then it started beating faster than it ever had. I replayed those words a hundred times that night. I still do sometimes. <em>You loved me first.</em> That's one of my favourite facts about us.</div>
-        <div class="ti-img"><img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500&q=80" alt="I love you"></div>
+        <div class="ti-img"><img src="us3.jpeg" alt="I love you"></div>
       </div>
 
       <div class="ti">
@@ -921,7 +961,7 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
         <div class="ti-tag">🌊 Through Everything</div>
         <div class="ti-date">The Hard Days & The Beautiful Ones</div>
         <div class="ti-txt">We've had our fights. Our silences. Our misunderstandings. But you always say sorry first, even when it wasn't your fault. You always came back. And every single time you did, I fell for you a little more. The hard days taught me — you are worth every single one of them.</div>
-        <div class="ti-img"><img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500&q=80" alt="Through everything"></div>
+        <div class="ti-img"><img src="us4.jpeg" alt="Through everything"></div>
       </div>
 
       <div class="ti">
@@ -930,7 +970,7 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
         <div class="ti-tag">🎵 Still Us</div>
         <div class="ti-date">Sting, Byko & Teri Aankhon Mein</div>
         <div class="ti-txt">After 6 years, you still call me Byko. I still dedicate Teri Aankhon Mein to you. You still drink Sting like it's a personality. And I still catch myself thinking — how did I get this lucky? Some things don't change. And I never want them to.</div>
-        <div class="ti-img"><img src="https://images.unsplash.com/photo-1529180615058-0a964b13b819?w=500&q=80" alt="Still us"></div>
+        <div class="ti-img"><img src="us5.jpeg" alt="Still us"></div>
       </div>
 
       <div class="ti">
@@ -939,7 +979,7 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
         <div class="ti-tag">🎂 Today</div>
         <div class="ti-date">Your Birthday — A New Chapter</div>
         <div class="ti-txt">Today is yours, Sakshi. Every candle, every wish, every moment. You have been my person for 6 years, 7 months, and 1 day. And I plan to count every single day from here. Happy Birthday, my love. Here's to forever. 💖</div>
-        <div class="ti-img"><img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500&q=80" alt="Birthday"></div>
+        <div class="ti-img"><img src="us6.jpeg" alt="Birthday"></div>
       </div>
 
     </div>
@@ -1739,7 +1779,7 @@ function buildConstellation(){
   const canvas = $("star-canvas");
   if(!canvas) return;
   const ctx = canvas.getContext("2d");
-  const W = canvas.width, H = canvas.height;
+  const W = canvas.width, H = canvas.height; // 320x310
 
   // ── SAKSHI letter coordinates (scaled to 640x420) ──
   // Each letter drawn as connected star points
@@ -1965,70 +2005,66 @@ function buildScratch(){
   const canvas = document.getElementById("scratch-canvas");
   if(!canvas) return;
   const ctx = canvas.getContext("2d");
+
+  // size canvas to match parent
+  const parent = canvas.parentElement;
+  canvas.width  = parent.offsetWidth  || 300;
+  canvas.height = parent.offsetHeight || 200;
   const W = canvas.width, H = canvas.height;
 
-  // draw the scratch coating — rose gold gradient
+  // rose-gold coating
   const grad = ctx.createLinearGradient(0,0,W,H);
   grad.addColorStop(0,"#c0415a");
-  grad.addColorStop(.5,"#d4a057");
+  grad.addColorStop(.45,"#d4a057");
   grad.addColorStop(1,"#c0415a");
   ctx.fillStyle = grad;
-  ctx.beginPath();
-  ctx.roundRect(0,0,W,H,16);
-  ctx.fill();
+  ctx.fillRect(0,0,W,H);
 
-  // scratch text on coating
-  ctx.fillStyle = "rgba(255,255,255,.35)";
-  ctx.font = "bold 13px Lato, sans-serif";
-  ctx.textAlign = "center";
-  ctx.fillText("✨ SCRATCH HERE ✨", W/2, H/2-6);
-  ctx.font = "11px Lato, sans-serif";
-  ctx.fillStyle = "rgba(255,255,255,.25)";
-  ctx.fillText("Use your finger or mouse", W/2, H/2+14);
-
-  ctx.globalCompositeOperation = "destination-out";
-
-  let painting = false;
-  let totalPixels = W * H;
-  let checkInterval;
-
-  function scratch(x, y, r=22){
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI*2);
-    ctx.fill();
+  // sparkles
+  for(let i=0;i<60;i++){
+    ctx.fillStyle=`rgba(255,255,255,${.05+Math.random()*.12})`;
+    ctx.beginPath();ctx.arc(Math.random()*W,Math.random()*H,1+Math.random()*3,0,Math.PI*2);ctx.fill();
   }
 
-  function getPos(e, rect){
-    if(e.touches){
-      return {x:(e.touches[0].clientX-rect.left)*(W/rect.width), y:(e.touches[0].clientY-rect.top)*(H/rect.height)};
-    }
-    return {x:(e.clientX-rect.left)*(W/rect.width), y:(e.clientY-rect.top)*(H/rect.height)};
+  // text
+  ctx.fillStyle="rgba(255,255,255,.55)";ctx.font="bold 14px Lato,sans-serif";ctx.textAlign="center";
+  ctx.fillText("✨ SCRATCH HERE ✨",W/2,H/2-8);
+  ctx.font="11px Lato,sans-serif";ctx.fillStyle="rgba(255,255,255,.3)";
+  ctx.fillText("Use your finger or mouse 💕",W/2,H/2+12);
+
+  ctx.globalCompositeOperation="destination-out";
+  let painting=false;let checkInterval;
+
+  function scratch(x,y){ctx.beginPath();ctx.arc(x,y,28,0,Math.PI*2);ctx.fill();}
+
+  function getPos(e){
+    const r=canvas.getBoundingClientRect(),sx=W/r.width,sy=H/r.height;
+    return e.touches
+      ?{x:(e.touches[0].clientX-r.left)*sx,y:(e.touches[0].clientY-r.top)*sy}
+      :{x:(e.clientX-r.left)*sx,y:(e.clientY-r.top)*sy};
   }
 
   function checkDone(){
-    const data = ctx.getImageData(0,0,W,H).data;
-    let cleared = 0;
-    for(let i=3; i<data.length; i+=4){ if(data[i]<128) cleared++; }
-    const pct = (cleared/totalPixels)*100;
-    if(pct > 55){
+    const d=ctx.getImageData(0,0,W,H).data;
+    let c=0;for(let i=3;i<d.length;i+=4){if(d[i]<64)c++;}
+    if(c/(W*H)>.50){
       clearInterval(checkInterval);
-      // fully reveal
       ctx.clearRect(0,0,W,H);
-      canvas.style.display = "none";
-      document.getElementById("scratch-hint").style.display = "none";
-      document.getElementById("scratch-done").style.display = "block";
-      confetti(100);
+      canvas.style.display="none";
+      document.getElementById("scratch-hint").style.display="none";
+      document.getElementById("scratch-done").style.display="block";
+      confetti(150);setTimeout(()=>confetti(100),1200);
     }
   }
 
-  canvas.addEventListener("mousedown",  e=>{ painting=true; const r=canvas.getBoundingClientRect(); const p=getPos(e,r); scratch(p.x,p.y); });
-  canvas.addEventListener("mousemove",  e=>{ if(!painting) return; const r=canvas.getBoundingClientRect(); const p=getPos(e,r); scratch(p.x,p.y); });
-  canvas.addEventListener("mouseup",    ()=>{ painting=false; });
-  canvas.addEventListener("touchstart", e=>{ e.preventDefault(); painting=true; const r=canvas.getBoundingClientRect(); const p=getPos(e,r); scratch(p.x,p.y); },{passive:false});
-  canvas.addEventListener("touchmove",  e=>{ e.preventDefault(); if(!painting) return; const r=canvas.getBoundingClientRect(); const p=getPos(e,r); scratch(p.x,p.y); },{passive:false});
-  canvas.addEventListener("touchend",   ()=>{ painting=false; });
-
-  checkInterval = setInterval(checkDone, 300);
+  canvas.addEventListener("mousedown",  e=>{painting=true;const p=getPos(e);scratch(p.x,p.y);});
+  canvas.addEventListener("mousemove",  e=>{if(!painting)return;const p=getPos(e);scratch(p.x,p.y);});
+  canvas.addEventListener("mouseup",    ()=>{painting=false;});
+  canvas.addEventListener("mouseleave", ()=>{painting=false;});
+  canvas.addEventListener("touchstart", e=>{e.preventDefault();painting=true;const p=getPos(e);scratch(p.x,p.y);},{passive:false});
+  canvas.addEventListener("touchmove",  e=>{e.preventDefault();if(!painting)return;const p=getPos(e);scratch(p.x,p.y);},{passive:false});
+  canvas.addEventListener("touchend",   ()=>{painting=false;});
+  checkInterval=setInterval(checkDone,400);
 }
 
 // ── ACTIVATE BIRTHDAY ─────────────────────────
@@ -2298,6 +2334,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 // ── LIGHTBOX ──────────────────────────────────
 function openLb(card){const img=card.querySelector("img");if(!img)return;$("lb-img").src=img.src;$("lb").classList.add("on")}
+function openLbSrc(src){$("lb-img").src=src;$("lb").classList.add("on")}
 function closeLb(){$("lb").classList.remove("on")}
 $("lb").addEventListener("click",e=>{if(e.target.id==="lb")closeLb()});
 </script>
