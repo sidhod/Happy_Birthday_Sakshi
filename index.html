@@ -409,20 +409,21 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
 .sakshi-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  grid-auto-rows:200px;
   gap:12px;
+  align-items:start;
 }
 .sg-card{
   border-radius:18px;overflow:hidden;position:relative;cursor:pointer;
   box-shadow:0 5px 20px rgba(0,0,0,.3);
   transition:transform .38s cubic-bezier(.34,1.2,.64,1),box-shadow .38s;
   background:linear-gradient(135deg,rgba(232,99,122,.15),rgba(212,160,87,.1));
+  break-inside:avoid;
 }
 .sg-card:hover{transform:scale(1.04) translateY(-4px);box-shadow:0 16px 44px rgba(232,99,122,.25)}
 .sg-card.sg-tall{grid-row:span 2}
 .sg-card.sg-wide{grid-column:span 2}
-.sg-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
-.sg-card:hover img{transform:scale(1.06)}
+.sg-card img{width:100%;height:auto;display:block;transition:transform .4s;min-height:120px;object-fit:cover}
+.sg-card:hover img{transform:scale(1.04)}
 .sg-card.sg-ph img{display:none}
 .sg-ph-inner{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
@@ -764,29 +765,31 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
   </div>
 </section>
 
-<!-- ══ 7. PHOTO STRIP ══ -->
-<section class="sec dark bday-hidden" id="photos-sec">
-  <div class="sec-in">
-    <p class="sec-lbl" style="color:rgba(245,184,200,.6)">Our Moments</p>
-    <h2 class="sec-title">Beautiful Memories Together 📸</h2>
-    <div class="pgrid">
-      <div class="pc feat" onclick="openLb(this)">
-        <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&q=80" alt="Memory 1">
-        <div class="pc-ov"><span>Our favourite memory ❤</span></div>
+<!-- ══ 7. SCRATCH EMAIL PASSWORD ══ -->
+<section class="sec dark bday-hidden" id="scratch-sec">
+  <div class="sec-in" style="max-width:560px;text-align:center">
+    <p class="sec-lbl" style="color:rgba(245,184,200,.6)">Secret Just For You</p>
+    <h2 class="sec-title">Password of My Favourite Email 💌</h2>
+    <p style="font-family:'Playfair Display',serif;font-style:italic;color:rgba(245,184,200,.6);font-size:.9rem;line-height:1.7;margin-bottom:28px">
+      "I trust you with everything, Sakshi.<br>Scratch to reveal my secret. 💕"
+    </p>
+    <div style="position:relative;display:inline-block;border-radius:20px;overflow:hidden;box-shadow:0 16px 50px rgba(232,99,122,.3)">
+      <!-- hidden password underneath -->
+      <div id="scratch-reveal" style="width:300px;height:120px;background:linear-gradient(135deg,#1c0810,#2d0d1a);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1.5px solid rgba(232,99,122,.3);border-radius:20px">
+        <div style="font-size:1.4rem">🔐</div>
+        <div style="font-family:'Playfair Display',serif;color:var(--gold);font-size:1.3rem;font-weight:700;letter-spacing:2px">Sakshi@1926</div>
+        <div style="font-size:.68rem;color:rgba(245,184,200,.45);letter-spacing:2px;text-transform:uppercase">Your gift 💕</div>
       </div>
-      <div class="pc" onclick="openLb(this)">
-        <img src="https://images.unsplash.com/photo-1529180615058-0a964b13b819?w=600&q=80" alt="Memory 2">
-        <div class="pc-ov"><span>This day you were so beautiful 😍</span></div>
-      </div>
-      <div class="pc" onclick="openLb(this)">
-        <img src="https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=600&q=80" alt="Memory 3">
-        <div class="pc-ov"><span>You light up my world ✨</span></div>
-      </div>
-      <div class="pc" onclick="openLb(this)">
-        <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&q=80" alt="Memory 4">
-        <div class="pc-ov"><span>My everything 🌙</span></div>
-      </div>
+      <!-- scratch canvas on top -->
+      <canvas id="scratch-canvas" width="300" height="120"
+        style="position:absolute;inset:0;border-radius:20px;cursor:crosshair;touch-action:none"></canvas>
     </div>
+    <p id="scratch-hint" style="color:rgba(245,184,200,.4);font-size:.75rem;margin-top:14px;letter-spacing:1px">
+      ✏️ Scratch the card to reveal the password
+    </p>
+    <p id="scratch-done" style="display:none;color:var(--rose);font-size:.82rem;margin-top:10px;font-family:'Playfair Display',serif;font-style:italic">
+      "Now you have a piece of my trust, Sakshi. Keep it safe. 💖"
+    </p>
   </div>
 </section>
 
@@ -1867,6 +1870,77 @@ function buildConstellation(){
   canvas.addEventListener("touchstart", e=>{ e.preventDefault(); onTap(e); }, {passive:false});
 }
 
+// ── SCRATCH CARD ──────────────────────────────
+function buildScratch(){
+  const canvas = document.getElementById("scratch-canvas");
+  if(!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+
+  // draw the scratch coating — rose gold gradient
+  const grad = ctx.createLinearGradient(0,0,W,H);
+  grad.addColorStop(0,"#c0415a");
+  grad.addColorStop(.5,"#d4a057");
+  grad.addColorStop(1,"#c0415a");
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.roundRect(0,0,W,H,16);
+  ctx.fill();
+
+  // scratch text on coating
+  ctx.fillStyle = "rgba(255,255,255,.35)";
+  ctx.font = "bold 13px Lato, sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("✨ SCRATCH HERE ✨", W/2, H/2-6);
+  ctx.font = "11px Lato, sans-serif";
+  ctx.fillStyle = "rgba(255,255,255,.25)";
+  ctx.fillText("Use your finger or mouse", W/2, H/2+14);
+
+  ctx.globalCompositeOperation = "destination-out";
+
+  let painting = false;
+  let totalPixels = W * H;
+  let checkInterval;
+
+  function scratch(x, y, r=22){
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  function getPos(e, rect){
+    if(e.touches){
+      return {x:(e.touches[0].clientX-rect.left)*(W/rect.width), y:(e.touches[0].clientY-rect.top)*(H/rect.height)};
+    }
+    return {x:(e.clientX-rect.left)*(W/rect.width), y:(e.clientY-rect.top)*(H/rect.height)};
+  }
+
+  function checkDone(){
+    const data = ctx.getImageData(0,0,W,H).data;
+    let cleared = 0;
+    for(let i=3; i<data.length; i+=4){ if(data[i]<128) cleared++; }
+    const pct = (cleared/totalPixels)*100;
+    if(pct > 55){
+      clearInterval(checkInterval);
+      // fully reveal
+      ctx.clearRect(0,0,W,H);
+      canvas.style.display = "none";
+      document.getElementById("scratch-hint").style.display = "none";
+      document.getElementById("scratch-done").style.display = "block";
+      confetti(100);
+    }
+  }
+
+  canvas.addEventListener("mousedown",  e=>{ painting=true; const r=canvas.getBoundingClientRect(); const p=getPos(e,r); scratch(p.x,p.y); });
+  canvas.addEventListener("mousemove",  e=>{ if(!painting) return; const r=canvas.getBoundingClientRect(); const p=getPos(e,r); scratch(p.x,p.y); });
+  canvas.addEventListener("mouseup",    ()=>{ painting=false; });
+  canvas.addEventListener("touchstart", e=>{ e.preventDefault(); painting=true; const r=canvas.getBoundingClientRect(); const p=getPos(e,r); scratch(p.x,p.y); },{passive:false});
+  canvas.addEventListener("touchmove",  e=>{ e.preventDefault(); if(!painting) return; const r=canvas.getBoundingClientRect(); const p=getPos(e,r); scratch(p.x,p.y); },{passive:false});
+  canvas.addEventListener("touchend",   ()=>{ painting=false; });
+
+  checkInterval = setInterval(checkDone, 300);
+}
+
 // ── ACTIVATE BIRTHDAY ─────────────────────────
 let bdayOn=false;
 function activateBirthday(){
@@ -1886,7 +1960,7 @@ function activateBirthday(){
     {id:"love-sec",   delay:600},
     {id:"reasons-sec",delay:800},
     {id:"star-sec",   delay:1000},
-    {id:"photos-sec", delay:1200},
+    {id:"scratch-sec", delay:1200},
     {id:"future-sec", delay:1400},
     {id:"tl-sec",     delay:1600},
     {id:"map-sec",    delay:1800},
@@ -1906,6 +1980,7 @@ function activateBirthday(){
   setTimeout(()=>{buildSlideshow();},600);
   setTimeout(()=>{buildReasons();},1000);
   setTimeout(()=>{buildConstellation();},1200);
+  setTimeout(()=>{buildScratch();},1300);
   setTimeout(()=>{buildFuture();},1600);
   setTimeout(()=>{buildMap();},1900);
 
