@@ -405,6 +405,44 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
 @keyframes cardFlip{0%{transform:rotateY(0)}50%{transform:rotateY(90deg)}100%{transform:rotateY(0)}}
 .reason-emoji{font-size:1.4rem;display:block;margin-bottom:6px}
 
+/* sakshi solo gallery */
+.sakshi-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  grid-auto-rows:200px;
+  gap:12px;
+}
+.sg-card{
+  border-radius:18px;overflow:hidden;position:relative;cursor:pointer;
+  box-shadow:0 5px 20px rgba(0,0,0,.3);
+  transition:transform .38s cubic-bezier(.34,1.2,.64,1),box-shadow .38s;
+  background:linear-gradient(135deg,rgba(232,99,122,.15),rgba(212,160,87,.1));
+}
+.sg-card:hover{transform:scale(1.04) translateY(-4px);box-shadow:0 16px 44px rgba(232,99,122,.25)}
+.sg-card.sg-tall{grid-row:span 2}
+.sg-card.sg-wide{grid-column:span 2}
+.sg-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.sg-card:hover img{transform:scale(1.06)}
+.sg-card.sg-ph img{display:none}
+.sg-ph-inner{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:2.5rem;color:rgba(245,184,200,.4);
+}
+.sg-card:not(.sg-ph) .sg-ph-inner{display:none}
+.sg-ov{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(20,5,12,.85) 0%,transparent 50%);
+  opacity:0;transition:opacity .3s;
+  display:flex;align-items:flex-end;padding:14px;
+}
+.sg-card:hover .sg-ov{opacity:1}
+.sg-ov span{color:#fff;font-family:'Playfair Display',serif;font-style:italic;font-size:.87rem}
+
+@media(max-width:580px){
+  .sakshi-grid{grid-template-columns:1fr 1fr;grid-auto-rows:160px}
+  .sg-card.sg-wide{grid-column:span 2}
+}
+
 /* future cards */
 .future-card{
   background:rgba(255,255,255,.05);border:1px solid rgba(212,160,87,.2);
@@ -563,6 +601,75 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
         💡 Replace voice.mp3 with your recorded audio file
       </p>
     </div>
+  </div>
+</section>
+
+<!-- ══ 2b. SAKSHI SOLO GALLERY ══ -->
+<section class="sec dark bday-hidden" id="sakshi-sec">
+  <div class="sec-in">
+    <p class="sec-lbl" style="color:rgba(245,184,200,.6)">Just Her</p>
+    <h2 class="sec-title">My Favourite Person 💖</h2>
+    <p style="text-align:center;color:rgba(245,184,200,.5);font-size:.82rem;margin-bottom:32px;font-family:'Playfair Display',serif;font-style:italic">
+      "Every photo of you is my favourite photo." 📸
+    </p>
+    <div class="sakshi-grid" id="sakshi-grid">
+      <!-- ✏️ Replace sakshi1.jpg … sakshi6.jpg with your actual filenames -->
+      <div class="sg-card" onclick="openLb(this)">
+        <img src="sakshi1.jpeg" alt="Sakshi" onerror="this.parentNode.classList.add('sg-ph')">
+        <div class="sg-ph-inner">📷</div>
+        <div class="sg-ov"><span>Always beautiful 💕</span></div>
+      </div>
+      <div class="sg-card sg-tall" onclick="openLb(this)">
+        <img src="sakshi2.jpeg" alt="Sakshi" onerror="this.parentNode.classList.add('sg-ph')">
+        <div class="sg-ph-inner">🌸</div>
+        <div class="sg-ov"><span>My favourite smile ✨</span></div>
+      </div>
+      <div class="sg-card" onclick="openLb(this)">
+        <img src="sakshi3.jpeg" alt="Sakshi" onerror="this.parentNode.classList.add('sg-ph')">
+        <div class="sg-ph-inner">💖</div>
+        <div class="sg-ov"><span>Stunning, always 😍</span></div>
+      </div>
+      <div class="sg-card sg-wide" onclick="openLb(this)">
+        <img src="sakshi4.jpeg" alt="Sakshi" onerror="this.parentNode.classList.add('sg-ph')">
+        <div class="sg-ph-inner">✨</div>
+        <div class="sg-ov"><span>I kept staring at this one 🥺</span></div>
+      </div>
+      <div class="sg-card" onclick="openLb(this)">
+        <img src="sakshi5.jpeg" alt="Sakshi" onerror="this.parentNode.classList.add('sg-ph')">
+        <div class="sg-ph-inner">🌟</div>
+        <div class="sg-ov"><span>Pure happiness 💕</span></div>
+      </div>
+      <div class="sg-card" onclick="openLb(this)">
+        <img src="sakshi6.jpeg" alt="Sakshi" onerror="this.parentNode.classList.add('sg-ph')">
+        <div class="sg-ph-inner">💝</div>
+        <div class="sg-ov"><span>My whole world 🌙</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 2c. OUR VIDEO ══ -->
+<section class="sec mid bday-hidden" id="video-sec">
+  <div class="sec-in" style="max-width:680px;text-align:center">
+    <p class="sec-lbl" style="color:rgba(245,184,200,.6)">From the Beginning</p>
+    <h2 class="sec-title">Us — The Movie 🎬💖</h2>
+    <p style="font-family:'Playfair Display',serif;font-style:italic;color:rgba(255,255,255,.7);font-size:.92rem;line-height:1.7;margin-bottom:24px">
+      "November 18, 2019 to forever — watch our story unfold. 💕"
+    </p>
+    <div style="position:relative;border-radius:20px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.7);border:1px solid rgba(232,99,122,.2)">
+      <!-- ✏️ Replace ourstory.mp4 with your actual video filename -->
+      <video
+        id="our-video"
+        src="ourstory.mp4"
+        controls
+        playsinline
+        preload="metadata"
+        style="width:100%;display:block;max-height:480px;background:#000"
+      ></video>
+    </div>
+    <p style="font-size:.72rem;color:rgba(245,184,200,.3);margin-top:12px;letter-spacing:1px">
+      💡 Replace ourstory.mp4 with your video file
+    </p>
   </div>
 </section>
 
@@ -1773,7 +1880,9 @@ function activateBirthday(){
   const order=[
     {id:"cake-sec",   delay:0},
     {id:"voice-sec",  delay:200},
-    {id:"slides-sec", delay:400},
+    {id:"sakshi-sec", delay:350},
+    {id:"video-sec",  delay:500},
+    {id:"slides-sec", delay:650},
     {id:"love-sec",   delay:600},
     {id:"reasons-sec",delay:800},
     {id:"star-sec",   delay:1000},
