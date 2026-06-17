@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday 💖</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--rose:#E8637A;--blush:#F5B8C8;--cream:#FFF5F7;--gold:#D4A057;--deep:#3D1A24;--soft:#FAE8EE}
@@ -293,6 +295,130 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
 @keyframes jiggle{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
+/* ── TIMELINE EXTRAS ── */
+.ti-year{font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:3px;opacity:.8}
+.ti-tag{display:inline-block;background:rgba(232,99,122,.15);border:1px solid rgba(232,99,122,.3);border-radius:50px;padding:3px 12px;font-size:.68rem;letter-spacing:1px;color:var(--rose);margin-bottom:6px}
+.ti-dot-star{background:linear-gradient(135deg,var(--gold),#ff9f43)!important;box-shadow:0 0 0 4px #0d0209,0 0 0 6px rgba(212,160,87,.5),0 0 20px rgba(212,160,87,.6)!important}
+.ti-txt em{color:var(--rose);font-style:italic}
+
+/* ── ENVELOPE ── */
+.envelope{
+  width:min(340px,90vw);height:200px;
+  margin:0 auto 24px;position:relative;cursor:pointer;
+  filter:drop-shadow(0 20px 40px rgba(232,99,122,.3));
+  transition:transform .3s;
+}
+.envelope:hover{transform:scale(1.03)}
+.env-body{
+  position:absolute;inset:0;
+  background:linear-gradient(160deg,#2d0d1a,#1c0810);
+  border:1.5px solid rgba(232,99,122,.3);
+  border-radius:8px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.env-flap{
+  position:absolute;top:0;left:0;right:0;height:50%;
+  background:linear-gradient(160deg,#3d1520,#2a0d18);
+  border-bottom:1.5px solid rgba(232,99,122,.2);
+  clip-path:polygon(0 0,100% 0,50% 100%);
+  transform-origin:top center;
+  transition:transform .6s cubic-bezier(.34,1.2,.64,1);
+  z-index:2;
+}
+.envelope.opened .env-flap{transform:rotateX(180deg)}
+.env-seal{
+  font-size:2.5rem;animation:hb 1.4s ease-in-out infinite;
+  position:relative;z-index:3;
+  transition:opacity .3s;
+}
+.envelope.opened .env-seal{opacity:0}
+.env-hint{
+  font-size:.72rem;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(245,184,200,.45);margin-top:10px;
+  transition:opacity .3s;
+}
+.envelope.opened .env-hint{opacity:0}
+
+/* ── LETTER PAPER ── */
+#letter-paper{
+  background:linear-gradient(160deg,#fdf6f0,#fff8f5);
+  border-radius:16px;padding:32px 28px 28px;
+  box-shadow:0 20px 60px rgba(0,0,0,.4),inset 0 0 0 1px rgba(232,99,122,.15);
+  text-align:left;color:#3D1A24;
+  animation:letterSlide .5s cubic-bezier(.22,1,.36,1) both;
+  position:relative;overflow:hidden;
+}
+@keyframes letterSlide{from{opacity:0;transform:translateY(-30px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+#letter-paper::before{
+  content:'';position:absolute;left:60px;top:0;bottom:0;width:1px;
+  background:rgba(232,99,122,.15);
+}
+.letter-top{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(232,99,122,.15)}
+.letter-stamp{font-size:1.8rem;animation:hb 1.4s ease-in-out infinite}
+.letter-from,.letter-to{font-size:.72rem;letter-spacing:1px;color:var(--rose)}
+.letter-date{font-size:.7rem;color:rgba(61,26,36,.5);letter-spacing:1px}
+.letter-body{
+  font-family:'Playfair Display',serif;font-size:.97rem;line-height:1.95;
+  color:#3D1A24;min-height:200px;padding-left:20px;
+}
+.letter-cursor{display:inline-block;width:2px;height:1.1em;background:var(--rose);vertical-align:text-bottom;animation:blink .7s step-end infinite;margin-left:1px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.letter-sign{font-family:'Playfair Display',serif;font-style:italic;font-size:.92rem;color:var(--deep);text-align:right;padding-left:20px;transition:opacity 1s}
+.letter-sign.show{opacity:1!important}
+
+/* location cards */
+.loc-card{
+  background:rgba(255,255,255,.05);border:1px solid rgba(232,99,122,.2);
+  border-radius:18px;padding:18px 12px;text-align:center;
+}
+.loc-card-gold{border-color:rgba(212,160,87,.25)}
+.loc-icon{font-size:2rem;margin-bottom:6px}
+.loc-name{font-family:'Playfair Display',serif;color:#fff;font-size:.95rem;font-weight:700;margin-bottom:3px}
+.loc-state{font-size:.65rem;color:rgba(245,184,200,.45);letter-spacing:.5px;margin-bottom:8px}
+.loc-person{font-size:.78rem;color:var(--rose);font-family:'Playfair Display',serif;font-style:italic}
+
+/* leaflet dark overrides */
+#leaflet-map .leaflet-tile-pane{filter:saturate(0.3) brightness(0.5) hue-rotate(300deg)}
+#leaflet-map .leaflet-control-attribution{background:rgba(0,0,0,.5);color:rgba(255,255,255,.3);font-size:9px}
+#leaflet-map .leaflet-control-zoom a{background:rgba(30,8,16,.9);color:var(--rose);border-color:rgba(232,99,122,.3)}
+#leaflet-map .leaflet-control-zoom a:hover{background:rgba(232,99,122,.2)}
+.custom-pin{text-align:center;font-size:1.6rem;filter:drop-shadow(0 4px 12px rgba(232,99,122,.8))}
+.custom-pin-gold{filter:drop-shadow(0 4px 12px rgba(212,160,87,.8))}
+
+/* slideshow */
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease}
+.slide.active{opacity:1}
+.slide img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* reasons grid cards */
+.reason-card{
+  background:rgba(255,255,255,.05);border:1px solid rgba(232,99,122,.2);
+  border-radius:16px;padding:16px 12px;text-align:center;cursor:pointer;
+  transition:transform .3s,background .3s;font-size:.78rem;
+  color:rgba(245,184,200,.85);line-height:1.5;
+  min-height:90px;display:flex;align-items:center;justify-content:center;
+  perspective:600px;
+}
+.reason-card:hover{transform:scale(1.05);background:rgba(232,99,122,.12)}
+.reason-card.flipped{background:rgba(232,99,122,.18);border-color:rgba(232,99,122,.5);animation:cardFlip .4s ease}
+@keyframes cardFlip{0%{transform:rotateY(0)}50%{transform:rotateY(90deg)}100%{transform:rotateY(0)}}
+.reason-emoji{font-size:1.4rem;display:block;margin-bottom:6px}
+
+/* future cards */
+.future-card{
+  background:rgba(255,255,255,.05);border:1px solid rgba(212,160,87,.2);
+  border-radius:20px;padding:22px 16px;text-align:center;
+  transition:transform .3s;
+}
+.future-card:hover{transform:translateY(-4px)}
+.future-card .f-emoji{font-size:2rem;display:block;margin-bottom:10px}
+.future-card .f-title{font-family:'Playfair Display',serif;color:#fff;font-size:1rem;margin-bottom:6px}
+.future-card .f-desc{font-size:.78rem;color:rgba(245,184,200,.55);line-height:1.5}
+
+/* cake */
+#cake-wrap{cursor:pointer}
+
 /* ── MOBILE FIRST ── */
 @media(max-width:600px){
   /* quiz modal */
@@ -404,11 +530,138 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
   <div class="scroll-cue"><span>↓</span><span>Scroll to explore</span></div>
 </section>
 
-<!-- PHOTOS -->
+<!-- ══ 1. BIRTHDAY CAKE ══ -->
+<section class="sec dark bday-hidden" id="cake-sec">
+  <div class="sec-in" style="max-width:500px;text-align:center">
+    <p class="sec-lbl" style="color:rgba(245,184,200,.6)">Make a Wish</p>
+    <h2 class="sec-title">Happy Birthday Sakshi! 🎂</h2>
+    <div id="cake-wrap">
+      <canvas id="cake-canvas" width="300" height="320" style="max-width:100%;display:block;margin:0 auto"></canvas>
+      <p id="cake-hint" style="color:rgba(245,184,200,.55);font-size:.8rem;letter-spacing:2px;margin-top:12px;text-transform:uppercase">Tap the cake to blow out the candles! 🕯️</p>
+      <p id="cake-wish" style="display:none;font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:#fff;margin-top:16px;line-height:1.6">
+        🌟 May all your wishes come true, Sakshi.<br>You deserve every happiness in this world. 💖
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 2. VOICE MESSAGE ══ -->
+<section class="sec mid bday-hidden" id="voice-sec">
+  <div class="sec-in" style="max-width:520px;text-align:center">
+    <p class="sec-lbl" style="color:rgba(245,184,200,.6)">Just For You</p>
+    <h2 class="sec-title">A Message From My Heart 🎤</h2>
+    <div style="background:rgba(255,255,255,.05);border:1px solid rgba(232,99,122,.25);border-radius:24px;padding:32px 24px">
+      <div style="font-size:3rem;margin-bottom:16px;animation:hb 1.5s ease-in-out infinite">🎙️</div>
+      <p style="font-family:'Playfair Display',serif;font-style:italic;color:rgba(255,255,255,.8);line-height:1.7;margin-bottom:24px;font-size:.95rem">
+        "Sakshi, I recorded something just for you.<br>Press play — this is my voice, just for your ears. 💕"
+      </p>
+      <!-- 🔊 Replace 'voice.mp3' with your actual audio file path -->
+      <audio id="voice-player" controls style="width:100%;border-radius:50px;outline:none;accent-color:var(--rose)" preload="none">
+        <source src="voice.mp3" type="audio/mpeg">
+      </audio>
+      <p style="font-size:.72rem;color:rgba(245,184,200,.35);margin-top:12px;letter-spacing:1px">
+        💡 Replace voice.mp3 with your recorded audio file
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 3. VIDEO SLIDESHOW ══ -->
+<section class="sec dark bday-hidden" id="slides-sec">
+  <div class="sec-in" style="max-width:640px;text-align:center">
+    <p class="sec-lbl" style="color:rgba(245,184,200,.6)">Our Story</p>
+    <h2 class="sec-title">Our Movie 🎬</h2>
+    <div id="slideshow" style="position:relative;border-radius:24px;overflow:hidden;aspect-ratio:16/9;background:#0d0209;box-shadow:0 20px 60px rgba(0,0,0,.6)">
+      <div class="slide active" data-caption="The day everything changed ❤️">
+        <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&q=80" alt="Slide 1">
+      </div>
+      <div class="slide" data-caption="You make every moment magical ✨">
+        <img src="https://images.unsplash.com/photo-1529180615058-0a964b13b819?w=800&q=80" alt="Slide 2">
+      </div>
+      <div class="slide" data-caption="My favourite person in the whole world 💕">
+        <img src="https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=800&q=80" alt="Slide 3">
+      </div>
+      <div class="slide" data-caption="I kept staring at this photo for an hour 😍">
+        <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&q=80" alt="Slide 4">
+      </div>
+      <div class="slide" data-caption="Byko — my everything, forever 💖">
+        <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&q=80" alt="Slide 5">
+      </div>
+      <div id="slide-caption" style="position:absolute;bottom:0;left:0;right:0;padding:20px 20px 16px;background:linear-gradient(to top,rgba(0,0,0,.85),transparent);font-family:'Playfair Display',serif;font-style:italic;color:#fff;font-size:1rem;text-align:left"></div>
+      <div id="slide-dots" style="position:absolute;top:14px;right:14px;display:flex;gap:6px"></div>
+    </div>
+    <p style="font-size:.72rem;color:rgba(245,184,200,.35);margin-top:12px;letter-spacing:1px">
+      💡 Replace slide img src with your real photos
+    </p>
+  </div>
+</section>
+
+<!-- ══ 4. LOVE LETTER ══ -->
+<section class="sec mid bday-hidden" id="love-sec">
+  <div class="sec-in" style="max-width:640px;text-align:center">
+    <p class="sec-lbl" style="color:rgba(245,184,200,.6)">For Sakshi Only</p>
+    <h2 class="sec-title">A Letter From My Heart 💌</h2>
+
+    <!-- Envelope -->
+    <div id="envelope-wrap" onclick="openEnvelope()">
+      <div id="envelope" class="envelope">
+        <div class="env-flap" id="env-flap"></div>
+        <div class="env-body">
+          <div class="env-seal" id="env-seal">💖</div>
+          <p class="env-hint">Tap to open your letter 💌</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Letter (hidden until opened) -->
+    <div id="letter-paper" style="display:none">
+      <div class="letter-top">
+        <div class="letter-stamp">💖</div>
+        <div class="letter-from">From: Your Sai 🌸</div>
+        <div class="letter-to">To: My Sakshi 💕</div>
+        <div class="letter-date">June 19, 2026</div>
+      </div>
+      <div class="letter-body" id="letter-body"></div>
+      <div class="letter-sign" id="letter-sign" style="opacity:0">
+        <br>— Forever yours, always yours. 🌸<br>
+        <span style="font-size:.75rem;color:var(--rose);letter-spacing:2px">18 November 2019 → ∞</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 5. REASONS I LOVE YOU ══ -->
+<section class="sec dark bday-hidden" id="reasons-sec">
+  <div class="sec-in">
+    <p class="sec-lbl" style="color:rgba(245,184,200,.6)">50 Reasons</p>
+    <h2 class="sec-title">Why I Love You, Sakshi 💖</h2>
+    <div id="reasons-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px"></div>
+  </div>
+</section>
+
+<!-- ══ 6. CONSTELLATION ══ -->
+<section class="sec mid bday-hidden" id="star-sec">
+  <div class="sec-in" style="max-width:680px;text-align:center">
+    <p class="sec-lbl" style="color:rgba(245,184,200,.6)">Written in the Stars</p>
+    <h2 class="sec-title">Your Constellation, Sakshi ✨</h2>
+    <p style="color:rgba(245,184,200,.5);font-size:.82rem;margin-bottom:20px;letter-spacing:1px">
+      ✨ Tap any glowing star to reveal a secret message 🌟
+    </p>
+    <div style="position:relative;border-radius:24px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.7)">
+      <canvas id="star-canvas" width="640" height="420" style="width:100%;display:block;cursor:pointer"></canvas>
+      <!-- overlay message box -->
+      <div id="star-popup" style="display:none;position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(10,2,8,.92);border:1px solid rgba(232,99,122,.45);border-radius:16px;padding:12px 20px;max-width:90%;width:max-content;font-family:'Playfair Display',serif;font-style:italic;color:#fff;font-size:.88rem;text-align:center;line-height:1.5;backdrop-filter:blur(8px);z-index:5;animation:popIn .3s cubic-bezier(.34,1.56,.64,1)">
+        <span id="star-popup-text"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 7. PHOTO STRIP ══ -->
 <section class="sec dark bday-hidden" id="photos-sec">
   <div class="sec-in">
     <p class="sec-lbl" style="color:rgba(245,184,200,.6)">Our Moments</p>
-    <h2 class="sec-title">Beautiful Memories Together</h2>
+    <h2 class="sec-title">Beautiful Memories Together 📸</h2>
     <div class="pgrid">
       <div class="pc feat" onclick="openLb(this)">
         <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&q=80" alt="Memory 1">
@@ -416,7 +669,7 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
       </div>
       <div class="pc" onclick="openLb(this)">
         <img src="https://images.unsplash.com/photo-1529180615058-0a964b13b819?w=600&q=80" alt="Memory 2">
-        <div class="pc-ov"><span>Always smiling 💕</span></div>
+        <div class="pc-ov"><span>This day you were so beautiful 😍</span></div>
       </div>
       <div class="pc" onclick="openLb(this)">
         <img src="https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=600&q=80" alt="Memory 3">
@@ -430,42 +683,143 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
   </div>
 </section>
 
-<!-- LOVE LETTER -->
-<section class="sec mid bday-hidden" id="love-sec">
-  <div class="sec-in" style="max-width:680px">
-    <p class="sec-lbl" style="color:rgba(245,184,200,.6)">For You</p>
-    <h2 class="sec-title">A Letter From My Heart</h2>
-    <div class="love-card">
-      <p>"Every morning I wake up grateful that the universe brought you into my life.
-      Your smile is my favourite thing in the world, your laugh is the best sound I've ever heard,
-      and loving you is the greatest adventure I've ever been on.<br><br>
-      Happy Birthday, my love. This day is yours — and so is my heart, today and every day. 💖"
-      <cite>— Forever yours 🌸</cite></p>
-    </div>
-    <div class="hrow"><span>❤️</span><span>💕</span><span>💖</span></div>
+<!-- ══ 8. OUR FUTURE ══ -->
+<section class="sec mid bday-hidden" id="future-sec">
+  <div class="sec-in" style="max-width:700px">
+    <p class="sec-lbl" style="color:rgba(245,184,200,.6)">Us, Forever</p>
+    <h2 class="sec-title">Our Future Together 💫</h2>
+    <div id="future-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px"></div>
   </div>
 </section>
 
-<!-- TIMELINE -->
+<!-- ══ 9. TIMELINE ══ -->
 <section class="sec dark bday-hidden" id="tl-sec">
-  <div class="sec-in" style="max-width:640px">
-    <p class="sec-lbl" style="color:rgba(245,184,200,.6)">Us</p>
-    <h2 class="sec-title">Our Story</h2>
+  <div class="sec-in" style="max-width:680px">
+    <p class="sec-lbl" style="color:rgba(245,184,200,.6)">6 Years & Counting</p>
+    <h2 class="sec-title">Our Story 📖</h2>
+    <p style="text-align:center;color:rgba(245,184,200,.5);font-size:.8rem;letter-spacing:2px;margin-bottom:40px;text-transform:uppercase">18 November 2019 — Forever</p>
     <div class="tl">
-      <div class="ti"><div class="ti-dot"></div><div class="ti-date">The beginning</div><div class="ti-txt">🌟 The day our story started — and everything changed forever.</div><div class="ti-img"><img src="https://images.unsplash.com/photo-1529180615058-0a964b13b819?w=500&q=80" alt=""></div></div>
-      <div class="ti"><div class="ti-dot"></div><div class="ti-date">The first adventure</div><div class="ti-txt">🗺️ Exploring together, laughing, making memories we'll never forget.</div><div class="ti-img"><img src="https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=500&q=80" alt=""></div></div>
-      <div class="ti"><div class="ti-dot"></div><div class="ti-date">Every quiet moment</div><div class="ti-txt">☕ The simple days that felt like magic because you were there.</div><div class="ti-img"><img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500&q=80" alt=""></div></div>
-      <div class="ti"><div class="ti-dot"></div><div class="ti-date">June 19, 2026 🎂</div><div class="ti-txt">💖 Your birthday. A new chapter. Here's to forever, my love. 💕</div><div class="ti-img"><img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500&q=80" alt=""></div></div>
+
+      <div class="ti">
+        <div class="ti-dot ti-dot-star"></div>
+        <div class="ti-year">18 November 2019</div>
+        <div class="ti-tag">✨ Day One</div>
+        <div class="ti-date">The Day It All Began</div>
+        <div class="ti-txt">November 18, 2019. The day we officially became <em>us</em>. I don't know if you know how nervous I was. How much I wanted it to be perfect. And it was — because you said yes. You chose me. And that changed everything, Sakshi. Every single thing.</div>
+        <div class="ti-img"><img src="https://images.unsplash.com/photo-1529180615058-0a964b13b819?w=500&q=80" alt="Day One"></div>
+      </div>
+
+      <div class="ti">
+        <div class="ti-dot"></div>
+        <div class="ti-year">2019 — 2020</div>
+        <div class="ti-tag">💬 The Beginning</div>
+        <div class="ti-date">Late Night Calls & First Everything</div>
+        <div class="ti-txt">Those early days when every call felt electric. When we'd talk for hours about everything and nothing. When I started calling you <em>Byko</em> and you called me <em>Navra</em> back — I thought, this is our own little language. No one else gets it. Just us. When every good morning text made my whole day. We were figuring each other out, and I loved every second of it.</div>
+        <div class="ti-img"><img src="https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=500&q=80" alt="Beginning"></div>
+      </div>
+
+      <div class="ti">
+        <div class="ti-dot"></div>
+        <div class="ti-year">Somewhere in 2020</div>
+        <div class="ti-tag">❤️ That Moment</div>
+        <div class="ti-date">You Said "I Love You" First</div>
+        <div class="ti-txt">You were braver than me, Sakshi. You always are. You said it first, and my heart just — stopped for a second. Then it started beating faster than it ever had. I replayed those words a hundred times that night. I still do sometimes. <em>You loved me first.</em> That's one of my favourite facts about us.</div>
+        <div class="ti-img"><img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500&q=80" alt="I love you"></div>
+      </div>
+
+      <div class="ti">
+        <div class="ti-dot"></div>
+        <div class="ti-year">All The Years</div>
+        <div class="ti-tag">🌊 Through Everything</div>
+        <div class="ti-date">The Hard Days & The Beautiful Ones</div>
+        <div class="ti-txt">We've had our fights. Our silences. Our misunderstandings. But you always say sorry first, even when it wasn't your fault. You always came back. And every single time you did, I fell for you a little more. The hard days taught me — you are worth every single one of them.</div>
+        <div class="ti-img"><img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500&q=80" alt="Through everything"></div>
+      </div>
+
+      <div class="ti">
+        <div class="ti-dot"></div>
+        <div class="ti-year">5+ Years Later</div>
+        <div class="ti-tag">🎵 Still Us</div>
+        <div class="ti-date">Sting, Byko & Teri Aankhon Mein</div>
+        <div class="ti-txt">After 6 years, you still call me Byko. I still dedicate Teri Aankhon Mein to you. You still drink Sting like it's a personality. And I still catch myself thinking — how did I get this lucky? Some things don't change. And I never want them to.</div>
+        <div class="ti-img"><img src="https://images.unsplash.com/photo-1529180615058-0a964b13b819?w=500&q=80" alt="Still us"></div>
+      </div>
+
+      <div class="ti">
+        <div class="ti-dot ti-dot-star"></div>
+        <div class="ti-year">19 June 2026</div>
+        <div class="ti-tag">🎂 Today</div>
+        <div class="ti-date">Your Birthday — A New Chapter</div>
+        <div class="ti-txt">Today is yours, Sakshi. Every candle, every wish, every moment. You have been my person for 6 years, 7 months, and 1 day. And I plan to count every single day from here. Happy Birthday, my love. Here's to forever. 💖</div>
+        <div class="ti-img"><img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500&q=80" alt="Birthday"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ MAP — LONG DISTANCE LOVE ══ -->
+<section class="sec dark bday-hidden" id="map-sec">
+  <div class="sec-in" style="max-width:720px;text-align:center">
+    <p class="sec-lbl" style="color:rgba(245,184,200,.6)">Across The Distance</p>
+    <h2 class="sec-title">Two Hearts, Two Cities 💕</h2>
+    <p style="color:rgba(245,184,200,.55);font-size:.88rem;line-height:1.7;margin-bottom:28px;font-family:'Playfair Display',serif;font-style:italic">
+      "The distance means nothing when someone means everything."
+    </p>
+
+    <!-- location cards -->
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-bottom:20px">
+      <div class="loc-card">
+        <div class="loc-icon">🏙️</div>
+        <div class="loc-name">Panvel</div>
+        <div class="loc-state">Navi Mumbai, Maharashtra</div>
+        <div class="loc-person">Sakshi 💕</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:.65rem;color:rgba(245,184,200,.4);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">distance</div>
+        <div style="font-family:'Playfair Display',serif;color:var(--gold);font-size:1.3rem;font-weight:700">~120 km</div>
+        <div style="font-size:1.4rem;margin:6px 0">💖</div>
+        <div style="font-size:.62rem;color:rgba(245,184,200,.35)">0 km apart<br>in heart</div>
+      </div>
+      <div class="loc-card loc-card-gold">
+        <div class="loc-icon">🏔️</div>
+        <div class="loc-name">Bholawade, Bhor</div>
+        <div class="loc-state">Pune, Maharashtra</div>
+        <div class="loc-person" style="color:var(--gold)">Sai 🌸</div>
+      </div>
+    </div>
+
+    <!-- REAL MAP via Leaflet -->
+    <div id="leaflet-map" style="height:380px;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6);border:1px solid rgba(232,99,122,.2);position:relative;z-index:3"></div>
+
+    <!-- quote -->
+    <div style="margin-top:22px;background:rgba(232,99,122,.06);border:1px solid rgba(232,99,122,.15);border-radius:16px;padding:20px 18px">
+      <p style="font-family:'Playfair Display',serif;font-style:italic;color:rgba(255,255,255,.82);line-height:1.8;font-size:.92rem">
+        "120 kilometres between us. But every morning text, every late night call, every <em>Navra</em> you say — closes that distance completely.<br>One day, Sakshi. One day there will be no distance at all. 💖"
+      </p>
     </div>
   </div>
 </section>
 
 <footer class="foot dark bday-hidden" id="foot">
   <span class="foot-heart">💖</span>
-  <p>Made with every bit of love — just for you.</p>
+  <p>Made with every bit of love — just for you, Sakshi. Happy Birthday. 🎂✨</p>
 </footer>
 
 <button id="music-btn">🎵</button>
+<button id="test-skip-btn" onclick="testSkip()" style="position:fixed;bottom:24px;left:24px;z-index:9999;background:rgba(20,5,12,.9);border:1.5px dashed rgba(232,99,122,.5);border-radius:50px;padding:10px 20px;font-size:.75rem;font-family:Lato,sans-serif;color:var(--rose);cursor:pointer;letter-spacing:1px;backdrop-filter:blur(8px)">🎂 Test Mode</button>
+
+<!-- TEST MODAL -->
+<div id="test-modal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.85);align-items:center;justify-content:center">
+  <div style="background:linear-gradient(160deg,#1c0810,#3a1520);border:1.5px solid rgba(232,99,122,.4);border-radius:24px;padding:36px 28px;width:min(320px,90vw);display:flex;flex-direction:column;align-items:center;gap:14px;box-shadow:0 20px 60px rgba(0,0,0,.8)">
+    <div style="font-size:2rem">🔐</div>
+    <p style="font-family:'Playfair Display',serif;color:#fff;font-size:1rem;text-align:center;margin:0">Enter test password</p>
+    <input id="test-pw-input" type="password" placeholder="Password..." autocomplete="off" style="width:100%;background:rgba(255,255,255,.08);border:1.5px solid rgba(232,99,122,.4);border-radius:50px;padding:12px 20px;color:#fff;font-size:.95rem;outline:none;text-align:center;letter-spacing:2px"/>
+    <button onclick="submitTestPw()" style="width:100%;background:linear-gradient(135deg,#E8637A,#c0415a);border:none;border-radius:50px;padding:12px;color:#fff;font-size:.9rem;font-family:Lato,sans-serif;font-weight:700;cursor:pointer;letter-spacing:1px">Unlock 🎉</button>
+    <button onclick="closeTestModal()" style="background:transparent;border:none;color:rgba(245,184,200,.4);font-size:.8rem;cursor:pointer;font-family:Lato,sans-serif;letter-spacing:1px">Cancel</button>
+    <p id="test-pw-err" style="color:#ff7a8a;font-size:.78rem;min-height:16px;text-align:center;margin:0"></p>
+  </div>
+</div>
 
 <div id="lb">
   <button class="lb-x" onclick="closeLb()">✕</button>
@@ -751,10 +1105,35 @@ function playSong(){
   try{
     if(actx){actx.close();actx=null;}
     actx=new(window.AudioContext||window.webkitAudioContext)();
-    const N=[[261.63,.30],[261.63,.10],[293.66,.40],[261.63,.40],[349.23,.40],[329.63,.88],[261.63,.30],[261.63,.10],[293.66,.40],[261.63,.40],[392.00,.40],[349.23,.88],[261.63,.30],[261.63,.10],[523.25,.40],[440.00,.40],[349.23,.40],[329.63,.40],[293.66,.88],[466.16,.30],[466.16,.10],[440.00,.40],[349.23,.40],[392.00,.40],[349.23,.95]];
-    const mg=actx.createGain();mg.gain.value=0.3;mg.connect(actx.destination);
-    let t=actx.currentTime+0.08,total=0;
-    N.forEach(([f,d])=>{const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(mg);o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(1,t+.03);g.gain.linearRampToValueAtTime(0,t+d-.03);o.start(t);o.stop(t+d);t+=d;total+=d;});
+    // Teri Aankhon Mein inspired melody — romantic & emotional
+    const N=[
+      [392.00,.40],[440.00,.40],[493.88,.40],[523.25,.80],
+      [493.88,.40],[440.00,.40],[392.00,.80],
+      [349.23,.40],[392.00,.40],[440.00,.40],[493.88,.80],
+      [440.00,.40],[392.00,.40],[349.23,1.00],
+      [392.00,.40],[440.00,.40],[493.88,.40],[587.33,.80],
+      [554.37,.40],[493.88,.40],[440.00,.80],
+      [392.00,.40],[349.23,.40],[329.63,.40],[293.66,1.20],
+      [349.23,.40],[392.00,.40],[440.00,.40],[493.88,.80],
+      [523.25,.40],[493.88,.40],[440.00,.40],[392.00,1.40],
+    ];
+    const mg=actx.createGain();mg.gain.value=0.22;mg.connect(actx.destination);
+    // add reverb-like effect with delay
+    const delay=actx.createDelay(.3);const delGain=actx.createGain();
+    delGain.gain.value=0.18;delay.connect(delGain);delGain.connect(actx.destination);
+    let t=actx.currentTime+0.1,total=0;
+    N.forEach(([f,d])=>{
+      ["sine","triangle"].forEach((type,ti)=>{
+        const o=actx.createOscillator(),g=actx.createGain();
+        o.connect(g);g.connect(mg);if(ti===1)g.connect(delay);
+        o.type=type;o.frequency.value=ti===1?f/2:f;
+        g.gain.setValueAtTime(0,t);
+        g.gain.linearRampToValueAtTime(ti===0?.8:.2,t+.05);
+        g.gain.exponentialRampToValueAtTime(.001,t+d-.02);
+        o.start(t);o.stop(t+d);
+      });
+      t+=d;total+=d;
+    });
     musicOn=true;$("music-btn").textContent="🔊";
     setTimeout(()=>{musicOn=false;$("music-btn").textContent="🎵";},total*1000+300);
   }catch(e){console.warn(e);}
@@ -779,6 +1158,608 @@ function startFW(){
   const draw=()=>{x.fillStyle="rgba(13,2,9,.13)";x.fillRect(0,0,W,H);for(let i=pts.length-1;i>=0;i--){const p=pts[i];p.x+=p.vx;p.y+=p.vy;p.vy+=.06;p.vx*=.983;p.vy*=.983;p.life-=p.dec;if(p.life<=0){pts.splice(i,1);continue;}x.save();x.globalAlpha=p.life;x.fillStyle=p.col;x.shadowBlur=8;x.shadowColor=p.col;x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fill();x.restore();}requestAnimationFrame(draw)};draw();
 }
 
+// ── REASONS I LOVE YOU ────────────────────────
+const REASONS=[
+  ["💖","Your smile — it makes everything okay"],
+  ["😂","The way you laugh when something is really funny"],
+  ["🌸","You make ordinary days feel special"],
+  ["🥺","Your eyes when you're being honest"],
+  ["✨","How you care about the people around you"],
+  ["💪","You're stronger than you think"],
+  ["🌙","Late night conversations that go on forever"],
+  ["🤫","The way you keep secrets — I trust you completely"],
+  ["🎯","You're honest, even when it's hard"],
+  ["💌","Good morning texts that start my day right"],
+  ["🌈","How you find joy in small things"],
+  ["🤗","The comfort I feel just talking to you"],
+  ["📸","Every photo of you is my favourite"],
+  ["💭","The random thoughts you share at midnight"],
+  ["🌟","The way you handle difficult things with grace"],
+  ["🎉","Your excitement when something good happens"],
+  ["🌺","You feel like home"],
+  ["🦋","The butterflies — still there, every time"],
+  ["💫","Your dreams — I want to see them all come true"],
+  ["🔥","How passionate you are about things you love"],
+  ["🧁","You deserve every good thing in this world"],
+  ["🌍","I'd choose you in every lifetime"],
+  ["⭐","You are more than enough, always"],
+  ["🎀","The little things you do without even noticing"],
+  ["🌊","Your voice — it calms me down"],
+  ["🏆","You push me to be better"],
+  ["🔮","I knew from the start you were different"],
+  ["💞","You love with your whole heart"],
+  ["🌻","My absolute favourite person on this planet"],
+  ["🎊","Every moment is better when you're in it"],
+  ["😤","Even your stubborn side — I love it"],
+  ["⏰","Your timing — you always say the right thing"],
+  ["🛏️","The lazy calls where we just exist together"],
+  ["🎭","Your expressions when you're telling a story"],
+  ["💕","The way you make everyone around you feel loved"],
+  ["🌠","You are my wish come true"],
+  ["🎵","The songs that remind me of you"],
+  ["📞","Every call that goes longer than planned"],
+  ["💍","One day — every plan I make includes you"],
+  ["🎂","You deserve to be celebrated every single day"],
+  ["🌙","How peaceful I feel just knowing you're there"],
+  ["🔋","You give me energy just by existing"],
+  ["🌸","Your kindness — it's rare and real"],
+  ["🤣","The jokes only we understand"],
+  ["💬","Conversations that feel like coming home"],
+  ["🎯","Your focus when you set your mind to something"],
+  ["🌏","My world is better with you in it"],
+  ["🫶","The way you show up — always"],
+  ["🎂","Happy Birthday — you deserve the whole world"],
+  ["❤️","I love you. More than I'll ever be able to say."],
+];
+
+function buildReasons(){
+  const grid=$("reasons-grid");if(!grid)return;
+  REASONS.forEach((r,i)=>{
+    const card=document.createElement("div");
+    card.className="reason-card";
+    card.innerHTML=`<span class="reason-emoji">${r[0]}</span>${r[1]}`;
+    card.style.animationDelay=i*.04+"s";
+    card.onclick=()=>{card.classList.toggle("flipped");};
+    grid.appendChild(card);
+  });
+}
+
+// ── DISTANCE MAP — LEAFLET ────────────────────
+function buildMap(){
+  if(document.getElementById("leaflet-map")._leaflet_id) return; // already init
+  
+  // coordinates
+  const PANVEL    = [18.9894, 73.1175]; // Sakshi
+  const BHOLAWADE = [18.1500, 73.8200]; // Sai
+
+  // center between both
+  const centerLat = (PANVEL[0]+BHOLAWADE[0])/2;
+  const centerLng = (PANVEL[1]+BHOLAWADE[1])/2;
+
+  const map = L.map("leaflet-map",{
+    center:[centerLat, centerLng],
+    zoom:9,
+    zoomControl:true,
+    scrollWheelZoom:false,
+    attributionControl:true,
+  });
+
+  // dark romantic tile layer
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+    attribution:'© OpenStreetMap',
+    maxZoom:18,
+  }).addTo(map);
+
+  // custom pink pin icon
+  function makeIcon(emoji, cls="custom-pin"){
+    return L.divIcon({
+      className:"",
+      html:`<div class="${cls}" style="font-size:2rem;text-shadow:0 0 12px rgba(232,99,122,.9)">${emoji}</div>`,
+      iconSize:[40,40],
+      iconAnchor:[20,40],
+      popupAnchor:[0,-40],
+    });
+  }
+
+  // Sakshi marker — Panvel
+  L.marker(PANVEL, {icon: makeIcon("💕")})
+    .addTo(map)
+    .bindPopup(`
+      <div style="text-align:center;font-family:'Playfair Display',serif;padding:6px 4px">
+        <div style="font-size:1.4rem">💕</div>
+        <b style="color:#E8637A;font-size:1rem">Sakshi</b><br>
+        <span style="font-size:.78rem;color:#666">Panvel, Navi Mumbai</span><br>
+        <span style="font-size:.72rem;color:#E8637A;font-style:italic">My heart lives here</span>
+      </div>
+    `, {maxWidth:180})
+    .openPopup();
+
+  // Sai marker — Bholawade Bhor
+  L.marker(BHOLAWADE, {icon: makeIcon("🌸","custom-pin custom-pin-gold")})
+    .addTo(map)
+    .bindPopup(`
+      <div style="text-align:center;font-family:'Playfair Display',serif;padding:6px 4px">
+        <div style="font-size:1.4rem">🌸</div>
+        <b style="color:#D4A057;font-size:1rem">Sai</b><br>
+        <span style="font-size:.78rem;color:#666">Bholawade, Bhor, Pune</span><br>
+        <span style="font-size:.72rem;color:#D4A057;font-style:italic">Always missing you</span>
+      </div>
+    `, {maxWidth:180});
+
+  // animated dashed line between them
+  const latlngs = [PANVEL, BHOLAWADE];
+  
+  // glow effect — draw thick faint line first
+  L.polyline(latlngs,{
+    color:"rgba(232,99,122,0.15)",
+    weight:12,
+    dashArray:null,
+  }).addTo(map);
+
+  // main dashed line
+  const line = L.polyline(latlngs,{
+    color:"#E8637A",
+    weight:2.5,
+    dashArray:"10, 8",
+    dashOffset:"0",
+    opacity:0.85,
+  }).addTo(map);
+
+  // animate dash
+  let offset = 0;
+  setInterval(()=>{
+    offset = (offset + 1) % 18;
+    line.setStyle({dashOffset: String(-offset)});
+  }, 60);
+
+  // midpoint heart label
+  const midLat = (PANVEL[0]+BHOLAWADE[0])/2;
+  const midLng = (PANVEL[1]+BHOLAWADE[1])/2;
+  L.marker([midLat, midLng], {
+    icon: L.divIcon({
+      className:"",
+      html:`<div style="font-size:1.5rem;animation:hb 1.5s ease-in-out infinite;filter:drop-shadow(0 2px 8px rgba(232,99,122,.8))">💖</div>`,
+      iconSize:[30,30],
+      iconAnchor:[15,15],
+    })
+  }).addTo(map);
+
+  // distance label on line
+  L.marker([midLat+0.08, midLng+0.15], {
+    icon: L.divIcon({
+      className:"",
+      html:`<div style="background:rgba(20,5,12,.85);border:1px solid rgba(232,99,122,.4);border-radius:50px;padding:4px 12px;font-size:.72rem;color:#fff;white-space:nowrap;font-family:Lato,sans-serif;letter-spacing:1px">~120 km apart</div>`,
+      iconSize:[120,28],
+      iconAnchor:[60,14],
+    })
+  }).addTo(map);
+
+  // fit bounds with padding
+  map.fitBounds([PANVEL, BHOLAWADE], {padding:[50,50]});
+}
+
+// ── OUR FUTURE ────────────────────────────────
+const FUTURES=[
+  {emoji:"✈️",title:"Travel Together",desc:"Manali, Goa, maybe even abroad — every destination with you"},
+  {emoji:"🎬",title:"Movie Marathons",desc:"Avengers all-nighter, you crying, me pretending I'm not 😂"},
+  {emoji:"🏡",title:"Our Own Space",desc:"A place that's ours — cozy, warm, full of us"},
+  {emoji:"🌙",title:"Midnight Drives",desc:"Windows down, our song playing, nowhere to be"},
+  {emoji:"🍽️",title:"Cook Together",desc:"Probably mess up the kitchen but laugh the whole time"},
+  {emoji:"💍",title:"Forever Plans",desc:"One day, Sakshi. Every plan I make includes you. 💖"},
+];
+
+function buildFuture(){
+  const grid=$("future-grid");if(!grid)return;
+  FUTURES.forEach(f=>{
+    const card=document.createElement("div");
+    card.className="future-card";
+    card.innerHTML=`<span class="f-emoji">${f.emoji}</span><div class="f-title">${f.title}</div><div class="f-desc">${f.desc}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+// ── LOVE LETTER — ENVELOPE + TYPEWRITER ──────
+const LETTER_TEXT = `Dear Sakshi,
+
+November 18, 2019. That's the day you said yes to us. I was nervous. You probably knew. But you smiled anyway, and I thought — this girl is going to be everything.
+
+And you were. You are.
+
+I called you Byko — and you called me Navra. Only you get to call me that. And honestly, I never want that to change. You said "I love you" first, because you've always been braver than me. You say sorry first, even when it's not your fault — and somehow that makes me feel more loved, not less.
+
+You drink Sting at midnight. You cried during Avengers Endgame and then looked away so I wouldn't notice. You take forever to get ready. You hum songs without realising it. You text me before you sleep, every single night.
+
+Six years, Sakshi. Six years of figuring each other out, of fights and silences and coming back every single time. And I would choose every single one of those days again. Every difficult one. Every beautiful one.
+
+My biggest fear is not heights or failure. My biggest fear is a life without you in it.
+
+You are the reason Teri Aankhon Mein is our song. You are the reason November 18 is my favourite date. You are the reason I believe in forever.
+
+Today is your birthday. And I just want you to know — there is no one on this planet who deserves to be celebrated more than you do.
+
+Happy Birthday, Byko.
+
+I love you. More than I'll ever be able to say. 💖`;
+
+let letterStarted = false;
+
+function openEnvelope(){
+  const env = document.getElementById("envelope");
+  if(!env || env.classList.contains("opened")) return;
+  env.classList.add("opened");
+
+  setTimeout(()=>{
+    document.getElementById("envelope-wrap").style.display = "none";
+    const paper = document.getElementById("letter-paper");
+    paper.style.display = "block";
+    if(!letterStarted){ letterStarted = true; typewriteLetter(); }
+  }, 700);
+}
+
+function typewriteLetter(){
+  const body = document.getElementById("letter-body");
+  const sign = document.getElementById("letter-sign");
+  body.innerHTML = "";
+
+  // add cursor
+  const cursor = document.createElement("span");
+  cursor.className = "letter-cursor";
+  body.appendChild(cursor);
+
+  let i = 0;
+  const text = LETTER_TEXT;
+  const speed = 28; // ms per character — adjust if too fast/slow
+
+  function type(){
+    if(i < text.length){
+      const ch = text[i];
+      const textNode = document.createTextNode(ch === "\n" ? "" : ch);
+      if(ch === "\n"){
+        body.insertBefore(document.createElement("br"), cursor);
+      } else {
+        body.insertBefore(textNode, cursor);
+      }
+      i++;
+      // vary speed slightly for realistic feel
+      const delay = ch === "." || ch === "," || ch === "\n" ? speed * 6 : speed + Math.random()*10;
+      setTimeout(type, delay);
+    } else {
+      // done — remove cursor, show signature
+      cursor.remove();
+      setTimeout(()=>{
+        sign.classList.add("show");
+        confetti(80);
+      }, 500);
+    }
+  }
+  type();
+}
+
+// ── BIRTHDAY CAKE ─────────────────────────────
+function buildCake(){
+  const canvas=$("cake-canvas");if(!canvas)return;
+  const ctx=canvas.getContext("2d");
+  let blown=false;
+  const candles=[80,130,150,170,220].map(x=>({x,lit:true}));
+
+  function draw(){
+    ctx.clearRect(0,0,300,320);
+    // plate
+    ctx.fillStyle="#2d0d1a";ctx.beginPath();ctx.ellipse(150,290,130,18,0,0,Math.PI*2);ctx.fill();
+    // cake layers
+    const layers=[{y:220,h:70,color:"#c0415a"},{y:165,h:55,color:"#e8637a"},{y:120,h:45,color:"#f5b8c8"}];
+    layers.forEach(l=>{
+      ctx.fillStyle=l.color;ctx.beginPath();ctx.roundRect(30,l.y,240,l.h,8);ctx.fill();
+      // frosting
+      ctx.fillStyle="rgba(255,255,255,.25)";ctx.beginPath();ctx.roundRect(30,l.y,240,12,8);ctx.fill();
+    });
+    // decorations
+    ctx.fillStyle="#d4a057";
+    for(let i=0;i<6;i++){ctx.beginPath();ctx.arc(50+i*38,240,5,0,Math.PI*2);ctx.fill();}
+    // candles
+    candles.forEach(c=>{
+      ctx.fillStyle="#fff8e1";ctx.fillRect(c.x-5,85,10,35);
+      ctx.fillStyle="#ffd700";ctx.fillRect(c.x-5,85,10,8);
+      if(c.lit){
+        // flame
+        ctx.fillStyle="rgba(255,150,0,.9)";
+        ctx.beginPath();ctx.ellipse(c.x,78,5,12,0,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle="rgba(255,220,0,.7)";
+        ctx.beginPath();ctx.ellipse(c.x,80,3,8,0,0,Math.PI*2);ctx.fill();
+        // glow
+        const g=ctx.createRadialGradient(c.x,78,0,c.x,78,20);
+        g.addColorStop(0,"rgba(255,200,0,.3)");g.addColorStop(1,"rgba(255,200,0,0)");
+        ctx.fillStyle=g;ctx.beginPath();ctx.arc(c.x,78,20,0,Math.PI*2);ctx.fill();
+      }
+    });
+    // text
+    ctx.fillStyle="#fff";ctx.font="bold 13px Lato,sans-serif";ctx.textAlign="center";
+    ctx.fillText("Happy Birthday",150,248);
+    ctx.font="italic bold 12px Playfair Display,serif";ctx.fillStyle="#ffd700";
+    ctx.fillText("Sakshi 💖",150,268);
+
+    if(!blown){requestAnimationFrame(draw);}
+  }
+  draw();
+
+  function blowOut(){
+    if(blown)return;
+    const litOnes=candles.filter(c=>c.lit);
+    if(litOnes.length===0)return;
+    // blow one at a time
+    let i=0;
+    const blowInterval=setInterval(()=>{
+      if(i<litOnes.length){litOnes[i].lit=false;i++;}
+      else{
+        clearInterval(blowInterval);
+        blown=true;
+        draw();
+        $("cake-hint").textContent="🎉 Wish granted! Happy Birthday Sakshi! 🎂";
+        $("cake-wish").style.display="block";
+        confetti(120);
+      }
+    },220);
+  }
+
+  canvas.addEventListener("click",blowOut);
+  $("cake-wrap").addEventListener("click",blowOut);
+}
+
+// ── SLIDESHOW ─────────────────────────────────
+function buildSlideshow(){
+  const slides=document.querySelectorAll(".slide");if(!slides.length)return;
+  const capEl=$("slide-caption");
+  const dotsEl=$("slide-dots");
+  let cur=0;
+
+  // dots
+  slides.forEach((_,i)=>{
+    const d=document.createElement("div");
+    d.style.cssText=`width:8px;height:8px;border-radius:50%;background:${i===0?"#fff":"rgba(255,255,255,.3)"};transition:background .3s;cursor:pointer`;
+    d.onclick=()=>goTo(i);
+    dotsEl.appendChild(d);
+  });
+
+  function goTo(n){
+    slides[cur].classList.remove("active");
+    dotsEl.children[cur].style.background="rgba(255,255,255,.3)";
+    cur=(n+slides.length)%slides.length;
+    slides[cur].classList.add("active");
+    dotsEl.children[cur].style.background="#fff";
+    capEl.textContent=slides[cur].dataset.caption||"";
+  }
+  goTo(0);
+  setInterval(()=>goTo(cur+1),3500);
+}
+
+// ── CONSTELLATION ─────────────────────────────
+const STAR_MSGS=[
+  "🌟 This star has shone for you since November 18, 2019 💖",
+  "💕 You said 'I love you' first — the bravest thing ever",
+  "🎵 Teri Aankhon Mein — our song, written in the stars",
+  "🌙 Every late night call — I was counting stars thinking of you",
+  "💖 My biggest fear? A sky without you in it",
+  "✨ Byko — a nickname only the stars and I know the meaning of",
+  "🌸 You are the brightest star in every sky I've ever looked at",
+  "🔮 I knew from the first moment — you were different",
+  "💫 Sakshi — even your name sounds like stardust",
+  "🌟 6 years, and I still get butterflies",
+  "❤️ One day, no distance between us. I promise.",
+  "🎂 Happy Birthday — the stars celebrate you today too",
+];
+
+function buildConstellation(){
+  const canvas = $("star-canvas");
+  if(!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+
+  // ── SAKSHI letter coordinates (scaled to 640x420) ──
+  // Each letter drawn as connected star points
+  const LETTERS = {
+    S: [[30,60],[28,55],[35,50],[52,48],[65,52],[68,60],[65,68],[52,72],[35,75],[28,83],[30,93],[40,98],[58,100],[72,96],[78,88]],
+    A: [[100,100],[115,55],[130,100],[106,78],[124,78]],
+    K: [[150,52],[150,100],[150,76],[168,52],[150,76],[168,100]],
+    S2:[[185,60],[183,55],[190,50],[207,48],[220,52],[223,60],[220,68],[207,72],[190,75],[183,83],[185,93],[195,98],[213,100],[227,96],[233,88]],
+    H: [[250,52],[250,100],[250,76],[270,76],[270,52],[270,100]],
+    I: [[295,52],[320,52],[307,52],[307,100],[295,100],[320,100]],
+  };
+
+  // flatten all star points with letter tag
+  const nameStars = [];
+  const letterKeys = ['S','A','K','S2','H','I'];
+  const letterColors = ['#E8637A','#D4A057','#c084fc','#E8637A','#60a5fa','#34d399'];
+
+  // offset each letter horizontally for nice spacing
+  const offsets = {S:0, A:90, K:180, S2:265, H:360, I:445};
+
+  letterKeys.forEach((key,li)=>{
+    const pts = LETTERS[key];
+    const ox = offsets[key];
+    // center vertically
+    const avgY = pts.reduce((s,p)=>s+p[1],0)/pts.length;
+    const oy = H/2 - avgY + 10;
+    pts.forEach((pt,pi)=>{
+      nameStars.push({
+        x: pt[0]+ox, y: pt[1]+oy,
+        letterIdx: li,
+        pointIdx: pi,
+        isLast: pi===pts.length-1,
+        color: letterColors[li],
+        msg: STAR_MSGS[(li*3+pi)%STAR_MSGS.length],
+        r: 3.5,
+        pulse: Math.random()*Math.PI*2, // random phase
+        glow: 0,
+        active: false,
+      });
+    });
+  });
+
+  // ── BACKGROUND STARS ──
+  const bgStars = Array.from({length:220}, ()=>({
+    x: Math.random()*W, y: Math.random()*H,
+    r: .3+Math.random()*1.4,
+    a: .1+Math.random()*.8,
+    phase: Math.random()*Math.PI*2,
+    speed: .008+Math.random()*.025,
+  }));
+
+  // ── SHOOTING STARS ──
+  const shoots = [];
+  function spawnShoot(){
+    shoots.push({
+      x: Math.random()*W*.7,
+      y: Math.random()*H*.4,
+      len: 80+Math.random()*120,
+      speed: 6+Math.random()*8,
+      a: 1, done: false,
+    });
+  }
+  spawnShoot();
+  setInterval(spawnShoot, 3200+Math.random()*2000);
+
+  // ── NEBULA / MILKY WAY ──
+  function drawNebula(){
+    const g = ctx.createRadialGradient(W*.6,H*.35,0,W*.6,H*.35,W*.5);
+    g.addColorStop(0,"rgba(100,30,60,.18)");
+    g.addColorStop(.5,"rgba(60,20,80,.08)");
+    g.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+    const g2 = ctx.createRadialGradient(W*.2,H*.7,0,W*.2,H*.7,W*.4);
+    g2.addColorStop(0,"rgba(30,60,120,.12)");
+    g2.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.fillStyle = g2; ctx.fillRect(0,0,W,H);
+  }
+
+  // active popup star
+  let activeIdx = -1;
+  let popupTimer = null;
+
+  let t = 0;
+  function loop(){
+    t += 0.016;
+
+    // Background
+    ctx.fillStyle = "#020008";
+    ctx.fillRect(0,0,W,H);
+    drawNebula();
+
+    // Background stars with twinkle
+    bgStars.forEach(s=>{
+      s.phase += s.speed;
+      const alpha = s.a * (.6 + .4*Math.sin(s.phase));
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle = `rgba(255,255,255,${alpha})`; ctx.fill();
+    });
+
+    // Shooting stars
+    shoots.forEach((s,i)=>{
+      if(s.done) return;
+      ctx.save();
+      ctx.strokeStyle = `rgba(255,255,255,${s.a})`;
+      ctx.lineWidth = 1.5;
+      ctx.shadowBlur = 6; ctx.shadowColor = "#fff";
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y);
+      ctx.lineTo(s.x + s.len, s.y + s.len*.4);
+      ctx.stroke();
+      ctx.restore();
+      s.x += s.speed; s.y += s.speed*.4; s.a -= .025;
+      if(s.a<=0) s.done = true;
+    });
+
+    // Constellation connecting lines per letter
+    letterKeys.forEach((key,li)=>{
+      const pts = nameStars.filter(s=>s.letterIdx===li);
+      ctx.beginPath();
+      pts.forEach((s,i)=>{
+        if(i===0) ctx.moveTo(s.x,s.y); else ctx.lineTo(s.x,s.y);
+      });
+      ctx.strokeStyle = `rgba(232,99,122,.18)`;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4,4]); ctx.lineDashOffset = -t*8;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    });
+
+    // Glow lines between active star and neighbours
+    if(activeIdx>=0){
+      const as = nameStars[activeIdx];
+      const neighbours = nameStars.filter(s=>s.letterIdx===as.letterIdx && s!==as);
+      neighbours.forEach(ns=>{
+        const d = Math.hypot(ns.x-as.x, ns.y-as.y);
+        if(d<100){
+          ctx.beginPath(); ctx.moveTo(as.x,as.y); ctx.lineTo(ns.x,ns.y);
+          ctx.strokeStyle=`rgba(232,99,122,${.5*(1-d/100)})`;
+          ctx.lineWidth=1.5; ctx.stroke();
+        }
+      });
+    }
+
+    // Name stars
+    nameStars.forEach((s,i)=>{
+      s.pulse += .04 + (i%3)*.01;
+      const pulseFactor = .7 + .3*Math.sin(s.pulse);
+      const isActive = i===activeIdx;
+      const r = isActive ? s.r*2.2 : s.r * pulseFactor;
+      const glowR = isActive ? 28 : 14*pulseFactor;
+
+      // outer glow
+      const glow = ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,glowR);
+      glow.addColorStop(0, isActive
+        ? `rgba(232,99,122,0.9)`
+        : s.color.replace(")",",0.5)").replace("rgb","rgba"));
+      glow.addColorStop(1,"rgba(0,0,0,0)");
+      ctx.fillStyle=glow; ctx.beginPath(); ctx.arc(s.x,s.y,glowR,0,Math.PI*2); ctx.fill();
+
+      // star core
+      ctx.beginPath(); ctx.arc(s.x,s.y,r,0,Math.PI*2);
+      ctx.fillStyle = isActive ? "#fff" : `rgba(255,255,255,${.7+.3*pulseFactor})`;
+      ctx.shadowBlur = isActive?20:8;
+      ctx.shadowColor = isActive?"#E8637A":s.color;
+      ctx.fill(); ctx.shadowBlur=0;
+
+      // 4-point sparkle on active star
+      if(isActive){
+        const sp = t*2;
+        [[0,-18],[0,18],[-18,0],[18,0],[-12,-12],[12,12],[-12,12],[12,-12]].forEach(([dx,dy])=>{
+          const fr = .5+.5*Math.sin(sp);
+          ctx.beginPath(); ctx.arc(s.x+dx*fr, s.y+dy*fr, 1.2,0,Math.PI*2);
+          ctx.fillStyle="rgba(255,255,200,.8)"; ctx.fill();
+        });
+      }
+    });
+
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  // ── TAP HANDLER ──
+  function onTap(e){
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = W/rect.width, scaleY = H/rect.height;
+    const cx = e.touches ? (e.touches[0].clientX-rect.left)*scaleX : (e.clientX-rect.left)*scaleX;
+    const cy = e.touches ? (e.touches[0].clientY-rect.top)*scaleY  : (e.clientY-rect.top)*scaleY;
+
+    const hit = nameStars.findIndex(s=>Math.hypot(s.x-cx,s.y-cy)<18);
+    if(hit>=0){
+      activeIdx = hit;
+      const popup = $("star-popup");
+      const text  = $("star-popup-text");
+      text.textContent = nameStars[hit].msg;
+      popup.style.display = "block";
+      popup.style.animation = "none";
+      void popup.offsetHeight;
+      popup.style.animation = "popIn .3s cubic-bezier(.34,1.56,.64,1)";
+      clearTimeout(popupTimer);
+      popupTimer = setTimeout(()=>{ popup.style.display="none"; activeIdx=-1; }, 4000);
+    }
+  }
+
+  canvas.addEventListener("click", onTap);
+  canvas.addEventListener("touchstart", e=>{ e.preventDefault(); onTap(e); }, {passive:false});
+}
+
 // ── ACTIVATE BIRTHDAY ─────────────────────────
 let bdayOn=false;
 function activateBirthday(){
@@ -788,11 +1769,45 @@ function activateBirthday(){
   $("bday-msg").classList.add("on");
   $("surprise-btn").classList.add("gone");
   $("music-btn").classList.add("on");
-  const order=[{id:"photos-sec",delay:0},{id:"love-sec",delay:200},{id:"tl-sec",delay:400},{id:"foot",delay:600}];
-  order.forEach(({id,delay})=>{setTimeout(()=>{const el=$(id);el.classList.remove("bday-hidden");void el.offsetHeight;el.classList.add("bday-reveal")},delay)});
-  startFW();confetti(260);setTimeout(()=>confetti(160),3000);setTimeout(()=>confetti(100),7000);
+
+  const order=[
+    {id:"cake-sec",   delay:0},
+    {id:"voice-sec",  delay:200},
+    {id:"slides-sec", delay:400},
+    {id:"love-sec",   delay:600},
+    {id:"reasons-sec",delay:800},
+    {id:"star-sec",   delay:1000},
+    {id:"photos-sec", delay:1200},
+    {id:"future-sec", delay:1400},
+    {id:"tl-sec",     delay:1600},
+    {id:"map-sec",    delay:1800},
+    {id:"foot",       delay:2000},
+  ];
+  order.forEach(({id,delay})=>{
+    setTimeout(()=>{
+      const el=$(id);if(!el)return;
+      el.classList.remove("bday-hidden");
+      void el.offsetHeight;
+      el.classList.add("bday-reveal");
+    },delay);
+  });
+
+  // init interactive sections after they appear
+  setTimeout(()=>{buildCake();},300);
+  setTimeout(()=>{buildSlideshow();},600);
+  setTimeout(()=>{buildReasons();},1000);
+  setTimeout(()=>{buildConstellation();},1200);
+  setTimeout(()=>{buildFuture();},1600);
+  setTimeout(()=>{buildMap();},1900);
+
+  startFW();confetti(260);
+  setTimeout(()=>confetti(160),3000);
+  setTimeout(()=>confetti(100),7000);
   playSong();
-  setTimeout(()=>$("photos-sec").scrollIntoView({behavior:"smooth",block:"start"}),800);
+  setTimeout(()=>{
+    const first=$("cake-sec");
+    if(first)first.scrollIntoView({behavior:"smooth",block:"start"});
+  },800);
 }
 
 // ── QUIZ ENGINE ───────────────────────────────
@@ -975,6 +1990,37 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("quiz-modal").cla
 // ── INIT ──────────────────────────────────────
 if(isBday()||isPast()){activateBirthday();}
 else{tick();cdInt=setInterval(tick,1000);}
+
+// ── TEST SKIP ─────────────────────────────────
+function testSkip(){
+  const m = $("test-modal");
+  m.style.display = "flex";
+  $("test-pw-input").value = "";
+  $("test-pw-err").textContent = "";
+  setTimeout(()=>$("test-pw-input").focus(), 100);
+}
+function closeTestModal(){
+  $("test-modal").style.display = "none";
+}
+function submitTestPw(){
+  const val = $("test-pw-input").value.trim();
+  if(val === "Sidh@2000"){
+    closeTestModal();
+    $("quiz-modal").classList.remove("open");
+    bdayOn = false;
+    activateBirthday();
+  } else {
+    $("test-pw-err").textContent = "Wrong password! Try again 🔐";
+    $("test-pw-input").value = "";
+    $("test-pw-input").focus();
+    setTimeout(()=>{ $("test-pw-err").textContent=""; }, 2000);
+  }
+}
+// allow Enter key in test password input
+document.addEventListener("DOMContentLoaded",()=>{
+  const inp = $("test-pw-input");
+  if(inp) inp.addEventListener("keydown", e=>{ if(e.key==="Enter") submitTestPw(); });
+});
 
 // ── LIGHTBOX ──────────────────────────────────
 function openLb(card){const img=card.querySelector("img");if(!img)return;$("lb-img").src=img.src;$("lb").classList.add("on")}
