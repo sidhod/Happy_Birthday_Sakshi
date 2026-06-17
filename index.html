@@ -275,9 +275,9 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
 .sec.dark .ti-dot{box-shadow:0 0 0 4px #0d0209,0 0 0 6px rgba(232,99,122,.38),0 0 14px rgba(232,99,122,.4)}
 .ti-date{font-size:.66rem;letter-spacing:3px;text-transform:uppercase;color:var(--rose);margin-bottom:2px}
 .ti-txt{font-family:'Playfair Display',serif;font-size:1rem;line-height:1.55;color:rgba(255,255,255,.82)}
-.ti-img{margin-top:12px;border-radius:14px;overflow:hidden}
-.ti-img img{width:100%;height:160px;object-fit:cover;display:block;transition:transform .4s}
-.ti:hover .ti-img img{transform:scale(1.04)}
+.ti-img{margin-top:12px;border-radius:14px;overflow:hidden;background:#0d0209}
+.ti-img img{width:100%;height:auto;max-height:340px;object-fit:contain;display:block;transition:transform .4s}
+.ti:hover .ti-img img{transform:scale(1.02)}
 .foot{padding:50px 22px;text-align:center;position:relative;z-index:2}
 .foot.dark{background:#0d0209;border-top:1px solid rgba(232,99,122,.12)}
 .foot.bday-hidden{visibility:hidden;max-height:0;overflow:hidden;padding:0;margin:0;opacity:0}
@@ -389,7 +389,7 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
 /* slideshow */
 .slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease}
 .slide.active{opacity:1}
-.slide img{width:100%;height:100%;object-fit:cover;display:block}
+.slide img{width:100%;height:100%;object-fit:contain;display:block;background:#0d0209}
 
 /* reasons grid cards */
 .reason-card{
@@ -757,7 +757,7 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
   <div class="sec-in" style="max-width:640px;text-align:center">
     <p class="sec-lbl" style="color:rgba(245,184,200,.6)">Our Story</p>
     <h2 class="sec-title">Our Movie 🎬</h2>
-    <div id="slideshow" style="position:relative;border-radius:24px;overflow:hidden;aspect-ratio:16/9;background:#0d0209;box-shadow:0 20px 60px rgba(0,0,0,.6)">
+    <div id="slideshow" style="position:relative;border-radius:24px;overflow:hidden;background:#0d0209;box-shadow:0 20px 60px rgba(0,0,0,.6);min-height:300px">
       <div class="slide active" data-caption="The day everything changed ❤️">
         <img src="us7.jpeg" alt="Slide 1">
       </div>
@@ -886,17 +886,17 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--deep);ove
       <p style="font-size:.72rem;color:rgba(245,184,200,.45);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">Our Celebration 🎉</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
         <!-- ✏️ Replace cele1.jpeg & cele2.jpeg with your celebration photos -->
-        <div style="border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4)">
+        <div style="border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4);background:#0d0209">
           <img src="cele1.jpeg" alt="Celebration 1"
-            style="width:100%;height:160px;object-fit:cover;display:block;transition:transform .4s"
+            style="width:100%;height:auto;max-height:280px;object-fit:contain;display:block;transition:transform .4s;background:#0d0209"
             onmouseover="this.style.transform='scale(1.04)'"
             onmouseout="this.style.transform='scale(1)'"
             onclick="openLbSrc(this.src)"
             onerror="this.parentNode.style.background='rgba(232,99,122,.1)';this.parentNode.innerHTML='<div style=height:160px;display:flex;align-items:center;justify-content:center;font-size:2rem>🎂</div>'">
         </div>
-        <div style="border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4)">
+        <div style="border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4);background:#0d0209">
           <img src="cele2.jpeg" alt="Celebration 2"
-            style="width:100%;height:160px;object-fit:cover;display:block;transition:transform .4s"
+            style="width:100%;height:auto;max-height:280px;object-fit:contain;display:block;transition:transform .4s;background:#0d0209"
             onmouseover="this.style.transform='scale(1.04)'"
             onmouseout="this.style.transform='scale(1)'"
             onclick="openLbSrc(this.src)"
@@ -1737,6 +1737,7 @@ function buildSlideshow(){
   const slides=document.querySelectorAll(".slide");if(!slides.length)return;
   const capEl=$("slide-caption");
   const dotsEl=$("slide-dots");
+  const slideshow=$("slideshow");
   let cur=0;
 
   // dots
@@ -1754,6 +1755,23 @@ function buildSlideshow(){
     slides[cur].classList.add("active");
     dotsEl.children[cur].style.background="#fff";
     capEl.textContent=slides[cur].dataset.caption||"";
+    // adjust height to fit current image
+    const img=slides[cur].querySelector("img");
+    if(img && img.complete && img.naturalHeight){
+      const ratio=img.naturalHeight/img.naturalWidth;
+      const w=slideshow.offsetWidth||640;
+      slideshow.style.height=Math.min(Math.round(w*ratio),520)+"px";
+    }
+  }
+  // set initial height when first image loads
+  const firstImg=slides[0].querySelector("img");
+  if(firstImg){
+    firstImg.addEventListener("load",()=>{
+      const ratio=firstImg.naturalHeight/firstImg.naturalWidth;
+      const w=slideshow.offsetWidth||640;
+      slideshow.style.height=Math.min(Math.round(w*ratio),520)+"px";
+    });
+    if(firstImg.complete) firstImg.dispatchEvent(new Event("load"));
   }
   goTo(0);
   setInterval(()=>goTo(cur+1),3500);
