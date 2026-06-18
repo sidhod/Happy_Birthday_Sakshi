@@ -1309,20 +1309,7 @@ const pad = n => String(n).padStart(2,"0");
 const revIO=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add("vis")})},{threshold:.2});
 document.querySelectorAll(".ti").forEach(el=>revIO.observe(el));
 
-// Stop background music when voice message section appears
-const voiceIO=new IntersectionObserver(es=>{
-  es.forEach(e=>{
-    if(e.isIntersecting && musicOn){
-      stopSong();
-      $("music-btn").textContent="🎵";
-    }
-  });
-},{threshold:.3});
-// observe after birthday activated
-document.addEventListener("bdayActivated",()=>{
-  const vs=document.getElementById("voice-sec");
-  if(vs) voiceIO.observe(vs);
-});
+
 
 // ── COUNTDOWN ─────────────────────────────────
 const cEls={d:$("cd-d"),h:$("cd-h"),m:$("cd-m"),s:$("cd-s")};
@@ -2102,8 +2089,7 @@ function activateBirthday(){
   $("bday-msg").classList.add("on");
   $("surprise-btn").classList.add("gone");
   $("music-btn").classList.add("on");
-  // notify voice observer
-  setTimeout(()=>document.dispatchEvent(new Event("bdayActivated")),500);
+
 
   const order=[
     {id:"cake-sec",   delay:0},
