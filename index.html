@@ -2360,6 +2360,15 @@ document.addEventListener("DOMContentLoaded",()=>{
   if(inp) inp.addEventListener("keydown", e=>{ if(e.key==="Enter") submitTestPw(); });
 });
 
+// ── VOICE AUDIO — stop bg music when played ───
+(function(){
+  const player = document.getElementById("voice-player");
+  if(!player) return;
+  player.addEventListener("play", ()=>{
+    if(musicOn) stopSong();
+  });
+})();
+
 // ── LIGHTBOX ──────────────────────────────────
 function openLb(card){const img=card.querySelector("img");if(!img)return;$("lb-img").src=img.src;$("lb").classList.add("on")}
 function openLbSrc(src){$("lb-img").src=src;$("lb").classList.add("on")}
