@@ -1309,6 +1309,21 @@ const pad = n => String(n).padStart(2,"0");
 const revIO=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add("vis")})},{threshold:.2});
 document.querySelectorAll(".ti").forEach(el=>revIO.observe(el));
 
+// Stop background music when voice message section appears
+const voiceIO=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting && musicOn){
+      stopSong();
+      $("music-btn").textContent="🎵";
+    }
+  });
+},{threshold:.3});
+// observe after birthday activated
+document.addEventListener("bdayActivated",()=>{
+  const vs=document.getElementById("voice-sec");
+  if(vs) voiceIO.observe(vs);
+});
+
 // ── COUNTDOWN ─────────────────────────────────
 const cEls={d:$("cd-d"),h:$("cd-h"),m:$("cd-m"),s:$("cd-s")};
 const prev={};let cdInt=null;
@@ -1333,34 +1348,27 @@ function playSong(){
   try{
     if(actx){actx.close();actx=null;}
     actx=new(window.AudioContext||window.webkitAudioContext)();
-    // Teri Aankhon Mein inspired melody — romantic & emotional
+    // Happy Birthday melody — classic tune
     const N=[
-      [392.00,.40],[440.00,.40],[493.88,.40],[523.25,.80],
-      [493.88,.40],[440.00,.40],[392.00,.80],
-      [349.23,.40],[392.00,.40],[440.00,.40],[493.88,.80],
-      [440.00,.40],[392.00,.40],[349.23,1.00],
-      [392.00,.40],[440.00,.40],[493.88,.40],[587.33,.80],
-      [554.37,.40],[493.88,.40],[440.00,.80],
-      [392.00,.40],[349.23,.40],[329.63,.40],[293.66,1.20],
-      [349.23,.40],[392.00,.40],[440.00,.40],[493.88,.80],
-      [523.25,.40],[493.88,.40],[440.00,.40],[392.00,1.40],
+      // "Hap-py Birth-day to You"
+      [261.63,.3],[261.63,.1],[293.66,.45],[261.63,.45],[349.23,.45],[329.63,.9],
+      [261.63,.3],[261.63,.1],[293.66,.45],[261.63,.45],[392.00,.45],[349.23,.9],
+      [261.63,.3],[261.63,.1],[523.25,.45],[440.00,.45],[349.23,.45],[329.63,.45],[293.66,.9],
+      [466.16,.3],[466.16,.1],[440.00,.45],[349.23,.45],[392.00,.45],[349.23,1.1],
     ];
-    const mg=actx.createGain();mg.gain.value=0.22;mg.connect(actx.destination);
-    // add reverb-like effect with delay
-    const delay=actx.createDelay(.3);const delGain=actx.createGain();
-    delGain.gain.value=0.18;delay.connect(delGain);delGain.connect(actx.destination);
-    let t=actx.currentTime+0.1,total=0;
+    const mg=actx.createGain();mg.gain.value=0.28;mg.connect(actx.destination);
+    // add slight reverb feel
+    const delay=actx.createDelay(.25);const dg=actx.createGain();
+    dg.gain.value=0.12;delay.connect(dg);dg.connect(actx.destination);
+    let t=actx.currentTime+0.08,total=0;
     N.forEach(([f,d])=>{
-      ["sine","triangle"].forEach((type,ti)=>{
-        const o=actx.createOscillator(),g=actx.createGain();
-        o.connect(g);g.connect(mg);if(ti===1)g.connect(delay);
-        o.type=type;o.frequency.value=ti===1?f/2:f;
-        g.gain.setValueAtTime(0,t);
-        g.gain.linearRampToValueAtTime(ti===0?.8:.2,t+.05);
-        g.gain.exponentialRampToValueAtTime(.001,t+d-.02);
-        o.start(t);o.stop(t+d);
-      });
-      t+=d;total+=d;
+      const o=actx.createOscillator(),g=actx.createGain();
+      o.connect(g);g.connect(mg);g.connect(delay);
+      o.type="triangle";o.frequency.value=f;
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(.9,t+.03);
+      g.gain.exponentialRampToValueAtTime(.001,t+d-.03);
+      o.start(t);o.stop(t+d);t+=d;total+=d;
     });
     musicOn=true;$("music-btn").textContent="🔊";
     setTimeout(()=>{musicOn=false;$("music-btn").textContent="🎵";},total*1000+300);
@@ -2094,6 +2102,8 @@ function activateBirthday(){
   $("bday-msg").classList.add("on");
   $("surprise-btn").classList.add("gone");
   $("music-btn").classList.add("on");
+  // notify voice observer
+  setTimeout(()=>document.dispatchEvent(new Event("bdayActivated")),500);
 
   const order=[
     {id:"cake-sec",   delay:0},
